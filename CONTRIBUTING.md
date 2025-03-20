@@ -1,1 +1,2 @@
-Guisong Wu\nHao Zhang
+Guisong Wu
+Hao Zhang
