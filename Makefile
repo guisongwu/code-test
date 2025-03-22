@@ -1,20 +1,21 @@
 CC = gcc
 CFLAGS = -Wall -g
-TARGET = my_program
+TARGET = myprogram
 
-all: $(TARGET)
+all : $(TARGET)
 
-$(TARGET): main.o utils.o math.o
-	$(CC) $(CFLAGS) -o $(TARGET) main.o utils.o math.o
+$(TARGET) : main.o math.o utils.o
+	$(CC) $(CFLAGS) -o $(TARGET) main.o math.o utils.o
 
-main.o: main.c math.h utils.h
+main.o : main.c math.h utils.h
 	$(CC) $(CFLAGS) -c main.c
 
-utils.o: utils.c utils.h
-	$(CC) $(CFLAGS) -c utils.c
-
-math.o: math.c math.h
+math.o : math.c math.h
 	$(CC) $(CFLAGS) -c math.c
 
-clean:
+utils.o : utils.c utils.h
+	$(CC) $(CFLAGS) -c utils.c
+
+clean :
 	rm -f *.o $(TARGET)
+
