@@ -1,0 +1,21 @@
+!_TAG_FILE_FORMAT	2	/extended format; --format=1 will not append ;" to lines/
+!_TAG_FILE_SORTED	1	/0=unsorted, 1=sorted, 2=foldcase/
+!_TAG_PROGRAM_AUTHOR	Darren Hiebert	/dhiebert@users.sourceforge.net/
+!_TAG_PROGRAM_NAME	Exuberant Ctags	//
+!_TAG_PROGRAM_URL	http://ctags.sourceforge.net	/official site/
+!_TAG_PROGRAM_VERSION	5.9~svn20110310	//
+CC	Makefile	/^CC = gcc$/;"	m
+CFLAGS	Makefile	/^CFLAGS = -Wall -g$/;"	m
+GREEN	learn.c	/^    GREEN,$/;"	e	enum:trafficLight	file:
+MATH_H	math.h	2;"	d
+RED	learn.c	/^    RED,$/;"	e	enum:trafficLight	file:
+TARGET	Makefile	/^TARGET = myprogram$/;"	m
+UTILS_H	utils.h	2;"	d
+YELLOW	learn.c	/^    YELLOW$/;"	e	enum:trafficLight	file:
+a	test.c	/^int a = 100;$/;"	v
+add	math.c	/^int add(int a, int b) {$/;"	f
+main	learn.c	/^int main()$/;"	f
+main	main.c	/^int main(){$/;"	f
+print_result	utils.c	/^void print_result(int result){$/;"	f
+subtract	math.c	/^int subtract(int a, int b) {$/;"	f
+trafficLight	learn.c	/^enum trafficLight{$/;"	g	file:
