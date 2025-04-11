@@ -1,70 +1,23 @@
 #include <stdio.h>
+#include "learn.h"
+//extern int Add(int a, int b);
 //extern int a;
 
-enum trafficLight{
-    RED,
-    GREEN,
-    YELLOW
-};
-
-
-int main()
-{
-    // enum trafficLight light = RED;
-    // printf("%d\n",light);
-    // char arr[3] = "abc";
-    // printf("%s\n",arr);
-    //printf("%zu\n",sizeof(char));
-    //printf("%zu\n",sizeof(short));
-
-    //printf("%zu\n",sizeof(int));
-
-    //printf("%zu\n",sizeof(long));
-    //printf("%zu\n",sizeof(long long));
-    //
-    //printf("%zu\n",sizeof(float));
-    //printf("%zu\n",sizeof(double));
-    //
-    //
-    // int arr[10] = {1,2,3,4,5,6,7,8,9,10};
-    // int i = 0;
-    // while (i < 10)
-    // {
-    //     printf("%d\n",arr[i]);
-    //     i++;
-    // }
-    // printf("%d\n",sizeof(arr));
+void print(Student* ps){
+    printf("%s %d %s %s\n", (*ps).name, (*ps).age, (*ps).sex, (*ps).tele);
+    printf("%s %d %s %s\n", ps->name, ps->age, ps->sex, ps->tele);
+}
 
 
 
-    // int a = 10;
-    // int b = a++;
-    // int b = ++a;
-    // printf("%d\n",b);
-
-    // int arr[10] = {1,2,3,4,5,6,7,8,9,10};
-    enum Fruit{
-        APPLE,
-        ORANGE,
-        BANANA
-    };
-    enum Fruit fruit = APPLE;
-    switch (fruit)
+int main(int argc, char* argv[]){
+    int i = 0;
+    int j = 0;
+    for (i=0,j=0; i<2&&j<4; i++,j++)
     {
-        case APPLE:
-            printf("Apple\n");
-            break;
-        case ORANGE:
-            printf("Orange\n");
-            break;
-        case BANANA:
-            printf("Banana\n");
-            break;
-        default:
-            printf("Unknown fruit\n");
-            break;
+        printf("hehe");
     }
-
-
     return 0;
 }
+
+
