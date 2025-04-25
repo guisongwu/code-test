@@ -7,6 +7,6 @@ int main(){
 
 	int diff = subtract(20,10);
 	print_result(diff);
-
+    
 	return 0;
 }
