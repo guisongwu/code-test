@@ -1,4 +1,6 @@
 *.o
-myprogram
 learn
+main
+poisson-fem
 tags
+

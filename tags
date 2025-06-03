@@ -21,8 +21,6 @@
 !_TAG_KIND_DESCRIPTION!C	t,typedef	/typedefs/
 !_TAG_KIND_DESCRIPTION!C	u,union	/union names/
 !_TAG_KIND_DESCRIPTION!C	v,variable	/variable definitions/
-!_TAG_KIND_DESCRIPTION!C++	M,module	/modules/
-!_TAG_KIND_DESCRIPTION!C++	P,partition	/partitions/
 !_TAG_KIND_DESCRIPTION!C++	c,class	/classes/
 !_TAG_KIND_DESCRIPTION!C++	d,macro	/macro definitions/
 !_TAG_KIND_DESCRIPTION!C++	e,enumerator	/enumerators (values inside an enumeration)/
@@ -52,51 +50,74 @@
 !_TAG_OUTPUT_VERSION	0.0	/current.age/
 !_TAG_PARSER_VERSION!C	1.1	/current.age/
 !_TAG_PARSER_VERSION!C++	1.1	/current.age/
-!_TAG_PARSER_VERSION!Make	1.1	/current.age/
+!_TAG_PARSER_VERSION!Make	0.0	/current.age/
 !_TAG_PARSER_VERSION!Markdown	1.1	/current.age/
 !_TAG_PATTERN_LENGTH_LIMIT	96	/0 for no limit/
 !_TAG_PROC_CWD	/home/wugs/cprogram/	//
 !_TAG_PROGRAM_AUTHOR	Universal Ctags Team	//
 !_TAG_PROGRAM_NAME	Universal Ctags	/Derived from Exuberant Ctags/
 !_TAG_PROGRAM_URL	https://ctags.io/	/official site/
-!_TAG_PROGRAM_VERSION	6.1.0	/e5b77bd09/
+!_TAG_PROGRAM_VERSION	6.1.0	//
 !_TAG_ROLE_DESCRIPTION!C!function	foreigndecl	/declared in foreign languages/
 !_TAG_ROLE_DESCRIPTION!C!header	local	/local header/
 !_TAG_ROLE_DESCRIPTION!C!header	system	/system header/
 !_TAG_ROLE_DESCRIPTION!C!macro	undef	/undefined/
 !_TAG_ROLE_DESCRIPTION!C!struct	foreigndecl	/declared in foreign languages/
-!_TAG_ROLE_DESCRIPTION!C++!header	exported	/exported with "exported imported ..."/
-!_TAG_ROLE_DESCRIPTION!C++!header	imported	/imported with "imported ..."/
 !_TAG_ROLE_DESCRIPTION!C++!header	local	/local header/
 !_TAG_ROLE_DESCRIPTION!C++!header	system	/system header/
 !_TAG_ROLE_DESCRIPTION!C++!macro	undef	/undefined/
-!_TAG_ROLE_DESCRIPTION!C++!module	imported	/imported with "imported ..."/
-!_TAG_ROLE_DESCRIPTION!C++!module	partOwner	/used for specifying a partition/
-!_TAG_ROLE_DESCRIPTION!C++!partition	imported	/imported with "imported ..."/
 !_TAG_ROLE_DESCRIPTION!Make!makefile	included	/included/
 !_TAG_ROLE_DESCRIPTION!Make!makefile	optional	/optionally included/
 $(TARGET)	Makefile	/^$(TARGET) : main.o math.o utils.o$/;"	t
 Add	test.c	/^static int Add(int a, int b)$/;"	f	typeref:typename:int	file:
+Animal	cpp_learn.cpp	/^class Animal {$/;"	c	file:
+BaseParams	cpp_learn.cpp	/^class BaseParams {$/;"	c	file:
 CC	Makefile	/^CC = gcc$/;"	m
 CFLAGS	Makefile	/^CFLAGS = -Wall -g$/;"	m
+Car	cpp_learn.cpp	/^class Car: public Vehicle {$/;"	c	file:
+Dog	cpp_learn.cpp	/^class Dog: public Animal {$/;"	c	file:
+Employee	cpp_learn.cpp	/^class Employee {$/;"	c	file:
 MATH_H	math.h	/^#define MATH_H$/;"	d
+Pig	cpp_learn.cpp	/^class Pig: public Animal {$/;"	c	file:
+Programmer	cpp_learn.cpp	/^class Programmer: public Employee {$/;"	c	file:
 Student	learn.h	/^}Student;$/;"	t	typeref:struct:Student_
 Student_	learn.h	/^typedef struct Student_{$/;"	s
 TARGET	Makefile	/^TARGET = myprogram$/;"	m
 UTILS_H	utils.h	/^#define UTILS_H$/;"	d
+Vehicle	cpp_learn.cpp	/^class Vehicle {$/;"	c	file:
+_t	cpp_learn.cpp	/^        double _t = 0;$/;"	m	class:BaseParams	typeref:typename:double	file:
 a	test.c	/^static int a = 10;$/;"	v	typeref:typename:int	file:
 add	math.c	/^int add(int a, int b) {$/;"	f	typeref:typename:int
 age	learn.h	/^    int age;$/;"	m	struct:Student_	typeref:typename:int
 all	Makefile	/^all : $(TARGET)$/;"	t
+animalSound	cpp_learn.cpp	/^        void animalSound() {$/;"	f	class:Animal	typeref:typename:void	file:
+animalSound	cpp_learn.cpp	/^        void animalSound() {$/;"	f	class:Dog	typeref:typename:void	file:
+animalSound	cpp_learn.cpp	/^        void animalSound() {$/;"	f	class:Pig	typeref:typename:void	file:
 binary_search	learn.c	/^int binary_search(int arr[], int target, int sz) {$/;"	f	typeref:typename:int
+bonus	cpp_learn.cpp	/^        int bonus;$/;"	m	class:Programmer	typeref:typename:int	file:
+brand	cpp_learn.cpp	/^        string brand = "Ford";$/;"	m	class:Vehicle	typeref:typename:string	file:
 clean	Makefile	/^clean :$/;"	t
+getSalary	cpp_learn.cpp	/^        int getSalary() {$/;"	f	class:Programmer	typeref:typename:int	file:
+getTime	cpp_learn.cpp	/^        double getTime() const {return _t;};$/;"	f	class:BaseParams	typeref:typename:double	file:
+honk	cpp_learn.cpp	/^        void honk() {$/;"	f	class:Vehicle	typeref:typename:void	file:
+main	cpp_learn.cpp	/^int main() {$/;"	f	typeref:typename:int
 main	learn.c	/^int main(int argc, char* argv[]) {$/;"	f	typeref:typename:int
 main	main.c	/^int main(){$/;"	f	typeref:typename:int
 main.o	Makefile	/^main.o : main.c math.h utils.h$/;"	t
 math.o	Makefile	/^math.o : math.c math.h$/;"	t
+model	cpp_learn.cpp	/^        string model = "Mustang";$/;"	m	class:Car	typeref:typename:string	file:
+myChild	cpp_learn.cpp	/^class myChild: public myClass, public myOtherClass {$/;"	c	file:
+myClass	cpp_learn.cpp	/^class myClass {$/;"	c	file:
+myFunction	cpp_learn.cpp	/^        void myFunction() {$/;"	f	class:myClass	typeref:typename:void	file:
+myGrandChild	cpp_learn.cpp	/^class myGrandChild: public myChild {$/;"	c	file:
+myOtherClass	cpp_learn.cpp	/^class myOtherClass {$/;"	c	file:
+myOtherFunction	cpp_learn.cpp	/^        void myOtherFunction() {$/;"	f	class:myOtherClass	typeref:typename:void	file:
 name	learn.h	/^    char name[20];$/;"	m	struct:Student_	typeref:typename:char[20]
 print	learn.c	/^void print(Student* ps){$/;"	f	typeref:typename:void
 print_result	utils.c	/^void print_result(int result){$/;"	f	typeref:typename:void
+salary	cpp_learn.cpp	/^        int salary;$/;"	m	class:Employee	typeref:typename:int	file:
+setSalary	cpp_learn.cpp	/^        void setSalary(int s) {$/;"	f	class:Programmer	typeref:typename:void	file:
+setTime	cpp_learn.cpp	/^        void setTime(double t0) {_t = t0;};$/;"	f	class:BaseParams	typeref:typename:void	file:
 sex	learn.h	/^    char sex[10];$/;"	m	struct:Student_	typeref:typename:char[10]
 subtract	math.c	/^int subtract(int a, int b) {$/;"	f	typeref:typename:int
 swap	learn.c	/^void swap(int* p1, int* p2) {$/;"	f	typeref:typename:void

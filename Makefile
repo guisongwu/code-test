@@ -1,21 +1,38 @@
+# 编译器设置
 CC = gcc
-CFLAGS = -Wall -g
-TARGET = myprogram
+CXX = g++
+CFLAGS = -Wall -Wextra -std=c11
+CXXFLAGS = -Wall -Wextra -std=c++11
 
-all : $(TARGET)
+# 目标文件
+TARGETS = main poisson-fem learn
 
-$(TARGET) : main.o math.o utils.o
-	$(CC) $(CFLAGS) -o $(TARGET) main.o math.o utils.o
+# 默认目标（执行 make 时默认构建所有目标）
+all: $(TARGETS)
 
-main.o : main.c math.h utils.h
-	$(CC) $(CFLAGS) -c main.c
+# main 的构建规则
+main: main.o utils.o math.o
+	$(CC) $(CFLAGS) $^ -o $@
 
-math.o : math.c math.h
-	$(CC) $(CFLAGS) -c math.c
+# poisson-fem 的构建规则
+poisson-fem: poisson-fem.o
+	$(CC) $(CFLAGS) $^ -o $@
 
-utils.o : utils.c utils.h
-	$(CC) $(CFLAGS) -c utils.c
+# learn 的构建规则（C++ 程序）
+learn: learn.o
+	$(CXX) $(CXXFLAGS) $^ -o $@
 
-clean :
-	rm -f *.o $(TARGET)
+# 通用规则：从 .c 文件生成 .o 文件
+%.o: %.c
+	$(CC) $(CFLAGS) -c $< -o $@
 
+# 通用规则：从 .cpp 文件生成 .o 文件
+%.o: %.cpp
+	$(CXX) $(CXXFLAGS) -c $< -o $@
+
+# 清理生成的文件
+clean:
+	rm -f *.o $(TARGETS)
+
+# 伪目标声明
+.PHONY: all clean
