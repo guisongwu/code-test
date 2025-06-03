@@ -2,7 +2,7 @@
 CC = gcc
 CXX = g++
 CFLAGS = -Wall -Wextra -std=c11
-CXXFLAGS = -Wall -Wextra -std=c++11
+CXXFLAGS = -Wall -Wextra -std=c++20
 
 # 目标文件
 TARGETS = main poisson-fem learn
