@@ -68,58 +68,34 @@
 !_TAG_ROLE_DESCRIPTION!C++!macro	undef	/undefined/
 !_TAG_ROLE_DESCRIPTION!Make!makefile	included	/included/
 !_TAG_ROLE_DESCRIPTION!Make!makefile	optional	/optionally included/
-$(TARGET)	Makefile	/^$(TARGET) : main.o math.o utils.o$/;"	t
-Add	test.c	/^static int Add(int a, int b)$/;"	f	typeref:typename:int	file:
-Animal	cpp_learn.cpp	/^class Animal {$/;"	c	file:
-BaseParams	cpp_learn.cpp	/^class BaseParams {$/;"	c	file:
+%.o	Makefile	/^%.o: %.c$/;"	t
+%.o	Makefile	/^%.o: %.cpp$/;"	t
 CC	Makefile	/^CC = gcc$/;"	m
-CFLAGS	Makefile	/^CFLAGS = -Wall -g$/;"	m
-Car	cpp_learn.cpp	/^class Car: public Vehicle {$/;"	c	file:
-Dog	cpp_learn.cpp	/^class Dog: public Animal {$/;"	c	file:
-Employee	cpp_learn.cpp	/^class Employee {$/;"	c	file:
+CXX	Makefile	/^CXX = g++$/;"	m
+CXXFLAGS	Makefile	/^CXXFLAGS = -g -Wall -Wno-unused-variable -Wno-unused-parameter -Wextra -std=c++20$/;"	m
+IDX	poisson.c	/^#define IDX(/;"	d	file:
 MATH_H	math.h	/^#define MATH_H$/;"	d
-Pig	cpp_learn.cpp	/^class Pig: public Animal {$/;"	c	file:
-Programmer	cpp_learn.cpp	/^class Programmer: public Employee {$/;"	c	file:
-Student	learn.h	/^}Student;$/;"	t	typeref:struct:Student_
-Student_	learn.h	/^typedef struct Student_{$/;"	s
-TARGET	Makefile	/^TARGET = myprogram$/;"	m
+N	poisson.c	/^#define N 5  \/\/ Nu/;"	d	file:
+NE	poisson.c	/^#define NE /;"	d	file:
+NN	poisson.c	/^#define NN /;"	d	file:
+TARGETS	Makefile	/^TARGETS = main poisson learn testc$/;"	m
 UTILS_H	utils.h	/^#define UTILS_H$/;"	d
-Vehicle	cpp_learn.cpp	/^class Vehicle {$/;"	c	file:
-_t	cpp_learn.cpp	/^        double _t = 0;$/;"	m	class:BaseParams	typeref:typename:double	file:
-a	test.c	/^static int a = 10;$/;"	v	typeref:typename:int	file:
 add	math.c	/^int add(int a, int b) {$/;"	f	typeref:typename:int
-age	learn.h	/^    int age;$/;"	m	struct:Student_	typeref:typename:int
-all	Makefile	/^all : $(TARGET)$/;"	t
-animalSound	cpp_learn.cpp	/^        void animalSound() {$/;"	f	class:Animal	typeref:typename:void	file:
-animalSound	cpp_learn.cpp	/^        void animalSound() {$/;"	f	class:Dog	typeref:typename:void	file:
-animalSound	cpp_learn.cpp	/^        void animalSound() {$/;"	f	class:Pig	typeref:typename:void	file:
-binary_search	learn.c	/^int binary_search(int arr[], int target, int sz) {$/;"	f	typeref:typename:int
-bonus	cpp_learn.cpp	/^        int bonus;$/;"	m	class:Programmer	typeref:typename:int	file:
-brand	cpp_learn.cpp	/^        string brand = "Ford";$/;"	m	class:Vehicle	typeref:typename:string	file:
-clean	Makefile	/^clean :$/;"	t
-getSalary	cpp_learn.cpp	/^        int getSalary() {$/;"	f	class:Programmer	typeref:typename:int	file:
-getTime	cpp_learn.cpp	/^        double getTime() const {return _t;};$/;"	f	class:BaseParams	typeref:typename:double	file:
-honk	cpp_learn.cpp	/^        void honk() {$/;"	f	class:Vehicle	typeref:typename:void	file:
-main	cpp_learn.cpp	/^int main() {$/;"	f	typeref:typename:int
-main	learn.c	/^int main(int argc, char* argv[]) {$/;"	f	typeref:typename:int
+all	Makefile	/^all: $(TARGETS)$/;"	t
+apply_bc	poisson.c	/^void apply_bc(double *x, double *y, double K[NN][NN], double F[NN], double U[NN]) {$/;"	f	typeref:typename:void
+assemble	poisson.c	/^void assemble(double *x, double *y, int elem[NE][3], double K[NN][NN], double F[NN]) {$/;"	f	typeref:typename:void
+boundary	poisson.c	/^double boundary(double x, double y) {$/;"	f	typeref:typename:double
+clean	Makefile	/^clean:$/;"	t
+generate_elements	poisson.c	/^void generate_elements(int elem[NE][3]) {$/;"	f	typeref:typename:void
+generate_nodes	poisson.c	/^void generate_nodes(double *x, double *y) {$/;"	f	typeref:typename:void
+learn	Makefile	/^learn: learn.o$/;"	t
+main	Makefile	/^main: main.o utils.o math.o$/;"	t
+main	learn.cpp	/^int main() {$/;"	f	typeref:typename:int
 main	main.c	/^int main(){$/;"	f	typeref:typename:int
-main.o	Makefile	/^main.o : main.c math.h utils.h$/;"	t
-math.o	Makefile	/^math.o : math.c math.h$/;"	t
-model	cpp_learn.cpp	/^        string model = "Mustang";$/;"	m	class:Car	typeref:typename:string	file:
-myChild	cpp_learn.cpp	/^class myChild: public myClass, public myOtherClass {$/;"	c	file:
-myClass	cpp_learn.cpp	/^class myClass {$/;"	c	file:
-myFunction	cpp_learn.cpp	/^        void myFunction() {$/;"	f	class:myClass	typeref:typename:void	file:
-myGrandChild	cpp_learn.cpp	/^class myGrandChild: public myChild {$/;"	c	file:
-myOtherClass	cpp_learn.cpp	/^class myOtherClass {$/;"	c	file:
-myOtherFunction	cpp_learn.cpp	/^        void myOtherFunction() {$/;"	f	class:myOtherClass	typeref:typename:void	file:
-name	learn.h	/^    char name[20];$/;"	m	struct:Student_	typeref:typename:char[20]
-print	learn.c	/^void print(Student* ps){$/;"	f	typeref:typename:void
+main	poisson.c	/^int main() {$/;"	f	typeref:typename:int
+main	testc.c	/^int main(int argc, char* argv[]) {$/;"	f	typeref:typename:int
+poisson	Makefile	/^poisson: poisson.o$/;"	t
 print_result	utils.c	/^void print_result(int result){$/;"	f	typeref:typename:void
-salary	cpp_learn.cpp	/^        int salary;$/;"	m	class:Employee	typeref:typename:int	file:
-setSalary	cpp_learn.cpp	/^        void setSalary(int s) {$/;"	f	class:Programmer	typeref:typename:void	file:
-setTime	cpp_learn.cpp	/^        void setTime(double t0) {_t = t0;};$/;"	f	class:BaseParams	typeref:typename:void	file:
-sex	learn.h	/^    char sex[10];$/;"	m	struct:Student_	typeref:typename:char[10]
+solve	poisson.c	/^void solve(double K[NN][NN], double F[NN], double U[NN]) {$/;"	f	typeref:typename:void
 subtract	math.c	/^int subtract(int a, int b) {$/;"	f	typeref:typename:int
-swap	learn.c	/^void swap(int* p1, int* p2) {$/;"	f	typeref:typename:void
-tele	learn.h	/^    char tele[12];$/;"	m	struct:Student_	typeref:typename:char[12]
-utils.o	Makefile	/^utils.o : utils.c utils.h$/;"	t
+testc	Makefile	/^testc: testc.o$/;"	t

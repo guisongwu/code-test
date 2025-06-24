@@ -1,36 +1,51 @@
-# 编译器设置
+# compiler settings 
 CC = gcc
 CXX = g++
-CFLAGS = -Wall -Wextra -std=c11
-CXXFLAGS = -Wall -Wextra -std=c++20
+CFLAGS = -g -Wall -Wno-unused-variable -Wno-unused-parameter -Wextra -std=gnu17
+CXXFLAGS = -g -Wall -Wno-unused-variable -Wno-unused-parameter -Wextra -std=c++20
+LDFLAGS = -L/usr/local/lib -Wl,-rpath=/usr/local/lib
+LDLIBS = -lm
 
-# 目标文件
-TARGETS = main poisson-fem learn
+# target files 
+TARGETS = main poisson learn testc testcpp
 
-# 默认目标（执行 make 时默认构建所有目标）
+# default target(when "make" is called, all the target files will be built.)
 all: $(TARGETS)
 
-# main 的构建规则
-main: main.o utils.o math.o
+########################### Link ################################
+
+# build rule of "testc"
+testc: testc.o
+	$(CC) $(CFLAGS) $^ -o $@ $(LDLIBS)
+
+# build rule of "testcpp"
+testcpp: testcpp.o
+	$(CXX) $(CXXFLAGS) $^ -o $@
+
+# build rule of "main" 
+main: main.o utils.o my-math.o
 	$(CC) $(CFLAGS) $^ -o $@
 
-# poisson-fem 的构建规则
-poisson-fem: poisson-fem.o
+# build rule of "poisson"
+poisson: poisson.o
 	$(CC) $(CFLAGS) $^ -o $@
 
-# learn 的构建规则（C++ 程序）
+# build rule of "learn" (cpp program)
 learn: learn.o
 	$(CXX) $(CXXFLAGS) $^ -o $@
 
-# 通用规则：从 .c 文件生成 .o 文件
+
+######################### Compile #############################
+
+# general build rule for C program to object file
 %.o: %.c
 	$(CC) $(CFLAGS) -c $< -o $@
 
-# 通用规则：从 .cpp 文件生成 .o 文件
+# general build rule for CPP program to object file
 %.o: %.cpp
 	$(CXX) $(CXXFLAGS) -c $< -o $@
 
-# 清理生成的文件
+# clean object and target files
 clean:
 	rm -f *.o $(TARGETS)
 
