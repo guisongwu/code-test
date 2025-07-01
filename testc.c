@@ -4,9 +4,10 @@
 
 
 int main(int argc, char* argv[]) {
+    
     // ----------------------------------- char ---------------------------------------
-    char a = 65;
-    printf("%c\n", a);
+    /* char a = 65; */
+    /* printf("%c\n", a); */
     // ------------------------- COORD *verts and COORD *verts[2] -----------------------------
     /* typedef double COORD[3]; */
     /* COORD *vert; */
@@ -28,7 +29,7 @@ int main(int argc, char* argv[]) {
     /*     } */
     /*     printf("\n"); */
     /* } */
-    // ------------------------------------ stdout(1) and stderr(2) -------------------------------------
+    // --------------------------- stdout(1) and stderr(2) ---------------------------------
     /* printf("This goes to stdout.\n"); */
     /* fprintf(stdout, "This is stdout using fprintf.\n"); */
     /* fprintf(stderr, "Error: something went wrong!\n"); */

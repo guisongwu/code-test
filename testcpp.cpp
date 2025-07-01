@@ -1,8 +1,64 @@
 #include <iostream>
+#include <cmath>
+#include <Eigen/Dense>
 using namespace std;
 
+using RealMat = Eigen::MatrixXd;
+using RealVec = Eigen::VectorXd;
+
+class Quad1d {
+    public:
+        double points[2] = {(1-1/sqrt(3))/2, (1+1/sqrt(3))/2};
+        double weights[2] = {0.5, 0.5};
+};
+class Quad2d {
+    public:
+        Quad1d quad1d;
+        double points[4][2] = {
+            {quad1d.points[0], quad1d.points[0]},
+            {quad1d.points[1], quad1d.points[0]},
+            {quad1d.points[0], quad1d.points[1]},
+            {quad1d.points[1], quad1d.points[1]}
+        };
+        double weights[4] = {0.25, 0.25, 0.25, 0.25};
+};
+
+double func1d(double x) {
+    return x*x;
+}
+double func2d(double x, double y) {
+    return (x*x+2)*(y*y+2*y+3); 
+}
+
+
 int main(int argc, char *argv[]) {
-    std::cout << "This goes to stdout" << std::endl;
-    std::cerr << "Error: Something went wrong!" << std::endl;
+    // ----------------------------- eigen solve -------------------------------
+    RealMat mat(3,3);
+    mat << 1.0, 0, 0,
+        0, 1.0, 0,
+        0, 0, 1.0;
+    RealVec rhs(3);
+    rhs << 4, 5, 6;
+    RealVec x = mat.lu().solve(rhs);
+    cout << x << endl;
+    
+    // --------------------------- numerical integral ----------------------------
+    /* Quad1d quad1d; */
+    /* Quad2d quad2d; */
+    /* double sum = 0; */
+    /* for (int i = 0; i < 2; i++) { */
+    /*     sum += quad1d.weights[i] * func1d(quad1d.points[i]); */
+    /* } */
+    /* for (int i = 0; i < 4; i++) { */
+    /*     sum += quad2d.weights[i] * func2d(quad2d.points[i][0], quad2d.points[i][1]); */
+    /* } */
+    /* cout << sum << endl; */
+
+    // --------------------------- array and pointer -----------------------------
+    /* double *weights = {1.0, 1.0};      ------------ wrong! */
+    /* double weights[2] = {1.0, 1.0};    ------------ right! */
+    // --------------------------- stdout and stderr ------------------------------- 
+    /* std::cout << "This goes to stdout" << std::endl; */
+    /* std::cerr << "Error: Something went wrong!" << std::endl; */
     return 0;
 }
