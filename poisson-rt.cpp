@@ -13,12 +13,30 @@
 #define N 2
 #define h (1.0/N)
 #define area (h*h)
+#define len h
 #define First 0
 #define Second 1
 using namespace std;
 using RealMat = Eigen::MatrixXd;
 using RealVec = Eigen::VectorXd;
 typedef double Coord[2];
+
+
+
+class Test {
+    public:
+        double func_p(double x, double y) {
+            return x*x*y*y;
+        }
+        /* double func_u(double x, double y) { */
+                        
+        /* } */
+        double func_f(double x, double y) {
+            return -2*(x*x + y*y);
+        }
+};
+Test test;
+
 
 class Quad1d {
     public:
@@ -309,15 +327,19 @@ void Solver::build_mat() {
 
             // Apply boundary conditions (Dirichlet)
             if (i == 0) {
+                A.row(3).setZero();
                 A(3,3) = 1; 
             }
             if (i == N-1) {
+                A.row(1).setZero();
                 A(1,1) = 1;
             }
             if (j == 0) {
+                A.row(0).setZero();
                 A(0,0) = 1;
             }
             if (j == N-1) {
+                A.row(2).setZero();
                 A(2,2) = 1;
             }
 
@@ -361,11 +383,15 @@ void Solver::build_rhs() {
     int Id[Ndof];
     int *Iu = Id, *Ip = Iu + Nu;
     
-    RealVec F(Np);
+    RealVec F(Ndof);
+    RealMat u_shape(Nu, 2);
     RealVec p_shape(Np), divu_shape(Nu);
+    RealVec ubc(1);
+    double vf;
     
-    for (int i = 0; i < N; i++) {
-        for (int j = 0; j < N; j++) {
+    for (int i = 0; i < N; i++) { // iter elem
+        for (int j = 0; j < N; j++) { // iter elem
+                                     
             Elem e(i,j);
             for (int k = 0; k < Nu; k++) {
                 Iu[k] = map_u(i,j,k);
@@ -374,38 +400,87 @@ void Solver::build_rhs() {
             
             F.setZero();
             for (int k = 0; k < 4; k++) {
+                u->CalcShape(e, quad2d.points[k], u_shape);
+                u->CalcDivShape(e, quad2d.points[k], divu_shape);
                 p->CalcShape(e, quad2d.points[k], p_shape);
-                /* u->CalcDivShape(e, quad2d.points[k], divu_shape); */
                 
-                // Define source term f (example: f = 1)
-                double f = 1.0;
+                vf = test.func_f(quad2d.points[k][0], quad2d.points[k][1]);
                 
                 // F(q)
-                F(0) += quad2d.weights[k] * area * (p_shape(0) * f);
+                F(Nu) += quad2d.weights[k] * area * (p_shape(0) * vf);
             }
             
-            /* // Apply boundary conditions (Dirichlet) */
-            /* if (i == 0) { */
-            /*     F(3) = 0.0; // Value for Dirichlet BC */
-            /* } */
-            /* if (i == N-1) { */
-            /*     F(1) = 0.0; */
-            /* } */
-            /* if (j == 0) { */
-            /*     F(0) = 0.0; */
-            /* } */
-            /* if (j == N-1) { */
-            /*     F(2) = 0.0; */
-            /* } */
-            
-            /* VecSetValues(rhs, Ndof, Id, &F[0], ADD_VALUES); */
-        }
-    }
-    
-    /* VecAssemblyBegin(rhs); */
-    /* VecAssemblyEnd(rhs); */
+
+            if (i == 0) {
+                double n[2] = {-1,0};
+                for (int k = 0; k < 2; k++) {
+                    double pbc = test.func_p(0, quad1d.points[k]);
+                    double point[2] = {0,quad1d.points[k]};
+                    u->CalcShape(e, point, u_shape);
+                    for (int m = 0; m < Nu; m++) {
+                        F(m) += len * quad1d.weights[k] * (-1) * pbc * (u_shape(m,0) * n[0] + u_shape(m,1) * n[1]);
+                    }
+                }
+            }
+
+            if (i == N-1) {
+                double n[2] = {1,0};
+                for (int k = 0; k < 2; k++) {
+                    double pbc = test.func_p(1, quad1d.points[k]);
+                    double point[2] = {1,quad1d.points[k]};
+                    u->CalcShape(e, point, u_shape);
+                    for (int m = 0; m < Nu; m++) {
+                        F(m) += len * quad1d.weights[k] * (-1) * pbc * (u_shape(m,0) * n[0] + u_shape(m,1) * n[1]);
+                    }
+                }
+            }
+
+            if (j == 0) {
+                double n[2] = {0,-1};
+                for (int k = 0; k < 2; k++) {
+                    double pbc = test.func_p(quad1d.points[k], 0);
+                    double point[2] = {quad1d.points[k], 0};
+                    u->CalcShape(e, point, u_shape);
+                    for (int m = 0; m < Nu; m++) {
+                        F(m) += len * quad1d.weights[k] * (-1) * pbc * (u_shape(m,0) * n[0] + u_shape(m,1) * n[1]);
+                    }
+                }
+            }
+
+            if (j == N-1) {
+                double n[2] = {0,1};
+                for (int k = 0; k < 2; k++) {
+                    double pbc = test.func_p(quad1d.points[k], 1);
+                    double point[2] = {quad1d.points[k], 1};
+                    u->CalcShape(e, point, u_shape);
+                    for (int m = 0; m < Nu; m++) {
+                        F(m) += len * quad1d.weights[k] * (-1) * pbc * (u_shape(m,0) * n[0] + u_shape(m,1) * n[1]);
+                    }
+                }
+            }
+
+
+            for (int m = 0; m < Ndof; m++) {
+                rhs(Id[m]) += F(m);
+                /* for (int n = 0; n < Ndof; n++) { */
+                /*     mat(Id[m], Id[n]) += A(m,n); */
+                /* } */
+            }
+
+        } // end iter elem
+    } // end iter elem
+ 
+    /* for (int m = 0; m < total_dofs; m++) { */
+    /*     printf("%5.3f\n", rhs(m)); */
+    /* } */
+    cout << "Build Rhs Done\n";
 }
 
+void Solver::solve() {
+    x = mat.lu().solve(rhs);
+    cout << x << endl;
+}
+// ---------------------------- solve using Petsc ---------------------------
 /* void Solver::solve() { */
 /*     cout << "Solve Use Petsc\n"; */
     
@@ -423,12 +498,14 @@ void Solver::build_rhs() {
 /*     PetscViewerPopFormat(viewer); */
 /*     PetscViewerDestroy(&viewer); */
 /* } */
+// -----------------------------------------------------------------------------
 
-void Solver::step() {
-    build_mat();
-    build_rhs();
-    /* solve(); */
-}
+
+/* void Solver::step() { */
+/*     build_mat(); */
+/*     build_rhs(); */
+/*     /1* solve(); *1/ */
+/* } */
 
 int main(int argc, char* argv[]) {
     /* PetscInitialize(&argc, &argv, NULL, NULL); */
@@ -436,6 +513,8 @@ int main(int argc, char* argv[]) {
     Solver solver;
     solver.init();
     solver.build_mat();
+    solver.build_rhs();
+    solver.solve();
     /* solver.step(); */
     
     /* PetscFinalize(); */

@@ -3,14 +3,14 @@ PETSC_DIR=/opt/petsc-3.23.2
 PETSC_ARCH=
 
 EIGEN_DIR=/usr/include/eigen3
-include ${PETSC_DIR}/lib/petsc/conf/petscvariables
-include ${PETSC_DIR}/lib/petsc/conf/variables
-include ${PETSC_DIR}/lib/petsc/conf/rules
+# include ${PETSC_DIR}/lib/petsc/conf/petscvariables
+# include ${PETSC_DIR}/lib/petsc/conf/variables
+# include ${PETSC_DIR}/lib/petsc/conf/rules
 
 LAPACK_DIR=/opt/OpenBLAS-0.3.29
 MPREAL_DIR=
-MPFR_DIR=
-GMP_DIR=
+MPFR_DIR=/usr/lib/x86_64-linux-gnu
+GMP_DIR=/usr/lib/x86_64-linux-gnu
 
 
 CC = mpicc 
@@ -23,7 +23,7 @@ LDLIBS = -lm -lmpi -lpetsc
 
 
 # target files 
-TARGETS = main poisson learn testc testcpp poisson-mixed-quad
+TARGETS = main poisson learn testc testcpp poisson-rt
 
 # default target(when "make" is called, all the target files will be built.)
 all: $(TARGETS)
@@ -68,8 +68,8 @@ learn: learn.o
 	$(CXX) $(CXXFLAGS) $(CPPFLAGS) -c $< -o $@
 
 # clean object and target files
-# clean:
-# 	rm -f *.o $(TARGETS)
+clean:
+	rm -f *.o $(TARGETS)
 
 # 伪目标声明
 .PHONY: all clean
