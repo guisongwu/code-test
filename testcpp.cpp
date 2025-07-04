@@ -1,4 +1,5 @@
 #include <iostream>
+#include <cstdio>
 #include <cmath>
 #include <Eigen/Dense>
 using namespace std;
@@ -32,15 +33,48 @@ double func2d(double x, double y) {
 
 
 int main(int argc, char *argv[]) {
+    // ------------------------- COORD *verts and COORD *verts[2] -----------------------------
+    typedef double COORD[3];
+    COORD *vert;
+    vert = (COORD *) calloc (2, sizeof(COORD));
+    for (int i = 0; i < 2; i++) {
+        for (int j = 0; j < 3; j++) {
+            vert[i][j] = (double)i*j;
+            printf("%lf\t", vert[i][j]);
+        }
+        printf("\n");
+    }
+    cout << endl;
+
+    COORD vert1 = {1.0, 2.0, 3.0};
+    COORD vert2 = {4.0, 5.0, 6.0};
+    COORD *verts[2] = {&vert1, &vert2};
+    for (int i = 0; i < 2; i++) {
+        for (int j = 0; j < 3; j++) {
+            printf("%lf\t", (*verts[i])[j]);
+        }
+        printf("\n");
+    }
+    cout << endl;
+
+    vert = new COORD[10]();
+    for (int i = 0; i < 10; i++) {
+        for (int j = 0; j < 3; j++) {
+            vert[i][j] = (double)i*j;
+            printf("%lf\t", vert[i][j]);
+        }
+        printf("\n");
+    }
+
     // ----------------------------- eigen solve -------------------------------
-    RealMat mat(3,3);
-    mat << 1.0, 0, 0,
-        0, 1.0, 0,
-        0, 0, 1.0;
-    RealVec rhs(3);
-    rhs << 4, 5, 6;
-    RealVec x = mat.lu().solve(rhs);
-    cout << x << endl;
+    /* RealMat mat(3,3); */
+    /* mat << 1.0, 0, 0, */
+    /*     0, 1.0, 0, */
+    /*     0, 0, 1.0; */
+    /* RealVec rhs(3); */
+    /* rhs << 4, 5, 6; */
+    /* RealVec x = mat.lu().solve(rhs); */
+    /* cout << x << endl; */
     
     // --------------------------- numerical integral ----------------------------
     /* Quad1d quad1d; */

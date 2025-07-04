@@ -2,12 +2,12 @@
 // solve 
 // \vec{u} + \nabla p = 0
 // \nabla \cdot \vec{u} = f
-// using RT0/DG0 or BDFM1/DG0 on quad meshes.
+// using RT0/DG0 BDFM1/DG0 on quad meshes.
 // ================================================
 #include <iostream>
 #include <vector>
 #include <Eigen/Dense>
-/* #include <petscksp.h> */
+#include <petscksp.h>
 #include <stdio.h>
 
 #define N 2
@@ -16,7 +16,6 @@
 #define len h
 #define First 0
 #define Second 1
-
 using namespace std;
 using RealMat = Eigen::MatrixXd;
 using RealVec = Eigen::VectorXd;
@@ -29,11 +28,7 @@ class Test {
         double func_p(double x, double y) {
             return x*x*y*y;
         }
-        /* void func_u(double x, double y) { */
-
-        /* } */
         /* double func_u(double x, double y) { */
-
                         
         /* } */
         double func_f(double x, double y) {

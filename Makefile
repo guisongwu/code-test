@@ -1,7 +1,7 @@
 # compiler settings 
 PETSC_DIR=/opt/petsc-3.23.2
 PETSC_ARCH=
-
+MPI_DIR=/usr/lib/x86_64-linux-gnu/openmpi
 EIGEN_DIR=/usr/include/eigen3
 # include ${PETSC_DIR}/lib/petsc/conf/petscvariables
 # include ${PETSC_DIR}/lib/petsc/conf/variables
@@ -13,12 +13,16 @@ MPFR_DIR=/usr/lib/x86_64-linux-gnu
 GMP_DIR=/usr/lib/x86_64-linux-gnu
 
 
-CC = mpicc 
-CXX = mpicxx 
-CFLAGS = -g -Wno-unused-variable -Wno-unused-parameter -Wno-unused-function -Wextra -std=gnu17
-CXXFLAGS = -g -Wno-unused-variable -Wno-unused-parameter -Wextra -std=c++20
+# CC = mpicc 
+# CXX = mpicxx 
+CC = gcc 
+CXX = g++ 
+
+CFLAGS   = -g -Wall -Wextra -Wno-unused-variable -Wno-unused-parameter -Wno-unused-function -std=gnu17
+CXXFLAGS = -g -Wall -Wextra -Wno-unused-variable -Wno-unused-parameter -Wno-unused-function -std=c++20
+
 CPPFLAGS = -I/usr/include/eigen3 -I$(PETSC_DIR)/include -I$(MPI_DIR)/include
-LDFLAGS = -L/usr/local/lib -Wl,-rpath=/usr/local/lib -L$(MPI_DIR)/lib -Wl,-rpath=$(MPI_DIR)/lib -L$(PETSC_DIR)/lib -Wl,-rpath=$(PETSC_DIR)/lib
+LDFLAGS = -L$(MPI_DIR)/lib -Wl,-rpath=$(MPI_DIR)/lib -L$(PETSC_DIR)/lib -Wl,-rpath=$(PETSC_DIR)/lib
 LDLIBS = -lm -lmpi -lpetsc
 
 
@@ -32,7 +36,7 @@ all: $(TARGETS)
 
 # build rule of "testc"
 testc: testc.o
-	$(CC) $(CFLAGS) $^ -o $@ $(LDLIBS)
+	$(CC) $(CFLAGS) $^ -o $@ 
 
 # build rule of "testcpp"
 testcpp: testcpp.o
