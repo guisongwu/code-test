@@ -22,12 +22,15 @@ CFLAGS   = -g -Wall -Wextra -Wno-unused-variable -Wno-unused-parameter -Wno-unus
 CXXFLAGS = -g -Wall -Wextra -Wno-unused-variable -Wno-unused-parameter -Wno-unused-function -std=c++20
 
 CPPFLAGS = -I/usr/include/eigen3 -I$(PETSC_DIR)/include -I$(MPI_DIR)/include
+
 LDFLAGS = -L$(MPI_DIR)/lib -Wl,-rpath=$(MPI_DIR)/lib -L$(PETSC_DIR)/lib -Wl,-rpath=$(PETSC_DIR)/lib
 LDLIBS = -lm -lmpi -lpetsc
 
 
 # target files 
 TARGETS = main poisson learn testc testcpp poisson-rt
+TARGETC = poisson learn testc
+TARGETCPP = testcpp poisson-rt
 
 # default target(when "make" is called, all the target files will be built.)
 all: $(TARGETS)
@@ -43,10 +46,11 @@ testcpp: testcpp.o
 	$(CXX) $(CXXFLAGS) $^ -o $@
 
 # build rule of "poisson-mixed-quad"
-poisson-mixed-quad: poisson-mixed-quad.o
-	$(CXX) $(CXXFLAGS) $(LDFLAGS) $^ -o $@
-# poisson-mixed-quad: poisson-mixed-quad.o
-#     $(CLINKER) -o $@ $^ $(PETSC_LIB)
+poisson-rt: poisson-rt.o
+	$(CXX) $(CXXFLAGS) $^ -o $@
+# $(CXX) $(CXXFLAGS) $(LDFLAGS) $^ -o $@
+# poisson-rt: poisson-rt.o
+#     $(CLINKER) -o $@ $^
 
 # build rule of "main" 
 main: main.o utils.o my-math.o
@@ -65,7 +69,7 @@ learn: learn.o
 
 # general build rule for C program to object file
 %.o: %.c
-	$(CC) $(CFLAGS) -c $< -o $@
+	$(CC) $(CFLAGS) $(CPPFLAGS) -c $< -o $@
 
 # general build rule for CPP program to object file
 %.o: %.cpp

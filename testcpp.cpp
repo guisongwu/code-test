@@ -31,40 +31,65 @@ double func2d(double x, double y) {
     return (x*x+2)*(y*y+2*y+3); 
 }
 
+typedef double Coord[2];
+/* void ref2phy(const Coord *ref_coord, Coord &phy_coord) { */
+/*     double h = 1.0/2.0; */
+/*     phy_coord[0] = (*ref_coord)[0]*h + 0.5; */ 
+/*     phy_coord[1] = (*ref_coord)[1]*h + 0.0; */ 
+/* } */
+void ref2phy(const Coord &ref_coord, Coord &phy_coord) {
+    double h = 1.0/2.0;
+    phy_coord[0] = ref_coord[0]*h + 0.5; 
+    phy_coord[1] = ref_coord[1]*h + 0.0; 
+}
+
 
 int main(int argc, char *argv[]) {
+    // --------------------------------- ref2phy ----------------------------------------------
+    double points[4][2] = {
+        {1,2},
+        {2,1},
+        {0.5, 0.5},
+        {4,5}
+    };
+    Coord ref_coord = {points[2][0], points[2][1]};
+    Coord phy_coord;
+    ref2phy(ref_coord, phy_coord);
+    cout << phy_coord[0] << "\t" << phy_coord[1] << endl;
+
+    
     // ------------------------- COORD *verts and COORD *verts[2] -----------------------------
-    typedef double COORD[3];
-    COORD *vert;
-    vert = (COORD *) calloc (2, sizeof(COORD));
-    for (int i = 0; i < 2; i++) {
-        for (int j = 0; j < 3; j++) {
-            vert[i][j] = (double)i*j;
-            printf("%lf\t", vert[i][j]);
-        }
-        printf("\n");
-    }
-    cout << endl;
+    /* typedef double COORD[3]; */
+    /* COORD *vert; */
+    /* vert = (COORD *) calloc (2, sizeof(COORD)); */
+    /* for (int i = 0; i < 2; i++) { */
+    /*     for (int j = 0; j < 3; j++) { */
+    /*         vert[i][j] = (double)i*j; */
+    /*         printf("%lf\t", vert[i][j]); */
+    /*     } */
+    /*     printf("\n"); */
+    /* } */
+    /* cout << endl; */
 
-    COORD vert1 = {1.0, 2.0, 3.0};
-    COORD vert2 = {4.0, 5.0, 6.0};
-    COORD *verts[2] = {&vert1, &vert2};
-    for (int i = 0; i < 2; i++) {
-        for (int j = 0; j < 3; j++) {
-            printf("%lf\t", (*verts[i])[j]);
-        }
-        printf("\n");
-    }
-    cout << endl;
+    /* COORD vert1 = {1.0, 2.0, 3.0}; */
+    /* COORD vert2 = {4.0, 5.0, 6.0}; */
+    /* COORD *verts[2] = {&vert1, &vert2}; */
+    /* for (int i = 0; i < 2; i++) { */
+    /*     for (int j = 0; j < 3; j++) { */
+    /*         printf("%lf\t", (*verts[i])[j]); */
+    /*     } */
+    /*     printf("\n"); */
+    /* } */
+    /* cout << endl; */
 
-    vert = new COORD[10]();
-    for (int i = 0; i < 10; i++) {
-        for (int j = 0; j < 3; j++) {
-            vert[i][j] = (double)i*j;
-            printf("%lf\t", vert[i][j]);
-        }
-        printf("\n");
-    }
+    /* vert = new COORD[10](); */
+    /* for (int i = 0; i < 10; i++) { */
+    /*     for (int j = 0; j < 3; j++) { */
+    /*         vert[i][j] = (double)i*j; */
+    /*         printf("%lf\t", vert[i][j]); */
+    /*     } */
+    /*     printf("\n"); */
+    /* } */
 
     // ----------------------------- eigen solve -------------------------------
     /* RealMat mat(3,3); */

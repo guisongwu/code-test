@@ -8,7 +8,6 @@
 
 
 
-
 bool get_token(FILE *fp, char *token)
 {
     int c;
@@ -32,9 +31,8 @@ bool get_token(FILE *fp, char *token)
 }
 
 
-
-
 int main(int argc, char* argv[]) {
+    
     // ------------------------------- isalpha(int c) ---------------------------------
     // instead of isalpha(char c)
     /* printf("%d\n", isalpha(9)); */
@@ -46,7 +44,7 @@ int main(int argc, char* argv[]) {
     /* printf("%d\n", isalpha((int)'A')); */
     /* printf("%s\n", isalpha((int)'A') ? "TRUE" : "FALSE"); */
 
-    // -------------------------- atoi and atof --------------------------------
+    // ------------------------------- atoi and atof -----------------------------------
     /* char *str = "98.8"; */
     /* printf("%d\n", atoi(str)); // Skips leading whitespace (spaces, tabs, etc.). */
     /*                            // Reads optional sign (+ or -). */
@@ -57,11 +55,11 @@ int main(int argc, char* argv[]) {
     /* printf("%d\n", atoi("   -\n12abc123")); */
     /* printf("%d\n", atoi("   -  12abc123")); */
     /* printf("%d\n", atoi("     -12abc123")); */
-    printf("%f\n", atof("0.234"));
-    printf("%f\n", atof("0.234abc"));
-    printf("%f\n", atof("abc0.234"));
+    /* printf("%f\n", atof("0.234")); */
+    /* printf("%f\n", atof("0.234abc")); */
+    /* printf("%f\n", atof("abc0.234")); */
 
-    // ----------------------------- goto -----------------------------------
+    // ------------------------------------ goto ----------------------------------------
     /* goto error; */
     /* printf("Test if this sentence can be executed or not\n"); // this will be ignored. */
 /* error: */
@@ -73,12 +71,13 @@ int main(int argc, char* argv[]) {
     /*     printf("This is a test for goto sentence in a if condition.\n"); */
     /* } */
 
-    // ----------------------------- __LINE__ -------------------------------------
+    // ---------------------------------- __LINE__ --------------------------------------
     /* printf("%s\n", __FILE__); */
     /* printf("%d\n", __LINE__); */
     /* printf("%d\n", __LINE__); */
     /* printf("%d\n", __LINE__); */
-    // ------------------------------ strcmp and strcasecmp ---------------------------
+
+    // ----------------------------- strcmp and strcasecmp -------------------------------
     /* char *str1 = "helloworld"; */
     /* char *str2 = "HelloWorld"; */
     /* printf("%d\n", strcmp(str1, str2));  // case-sensitive */
@@ -86,7 +85,8 @@ int main(int argc, char* argv[]) {
     /*                                      // <0: str1[0] < str2[0] */
     /*                                      // =0: str1 == str2 */
     /* printf("%d\n", strcasecmp(str1, str2));  // case-insensitive */
-    // ---------------------------------- get_token ---------------------------------
+
+    // ------------------------------------ get_token -------------------------------------
     /* FILE *file = fopen("quad.msh", "r"); */
     /* if (file == NULL) { */
     /*     perror("Failed to open file"); */
@@ -100,7 +100,7 @@ int main(int argc, char* argv[]) {
     
     /* fclose(file);  // Always close the file! */
 
-    // -------------------------------- strchr ------------------------------------
+    // ------------------------------------ strchr ----------------------------------------
     /* char *str1 = "hello world";  // This is a read-only str. */
     /* char str2[] = "hello world";  // This is changable. */
     /* char *num = strchr(str2, 'o');  // char *strchr(const char *str, int c); */
@@ -110,7 +110,7 @@ int main(int argc, char* argv[]) {
     /* *num = 'e'; */
     /* printf("%s\n", str2); */
 
-    // -------------------------------- Write File -----------------------------------
+    // ----------------------------------- Write File --------------------------------------
     /* FILE *file = fopen("example.txt", "w");  // Open in write mode ("w") */
     /* if (file == NULL) { */
     /*     perror("Failed to open file");  // Error handling */
@@ -122,7 +122,7 @@ int main(int argc, char* argv[]) {
     /* fputc('A', file);  // Writes a single character */
     /* fclose(file);  // Always close the file! */
 
-    // --------------------------------- Read File -------------------------------------
+    // ------------------------------------- Read File ---------------------------------------
     /* FILE *file = fopen("quad.msh", "r"); */
     /* if (file == NULL) { */
     /*     perror("Failed to open file"); */
@@ -139,7 +139,7 @@ int main(int argc, char* argv[]) {
     /* } */
     /* fclose(file);  // Always close the file! */
 
-    // ---------------------------------- memset ------------------------------------
+    // -------------------------------------- memset ------------------------------------------
     /* char token[10]; */
     /* memset(token, 0, 10); */
     /* printf("%s\n", token); */
@@ -150,27 +150,37 @@ int main(int argc, char* argv[]) {
     /* strcpy(token, "hello shi"); // char *strcpy(char *dest, const char *src); */
     /* printf("%s\n", token); */
 
-    // ----------------------------------- char ---------------------------------------
+    // --------------------------------------- char --------------------------------------------
     /* char a = 65; */
     /* printf("%c\n", a); */
 
     // ------------------------- COORD *verts and COORD *verts[2] -----------------------------
-    /* typedef double COORD[3]; */
-    /* COORD *vert; */
-    /* vert = (COORD *) calloc (2, sizeof(COORD)); */
-    /* for (int i = 0; i < 2; i++) { */
-    /*     for (int j = 0; j < 3; j++) { */
+    double points[4][2] = {
+        {1,2},
+        {2,1},
+        {3,4},
+        {4,5}
+    };
+
+    typedef double Coord[2];
+    Coord *ref_coord = &points[2];
+    printf("%f\t%f\n", (*ref_coord)[0], (*ref_coord)[1]);
+
+    /* Coord *vert; */
+    /* vert = (Coord *) calloc (5, sizeof(Coord)); */
+    /* for (int i = 0; i < 5; i++) { */
+    /*     for (int j = 0; j < 2; j++) { */
     /*         vert[i][j] = (double)i*j; */
     /*         printf("%lf\t", vert[i][j]); */
     /*     } */
     /*     printf("\n"); */
     /* } */
 
-    /* COORD vert1 = {1.0, 2.0, 3.0}; */
-    /* COORD vert2 = {4.0, 5.0, 6.0}; */
-    /* COORD *verts[2] = {&vert1, &vert2}; */
-    /* for (int i = 0; i < 2; i++) { */
-    /*     for (int j = 0; j < 3; j++) { */
+    /* Coord vert1 = {1.0, 2.0}; */
+    /* Coord vert2 = {4.0, 5.0}; */
+    /* Coord *verts[2] = {&vert1, &vert2}; */
+    /* for (int i = 0; i < 3; i++) { */
+    /*     for (int j = 0; j < 2; j++) { */
     /*         printf("%lf\t", (*verts[i])[j]); */
     /*     } */
     /*     printf("\n"); */

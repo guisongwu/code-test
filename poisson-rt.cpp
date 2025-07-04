@@ -1,8 +1,8 @@
 // ================================================
-// solve 
-// \vec{u} + \nabla p = 0
-// \nabla \cdot \vec{u} = f
-// using RT0/DG0 or BDFM1/DG0 on quad meshes.
+//  solve 
+//  \vec{u} + \nabla p = 0
+//  \nabla \cdot \vec{u} = f
+//  using RT0/DG0 or BDFM1/DG0 on quad meshes.
 // ================================================
 #include <iostream>
 #include <vector>
@@ -26,16 +26,31 @@ typedef double Coord[2];
 
 class Test {
     public:
+        double func_p(const Coord &phy_coord) {
+            double x = phy_coord[0];
+            double y = phy_coord[1];
+            return x*x*y*y;
+        }
         double func_p(double x, double y) {
             return x*x*y*y;
         }
-        /* void func_u(double x, double y) { */
 
-        /* } */
-        /* double func_u(double x, double y) { */
+        void func_u(const Coord &phy_coord, double *u) {
+            double x = phy_coord[0];
+            double y = phy_coord[1];
+            u[0] = -2*x*y*y;
+            u[1] = -2*x*x*y;
+        }
+        void func_u(double x, double y, double *u) {
+            u[0] = -2*x*y*y;
+            u[1] = -2*x*x*y;
+        }
 
-                        
-        /* } */
+        double func_f(const Coord &phy_coord) {
+            double x = phy_coord[0];
+            double y = phy_coord[1];
+            return -2*(x*x + y*y);
+        }
         double func_f(double x, double y) {
             return -2*(x*x + y*y);
         }
@@ -67,6 +82,12 @@ class Elem {
             x_center = (x_left + x_right) / 2;
             y_center = (y_down + y_up) / 2;
         }
+
+        void ref2phy(const Coord ref_coord, Coord &phy_coord) {
+            phy_coord[0] = ref_coord[0]*h + x_left; 
+            phy_coord[1] = ref_coord[1]*h + y_down; 
+        }
+
         int i, j;
         double x_left;
         double x_right;
@@ -102,11 +123,11 @@ int map_p(int i, int j) {
 class FERT0 {
     public:
         FERT0();
-        void CalcShapeRef(const double *ip, RealMat &shape) const;
+        void CalcShapeRef(const double *ip, RealMat &shape);
         void CalcShape(const Elem &e, const double *ip, RealMat &shape);
-        void CalcDivShapeRef(const double *ip, RealVec &divshape) const;
+        void CalcDivShapeRef(const double *ip, RealVec &divshape);
         void CalcDivShape(const Elem &e, const double *ip, RealVec &divshape);
-        Coord *nodes = nullptr; 
+        Coord *nodes; 
         Eigen::PartialPivLU<RealMat> Ti;
         const int nbas = 4;
         const double nk[8] =
@@ -116,6 +137,7 @@ class FERT0 {
          -1.,  0. };
         vector<int> dof2nk;
 };
+
 
 FERT0::FERT0() {
     nodes = (Coord *) calloc (nbas, sizeof(Coord));
@@ -139,7 +161,8 @@ FERT0::FERT0() {
     Ti = Eigen::PartialPivLU<RealMat> (T);
 }
 
-void FERT0::CalcShapeRef(const double *ip, RealMat &shape) const {
+
+void FERT0::CalcShapeRef(const double *ip, RealMat &shape) {
     RealMat u(nbas,2);
     int o = 0;
     u(o,0) = 1; u(o,1) = 0;
@@ -159,7 +182,7 @@ void FERT0::CalcShape(const Elem &e, const double *ip, RealMat &shape) {
     CalcShapeRef(ip, shape);
 }
 
-void FERT0::CalcDivShapeRef(const double *ip, RealVec &divshape) const {
+void FERT0::CalcDivShapeRef(const double *ip, RealVec &divshape) {
     int o = 0; 
     RealVec divu(nbas);
     divu(o++) = 0; 
@@ -178,9 +201,9 @@ void FERT0::CalcDivShape(const Elem &e, const double *ip, RealVec &divshape) {
 class FEDG0 {
     public:
         FEDG0();
-        void CalcShapeRef(const double *ip, RealVec &shape) const;
+        void CalcShapeRef(const double *ip, RealVec &shape);
         void CalcShape(const Elem &e, const double *ip, RealVec &shape);
-        void CalcGradShapeRef(const double *ip, RealMat &gradshape) const;
+        void CalcGradShapeRef(const double *ip, RealMat &gradshape);
         void CalcGradShape(const Elem &e, const double *ip, RealMat &gradshape);
         Coord *nodes = nullptr;
 };
@@ -191,7 +214,7 @@ FEDG0::FEDG0() {
     nodes[First][1] = 1./2.;
 }
 
-void FEDG0::CalcShapeRef(const double *ip, RealVec &shape) const {
+void FEDG0::CalcShapeRef(const double *ip, RealVec &shape) {
     assert(shape.size() == 1);
     shape(First) = 1.;
 }
@@ -201,7 +224,7 @@ void FEDG0::CalcShape(const Elem &e, const double *ip, RealVec &shape) {
     shape(First) = 1.;
 }
 
-void FEDG0::CalcGradShapeRef(const double *ip, RealMat &gradshape) const {
+void FEDG0::CalcGradShapeRef(const double *ip, RealMat &gradshape) {
     assert(gradshape.rows() == 1);
     gradshape(First, 0) = 0.;
     gradshape(First, 1) = 0.;
@@ -231,6 +254,7 @@ class Solver {
         void step();
         FERT0 *u;
         FEDG0 *p;
+        /* Elem *e; */
         Quad2d quad2d;
         Quad1d quad1d;
         RealMat mat;
@@ -274,7 +298,6 @@ void Solver::init() {
     cout << "u_space: RT0\n";
     cout << "p_space: DG0\n";
     
-    // Initialize PETSc objects
     mat.resize(total_dofs, total_dofs);
     mat.setZero();
     rhs.resize(total_dofs);
@@ -296,9 +319,10 @@ void Solver::build_mat() {
     RealMat u_shape(Nu,2), dp_shape(Np,2);
     RealVec p_shape(Np), divu_shape(Nu);
     
-    for (int i = 0; i < N; i++) {
-        for (int j = 0; j < N; j++) {
-            Elem e(i,j);
+    for (int i = 0; i < N; i++) { // iter elem
+        for (int j = 0; j < N; j++) { // iter elem
+            /* e = new Elem(i, j); // dynamically allocates memory for an Elem object on the heap. */
+            Elem e(i,j);           // created an Elem object on the stack.
             for (int k = 0; k < Nu; k++) {
                 Iu[k] = map_u(i,j,k);
             }
@@ -318,14 +342,14 @@ void Solver::build_mat() {
                     }
                     // A(p,v)
                     for (int n = 0; n < Np; n++) {
-                        A(m,n+Nu) += quad2d.weights[k] * area * (-divu_shape(m) * p_shape(n));
+                        A(m,n+Nu) += quad2d.weights[k] * area / h * (-divu_shape(m) * p_shape(n));
                     }
                 }
                 
                 // A(q,u)
                 for (int m = 0; m < Np; m++) {
                     for (int n = 0; n < Nu; n++) {
-                        A(m + Nu, n) += quad2d.weights[k] * area * (p_shape(m) * divu_shape(n));
+                        A(m + Nu, n) += quad2d.weights[k] * area / h * (p_shape(m) * divu_shape(n));
                     }
                 }
             }
@@ -348,14 +372,17 @@ void Solver::build_mat() {
                 A(2,2) = 1;
             }
 
+
+            cout << A << endl << endl;
+
             // Add element matrix to global matrix
             for (int m = 0; m < Ndof; m++) {
                 for (int n = 0; n < Ndof; n++) {
                     mat(Id[m], Id[n]) += A(m,n);
                 }
             }
-        }
-    }
+        } // end iter elem
+    } // end iter elem
 
     /* MatAssemblyBegin(mat, MAT_FINAL_ASSEMBLY); */
     /* MatAssemblyEnd(mat, MAT_FINAL_ASSEMBLY); */
@@ -370,8 +397,17 @@ void Solver::build_mat() {
 
     cout << "Build Mat Done\n";
 
-    /* for (int i = 0; i < total_dofs; i++) { */
-    /*     for (int j = 0; j < total_dofs; j++) */ 
+    for (int i = 0; i < total_dofs; i++) {
+        printf("%d\t", i);
+        for (int j = 0; j < total_dofs; j++) 
+            printf("%4.2f\t", mat(i,j));
+            /* cout << "%4.2f" << mat(i,j) << "\t"; */
+        cout << endl;
+    }
+
+    /* for (int i = 0; i < 2*(N)*(N+1); i++) { */
+    /*     printf("%d\t", i); */
+    /*     for (int j = 0; j < 2*(N)*(N+1); j++) */ 
     /*         printf("%4.2f\t", mat(i,j)); */
     /*         /1* cout << "%4.2f" << mat(i,j) << "\t"; *1/ */
     /*     cout << endl; */
@@ -391,7 +427,7 @@ void Solver::build_rhs() {
     RealVec F(Ndof);
     RealMat u_shape(Nu, 2);
     RealVec p_shape(Np), divu_shape(Nu);
-    RealVec ubc(1);
+    double ubc[2];
     double vf;
     
     for (int i = 0; i < N; i++) { // iter elem
@@ -399,9 +435,9 @@ void Solver::build_rhs() {
                                      
             Elem e(i,j);
             for (int k = 0; k < Nu; k++) {
-                Iu[k] = map_u(i,j,k);
+                Iu[k] = map_u(i, j, k);
             }
-            Ip[0] = map_p(i,j);
+            Ip[0] = map_p(i, j);
             
             F.setZero();
             for (int k = 0; k < 4; k++) {
@@ -409,59 +445,80 @@ void Solver::build_rhs() {
                 u->CalcDivShape(e, quad2d.points[k], divu_shape);
                 p->CalcShape(e, quad2d.points[k], p_shape);
                 
-                vf = test.func_f(quad2d.points[k][0], quad2d.points[k][1]);
+                Coord ref_coord = {quad2d.points[k][0], quad2d.points[k][1]}; 
+                Coord phy_coord;
+                e.ref2phy(ref_coord, phy_coord);
+                vf = test.func_f(phy_coord);
                 
                 // F(q)
-                F(Nu) += quad2d.weights[k] * area * (p_shape(0) * vf);
+                for (int m = 0; m < Np; m++) {
+                    F(m + Nu) += quad2d.weights[k] * area * (p_shape(m) * vf);
+                }
             }
             
-
+            // -(p, v·n)_{\partial \Omega} and dirichlet boundary condition
             if (i == 0) {
                 double n[2] = {-1,0};
                 for (int k = 0; k < 2; k++) {
-                    double pbc = test.func_p(0, quad1d.points[k]);
-                    double point[2] = {0,quad1d.points[k]};
-                    u->CalcShape(e, point, u_shape);
+                    Coord ref_coord = {0, quad1d.points[k]}; 
+                    Coord phy_coord;
+                    e.ref2phy(ref_coord, phy_coord);
+                    double pbc = test.func_p(phy_coord);
+                    u->CalcShape(e, phy_coord, u_shape);
                     for (int m = 0; m < Nu; m++) {
                         F(m) += len * quad1d.weights[k] * (-1) * pbc * (u_shape(m,0) * n[0] + u_shape(m,1) * n[1]);
                     }
                 }
+                test.func_u(0, e.y_center, ubc);
+                F(3) = ubc[0] * n[0] + ubc[1] * n[1];
             }
 
             if (i == N-1) {
                 double n[2] = {1,0};
                 for (int k = 0; k < 2; k++) {
-                    double pbc = test.func_p(1, quad1d.points[k]);
-                    double point[2] = {1,quad1d.points[k]};
-                    u->CalcShape(e, point, u_shape);
+                    Coord ref_coord = {1, quad1d.points[k]}; 
+                    Coord phy_coord;
+                    e.ref2phy(ref_coord, phy_coord);
+                    double pbc = test.func_p(phy_coord);
+                    u->CalcShape(e, phy_coord, u_shape);
                     for (int m = 0; m < Nu; m++) {
                         F(m) += len * quad1d.weights[k] * (-1) * pbc * (u_shape(m,0) * n[0] + u_shape(m,1) * n[1]);
                     }
                 }
+                test.func_u(1, e.y_center, ubc);
+                F(1) = ubc[0] * n[0] + ubc[1] * n[1];
             }
 
             if (j == 0) {
                 double n[2] = {0,-1};
                 for (int k = 0; k < 2; k++) {
-                    double pbc = test.func_p(quad1d.points[k], 0);
-                    double point[2] = {quad1d.points[k], 0};
-                    u->CalcShape(e, point, u_shape);
+                    Coord ref_coord = {quad1d.points[k], 0}; 
+                    Coord phy_coord;
+                    e.ref2phy(ref_coord, phy_coord);
+                    double pbc = test.func_p(phy_coord);
+                    u->CalcShape(e, phy_coord, u_shape);
                     for (int m = 0; m < Nu; m++) {
                         F(m) += len * quad1d.weights[k] * (-1) * pbc * (u_shape(m,0) * n[0] + u_shape(m,1) * n[1]);
                     }
                 }
+                test.func_u(e.x_center, 0, ubc);
+                F(0) = ubc[0] * n[0] + ubc[1] * n[1];
             }
 
             if (j == N-1) {
                 double n[2] = {0,1};
                 for (int k = 0; k < 2; k++) {
-                    double pbc = test.func_p(quad1d.points[k], 1);
-                    double point[2] = {quad1d.points[k], 1};
-                    u->CalcShape(e, point, u_shape);
+                    Coord ref_coord = {quad1d.points[k], 1}; 
+                    Coord phy_coord;
+                    e.ref2phy(ref_coord, phy_coord);
+                    double pbc = test.func_p(phy_coord);
+                    u->CalcShape(e, phy_coord, u_shape);
                     for (int m = 0; m < Nu; m++) {
                         F(m) += len * quad1d.weights[k] * (-1) * pbc * (u_shape(m,0) * n[0] + u_shape(m,1) * n[1]);
                     }
                 }
+                test.func_u(e.x_center, 1, ubc);
+                F(2) = ubc[0] * n[0] + ubc[1] * n[1];
             }
 
 
@@ -475,16 +532,21 @@ void Solver::build_rhs() {
         } // end iter elem
     } // end iter elem
  
-    /* for (int m = 0; m < total_dofs; m++) { */
-    /*     printf("%5.3f\n", rhs(m)); */
-    /* } */
+    // output rhs vector
+    for (int m = 0; m < total_dofs; m++) {
+        printf("%d\t%5.3f\n", m, rhs(m));
+    }
     cout << "Build Rhs Done\n";
 }
+
+
 
 void Solver::solve() {
     x = mat.lu().solve(rhs);
     cout << x << endl;
 }
+
+
 // ---------------------------- solve using Petsc ---------------------------
 /* void Solver::solve() { */
 /*     cout << "Solve Use Petsc\n"; */
@@ -512,16 +574,45 @@ void Solver::solve() {
 /*     /1* solve(); *1/ */
 /* } */
 
+
 int main(int argc, char* argv[]) {
-    /* PetscInitialize(&argc, &argv, NULL, NULL); */
-    
+    // ---------------------------- solve ------------------------------ 
     Solver solver;
     solver.init();
     solver.build_mat();
     solver.build_rhs();
     solver.solve();
-    /* solver.step(); */
     
-    /* PetscFinalize(); */
+    // ------------------------------- nodes ------------------------------
+    /* FERT0 u; */
+    /* for (int i = 0; i < 4; i++) { */
+    /*     for (int j = 0; j < 2; j++) { */
+    /*         cout << u.nodes[i][j] << "\t"; */
+    /*     } */
+    /*     cout << endl; */
+    /* } */
+    // --------------------------- test basis function ---------------------------------
+    /* FERT0 *u_test = new FERT0(); */
+    /* double point[2] = {0.5, 0}; */
+    /* RealMat value(4,2); */
+    /* u_test->CalcShapeRef(point, value); */
+    /* cout << value << endl; */
+
+    /* point[0] = 1.0; */
+    /* point[1] = 0.5; */
+    /* u_test->CalcShapeRef(point, value); */
+    /* cout << value << endl; */
+
+    // ----------------------------- test dof map ------------------------------------
+    /* for (int i = 0; i < N; i++) { */
+    /*     for (int j = 0; j < N; j++) { */
+    /*         for (int ibas = 0; ibas < 4; ibas++) { */
+    /*             cout << map_u(i, j, ibas) << "\t"; */
+    /*         } */
+    /*         cout << map_p(i, j); */
+    /*         cout << endl; */
+    /*     } */
+    /* } */
+    
     return 0;
 }
