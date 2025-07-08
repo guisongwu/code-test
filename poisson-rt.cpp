@@ -299,11 +299,15 @@ class Solver {
         void build_rhs();
         void solve();
         void step();
+        void error();
+        
         FERT0 *u;
         FEDG0 *p;
         /* Elem *e; */
         Quad2d quad2d;
         Quad1d quad1d;
+        double u_error_L2;
+        double p_error_L2;
         RealMat mat;
         RealVec rhs;
         RealVec x;
@@ -330,7 +334,7 @@ Solver::Solver() {
 
 
 void Solver::build_mat() {
-    cout << "Build Mat\n";
+    cout << "Building Mat\n";
     int Nu = 4;
     int Np = 1;
     int Ndof = Nu + Np;
@@ -446,7 +450,7 @@ void Solver::build_mat() {
 
 
 void Solver::build_rhs() {
-    cout << "Build Rhs\n";
+    cout << "Building Rhs\n";
     /* VecSet(rhs, 0.0); */
     
     int Nu = 4;
@@ -507,8 +511,8 @@ void Solver::build_rhs() {
                         F(m) += len * quad1d.weights[k] * (-1) * pbc * (u_shape(m,0) * n[0] + u_shape(m,1) * n[1]);
                     }
                 }
-                test.func_u(0, e.y_center, ubc);
-                F(3) = ubc[0] * n[0] + ubc[1] * n[1];
+                /* test.func_u(0, e.y_center, ubc); */
+                /* F(3) = ubc[0] * n[0] + ubc[1] * n[1]; */
             }
 
             if (i == N-1) {
@@ -527,8 +531,8 @@ void Solver::build_rhs() {
                         F(m) += len * quad1d.weights[k] * (-1) * pbc * (u_shape(m,0) * n[0] + u_shape(m,1) * n[1]);
                     }
                 }
-                test.func_u(1, e.y_center, ubc);
-                F(1) = ubc[0] * n[0] + ubc[1] * n[1];
+                /* test.func_u(1, e.y_center, ubc); */
+                /* F(1) = ubc[0] * n[0] + ubc[1] * n[1]; */
                 /* cout << ubc[0] << "\t" << ubc[1] << endl; */
                 /* cout << F(1) << endl; */
             }
@@ -547,8 +551,8 @@ void Solver::build_rhs() {
                         F(m) += len * quad1d.weights[k] * (-1) * pbc * (u_shape(m,0) * n[0] + u_shape(m,1) * n[1]);
                     }
                 }
-                test.func_u(e.x_center, 0, ubc);
-                F(0) = ubc[0] * n[0] + ubc[1] * n[1];
+                /* test.func_u(e.x_center, 0, ubc); */
+                /* F(0) = ubc[0] * n[0] + ubc[1] * n[1]; */
             }
 
             if (j == N-1) {
@@ -565,8 +569,8 @@ void Solver::build_rhs() {
                         F(m) += len * quad1d.weights[k] * (-1) * pbc * (u_shape(m,0) * n[0] + u_shape(m,1) * n[1]);
                     }
                 }
-                test.func_u(e.x_center, 1, ubc);
-                F(2) = ubc[0] * n[0] + ubc[1] * n[1];
+                /* test.func_u(e.x_center, 1, ubc); */
+                /* F(2) = ubc[0] * n[0] + ubc[1] * n[1]; */
             }
 
             // dirichlet boundary condition
@@ -614,10 +618,21 @@ void Solver::build_rhs() {
 void Solver::solve() {
     /* x = mat.lu().solve(rhs); */
     x = mat.partialPivLu().solve(rhs);
-    /* cout << x << endl; */
+    cout << x << endl;
+
+    error();
+
 }
 
 
+
+void Solver::error() {
+    for (int i = 0; i < N+1; i++) {
+        double num_sol = x[i];
+        double u_value = test.func_u()
+        double exact_sol = test.func_u() 
+    }
+}
 
 
 int main(int argc, char* argv[]) {

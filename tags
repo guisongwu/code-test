@@ -77,40 +77,53 @@
 !_TAG_ROLE_DESCRIPTION!Sh!script	loaded	/loaded/
 %.o	Makefile	/^%.o: %.c$/;"	t
 %.o	Makefile	/^%.o: %.cpp$/;"	t
-BdryEdge	mesh.cpp	/^typedef int BdryEdge[3];$/;"	t	typeref:typename:int[3]	file:
-Btype	mesh.cpp	/^typedef unsigned short Btype;$/;"	t	typeref:typename:unsigned short	file:
+BdryEdge	mesh.hpp	/^typedef int BdryEdge[3];$/;"	t	typeref:typename:int[3]
+Btype	mesh.hpp	/^typedef unsigned short Btype;$/;"	t	typeref:typename:unsigned short
 CC	Makefile	/^CC = gcc $/;"	m
 CPPFLAGS	Makefile	/^CPPFLAGS = -I\/usr\/include\/eigen3$/;"	m
 CXX	Makefile	/^CXX = g++ $/;"	m
 CXXFLAGS	Makefile	/^CXXFLAGS = -g -Wall -Wextra -Wno-unused-variable -Wno-unused-parameter -Wno-unused-function -std/;"	m
+CalcDivShape	fe-rt.cpp	/^void FERT0::CalcDivShape(const Elem &e, const double *ip, RealVec &divshape) {$/;"	f	class:FERT0	typeref:typename:void
+CalcDivShape	fe-rt.cpp	/^void FERT1::CalcDivShape(const Elem &e, const double *ip, RealVec &divshape) {$/;"	f	class:FERT1	typeref:typename:void
 CalcDivShape	poisson-rt.cpp	/^void FERT0::CalcDivShape(const Elem &e, const double *ip, RealVec &divshape) {$/;"	f	class:FERT0	typeref:typename:void
+CalcDivShapeRef	fe-rt.cpp	/^void FERT0::CalcDivShapeRef(const double *ip, RealVec &divshape) {$/;"	f	class:FERT0	typeref:typename:void
+CalcDivShapeRef	fe-rt.cpp	/^void FERT1::CalcDivShapeRef(const double *ip, RealVec &divshape) {$/;"	f	class:FERT1	typeref:typename:void
 CalcDivShapeRef	poisson-rt.cpp	/^void FERT0::CalcDivShapeRef(const double *ip, RealVec &divshape) const {$/;"	f	class:FERT0	typeref:typename:void
 CalcGradShape	poisson-rt.cpp	/^void FEDG0::CalcGradShape(const Elem &e, const double *ip, RealMat &gradshape) {$/;"	f	class:FEDG0	typeref:typename:void
 CalcGradShapeRef	poisson-rt.cpp	/^void FEDG0::CalcGradShapeRef(const double *ip, RealMat &gradshape) const {$/;"	f	class:FEDG0	typeref:typename:void
+CalcShape	fe-rt.cpp	/^void FERT0::CalcShape(const Elem &e, const double *ip, RealMat &shape) {$/;"	f	class:FERT0	typeref:typename:void
+CalcShape	fe-rt.cpp	/^void FERT1::CalcShape(const Elem &e, const double *ip, RealMat &shape) {$/;"	f	class:FERT1	typeref:typename:void
 CalcShape	poisson-rt.cpp	/^void FEDG0::CalcShape(const Elem &e, const double *ip, RealVec &shape) {$/;"	f	class:FEDG0	typeref:typename:void
 CalcShape	poisson-rt.cpp	/^void FERT0::CalcShape(const Elem &e, const double *ip, RealMat &shape) {$/;"	f	class:FERT0	typeref:typename:void
+CalcShapeRef	fe-rt.cpp	/^void FERT0::CalcShapeRef(const double *ip, RealMat &shape) {$/;"	f	class:FERT0	typeref:typename:void
+CalcShapeRef	fe-rt.cpp	/^void FERT1::CalcShapeRef(const double *ip, RealMat &shape) {$/;"	f	class:FERT1	typeref:typename:void
 CalcShapeRef	poisson-rt.cpp	/^void FEDG0::CalcShapeRef(const double *ip, RealVec &shape) const {$/;"	f	class:FEDG0	typeref:typename:void
 CalcShapeRef	poisson-rt.cpp	/^void FERT0::CalcShapeRef(const double *ip, RealMat &shape) const {$/;"	f	class:FERT0	typeref:typename:void
-Coord	mesh.cpp	/^typedef double Coord[3];$/;"	t	typeref:typename:double[3]	file:
+Coord	fe-rt.hpp	/^typedef double Coord[2];$/;"	t	typeref:typename:double[2]
+Coord	mesh.hpp	/^typedef double Coord[3];$/;"	t	typeref:typename:double[3]
 Coord	poisson-rt.cpp	/^typedef double Coord[2];$/;"	t	typeref:typename:double[2]	file:
 Coord	testcpp.cpp	/^typedef double Coord[2];$/;"	t	typeref:typename:double[2]	file:
-Det	mesh.cpp	/^        Real Det;$/;"	m	class:ElemQuad	typeref:typename:Real	file:
-Det	mesh.cpp	/^        Real Det;$/;"	m	class:ElemTria	typeref:typename:Real	file:
+Det	mesh.hpp	/^        Real Det;$/;"	m	class:QuadElem	typeref:typename:Real
+Det	mesh.hpp	/^        Real Det;$/;"	m	class:TriaElem	typeref:typename:Real
 EIGEN_DIR	Makefile	/^EIGEN_DIR=\/usr\/include\/eigen3$/;"	m
 ERROR	mesh.cpp	/^#define ERROR /;"	d	file:
+Edge	mesh.hpp	/^typedef int Edge[2];$/;"	t	typeref:typename:int[2]
 Elem	poisson-rt.cpp	/^        Elem(int i, int j) : x_left(i*h), x_right((i+1)*h), y_down(j*h), y_up((j+1)*h) {$/;"	f	class:Elem	file:
 Elem	poisson-rt.cpp	/^class Elem {$/;"	c	file:
-ElemQuad	mesh.cpp	/^class ElemQuad {$/;"	c	file:
-ElemTria	mesh.cpp	/^class ElemTria {$/;"	c	file:
 FEDG0	poisson-rt.cpp	/^FEDG0::FEDG0() {$/;"	f	class:FEDG0
 FEDG0	poisson-rt.cpp	/^class FEDG0 {$/;"	c	file:
+FERT0	fe-rt.cpp	/^FERT0::FERT0() {$/;"	f	class:FERT0
+FERT0	fe-rt.hpp	/^class FERT0 {$/;"	c
 FERT0	poisson-rt.cpp	/^FERT0::FERT0() {$/;"	f	class:FERT0
 FERT0	poisson-rt.cpp	/^class FERT0 {$/;"	c	file:
+FERT1	fe-rt.cpp	/^FERT1::FERT1() {$/;"	f	class:FERT1
+FERT1	fe-rt.hpp	/^class FERT1 {$/;"	c
 First	poisson-rt.cpp	/^#define First /;"	d	file:
 GMP_DIR	Makefile	/^GMP_DIR=\/usr\/lib\/x86_64-linux-gnu$/;"	m
+Grid	mesh.hpp	/^class Grid {$/;"	c
 IDX	poisson.c	/^#define IDX(/;"	d	file:
-Jac	mesh.cpp	/^        Eigen::Matrix<Real, 2, 3> Jac;$/;"	m	class:ElemQuad	typeref:typename:Eigen::Matrix<Real,2,3>	file:
-Jac	mesh.cpp	/^        Eigen::Matrix<Real, 2, 3> Jac;$/;"	m	class:ElemTria	typeref:typename:Eigen::Matrix<Real,2,3>	file:
+Jac	mesh.hpp	/^        Eigen::Matrix<Real, 2, 3> Jac;$/;"	m	class:QuadElem	typeref:typename:Eigen::Matrix<Real,2,3>
+Jac	mesh.hpp	/^        Eigen::Matrix<Real, 2, 3> Jac;$/;"	m	class:TriaElem	typeref:typename:Eigen::Matrix<Real,2,3>
 LAPACK_DIR	Makefile	/^LAPACK_DIR=\/opt\/OpenBLAS-0.3.29$/;"	m
 LDFLAGS	Makefile	/^LDFLAGS = $/;"	m
 LDLIBS	Makefile	/^LDLIBS =$/;"	m
@@ -121,59 +134,66 @@ MPREAL_DIR	Makefile	/^MPREAL_DIR=$/;"	m
 N	poisson-rt.cpp	/^#define N /;"	d	file:
 N	poisson.c	/^#define N 5  \/\/ Nu/;"	d	file:
 NE	poisson.c	/^#define NE /;"	d	file:
-NEdge	mesh.cpp	/^#define NEdge /;"	d	file:
 NN	poisson.c	/^#define NN /;"	d	file:
-NVert	mesh.cpp	/^#define NVert /;"	d	file:
 PETSC_ARCH	Makefile	/^PETSC_ARCH=$/;"	m
 PETSC_DIR	Makefile	/^PETSC_DIR=\/opt\/petsc-3.23.2$/;"	m
 Quad1d	poisson-rt.cpp	/^class Quad1d {$/;"	c	file:
 Quad1d	testcpp.cpp	/^class Quad1d {$/;"	c	file:
 Quad2d	poisson-rt.cpp	/^class Quad2d {$/;"	c	file:
 Quad2d	testcpp.cpp	/^class Quad2d {$/;"	c	file:
+QuadElem	mesh.hpp	/^class QuadElem {$/;"	c
 READ_NUMBER	mesh.cpp	/^#define READ_NUMBER	/;"	d	file:
-Real	mesh.cpp	/^typedef double Real;$/;"	t	typeref:typename:double	file:
-Real3	mesh.cpp	/^using Real3 = Eigen::Vector3d;$/;"	t	typeref:typename:Eigen::Vector3d	file:
+Real	mesh.hpp	/^typedef double Real;$/;"	t	typeref:typename:double
+Real3	mesh.hpp	/^using Real3 = Eigen::Vector3d;$/;"	t	typeref:typename:Eigen::Vector3d
+RealMat	fe-rt.hpp	/^using RealMat = Eigen::MatrixXd;$/;"	t	typeref:typename:Eigen::MatrixXd
 RealMat	poisson-rt.cpp	/^using RealMat = Eigen::MatrixXd;$/;"	t	typeref:typename:Eigen::MatrixXd	file:
 RealMat	testcpp.cpp	/^using RealMat = Eigen::MatrixXd;$/;"	t	typeref:typename:Eigen::MatrixXd	file:
+RealVec	fe-rt.hpp	/^using RealVec = Eigen::VectorXd;$/;"	t	typeref:typename:Eigen::VectorXd
 RealVec	poisson-rt.cpp	/^using RealVec = Eigen::VectorXd;$/;"	t	typeref:typename:Eigen::VectorXd	file:
 RealVec	testcpp.cpp	/^using RealVec = Eigen::VectorXd;$/;"	t	typeref:typename:Eigen::VectorXd	file:
 Second	poisson-rt.cpp	/^#define Second /;"	d	file:
 Solver	poisson-rt.cpp	/^Solver::Solver() {$/;"	f	class:Solver
 Solver	poisson-rt.cpp	/^class Solver {$/;"	c	file:
-SortIndex	mesh.cpp	/^#define SortIndex(/;"	d	file:
+SortIndex	mesh.hpp	/^#define SortIndex(/;"	d
 TARGETC	Makefile	/^TARGETC = poisson learn testc$/;"	m
 TARGETCPP	Makefile	/^TARGETCPP = testcpp poisson-rt$/;"	m
 TARGETS	Makefile	/^TARGETS = main poisson learn testc testcpp poisson-rt mesh$/;"	m
 Test	poisson-rt.cpp	/^class Test {$/;"	c	file:
+Ti	fe-rt.hpp	/^        Eigen::PartialPivLU<RealMat> Ti;$/;"	m	class:FERT0	typeref:typename:Eigen::PartialPivLU<RealMat>
+Ti	fe-rt.hpp	/^        Eigen::PartialPivLU<RealMat> Ti;$/;"	m	class:FERT1	typeref:typename:Eigen::PartialPivLU<RealMat>
 Ti	poisson-rt.cpp	/^        Eigen::PartialPivLU<RealMat> Ti;$/;"	m	class:FERT0	typeref:typename:Eigen::PartialPivLU<RealMat>	file:
+TriaElem	mesh.hpp	/^class TriaElem {$/;"	c
 UTILS_H	utils.h	/^#define UTILS_H$/;"	d
 add	my-math.c	/^int add(int a, int b) {$/;"	f	typeref:typename:int
 all	Makefile	/^all: $(TARGETS)$/;"	t
 apply_bc	poisson.c	/^void apply_bc(double *x, double *y, double K[NN][NN], double F[NN], double U[NN]) {$/;"	f	typeref:typename:void
-area	mesh.cpp	/^        Real area;$/;"	m	class:ElemQuad	typeref:typename:Real	file:
-area	mesh.cpp	/^        Real area;$/;"	m	class:ElemTria	typeref:typename:Real	file:
+area	mesh.hpp	/^        Real area;$/;"	m	class:QuadElem	typeref:typename:Real
+area	mesh.hpp	/^        Real area;$/;"	m	class:TriaElem	typeref:typename:Real
 area	poisson-rt.cpp	/^#define area /;"	d	file:
 assemble	poisson.c	/^void assemble(double *x, double *y, int elem[NE][3], double K[NN][NN], double F[NN]) {$/;"	f	typeref:typename:void
 boundary	poisson.c	/^double boundary(double x, double y) {$/;"	f	typeref:typename:double
-btypes	mesh.cpp	/^        Btype btypes[3];$/;"	m	class:ElemTria	typeref:typename:Btype[3]	file:
-btypes	mesh.cpp	/^        Btype btypes[4];$/;"	m	class:ElemQuad	typeref:typename:Btype[4]	file:
+btypes	mesh.hpp	/^        Btype btypes[3];$/;"	m	class:TriaElem	typeref:typename:Btype[3]
+btypes	mesh.hpp	/^        Btype btypes[4];$/;"	m	class:QuadElem	typeref:typename:Btype[4]
 build_mat	poisson-rt.cpp	/^void Solver::build_mat() {$/;"	f	class:Solver	typeref:typename:void
 build_rhs	poisson-rt.cpp	/^void Solver::build_rhs() {$/;"	f	class:Solver	typeref:typename:void
 clean	Makefile	/^clean:$/;"	t
-dFdx	mesh.cpp	/^        Eigen::Matrix<Real, 3, 2> dFdx;$/;"	m	class:ElemQuad	typeref:typename:Eigen::Matrix<Real,3,2>	file:
-dFdx	mesh.cpp	/^        Eigen::Matrix<Real, 3, 2> dFdx;$/;"	m	class:ElemTria	typeref:typename:Eigen::Matrix<Real,3,2>	file:
+dFdx	mesh.hpp	/^        Eigen::Matrix<Real, 3, 2> dFdx;$/;"	m	class:QuadElem	typeref:typename:Eigen::Matrix<Real,3,2>
+dFdx	mesh.hpp	/^        Eigen::Matrix<Real, 3, 2> dFdx;$/;"	m	class:TriaElem	typeref:typename:Eigen::Matrix<Real,3,2>
+dof2nk	fe-rt.hpp	/^        vector<int> dof2nk;$/;"	m	class:FERT0	typeref:typename:vector<int>
+dof2nk	fe-rt.hpp	/^        vector<int> dof2nk;$/;"	m	class:FERT1	typeref:typename:vector<int>
 dof2nk	poisson-rt.cpp	/^        vector<int> dof2nk;$/;"	m	class:FERT0	typeref:typename:vector<int>	file:
-edge_length	mesh.cpp	/^        Real edge_length[3];$/;"	m	class:ElemTria	typeref:typename:Real[3]	file:
-edge_length	mesh.cpp	/^        Real edge_length[4];$/;"	m	class:ElemQuad	typeref:typename:Real[4]	file:
-edge_normal	mesh.cpp	/^        Real edge_normal[3][3];  \/\/ edge outer normal$/;"	m	class:ElemTria	typeref:typename:Real[3][3]	file:
-edge_normal	mesh.cpp	/^        Real edge_normal[4][3];  \/\/ edge outer normal$/;"	m	class:ElemQuad	typeref:typename:Real[4][3]	file:
+edge_length	mesh.hpp	/^        Real edge_length[3];$/;"	m	class:TriaElem	typeref:typename:Real[3]
+edge_length	mesh.hpp	/^        Real edge_length[4];$/;"	m	class:QuadElem	typeref:typename:Real[4]
+edge_normal	mesh.hpp	/^        Real edge_normal[3][3];  \/\/ edge outer normal$/;"	m	class:TriaElem	typeref:typename:Real[3][3]
+edge_normal	mesh.hpp	/^        Real edge_normal[4][3];  \/\/ edge outer normal$/;"	m	class:QuadElem	typeref:typename:Real[4][3]
 edge_sign	poisson-rt.cpp	/^        int edge_sign[4] = {1,1,1,1};$/;"	m	class:Elem	typeref:typename:int[4]	file:
-edges	mesh.cpp	/^        int edges[3];$/;"	m	class:ElemTria	typeref:typename:int[3]	file:
-edges	mesh.cpp	/^        int edges[4];$/;"	m	class:ElemQuad	typeref:typename:int[4]	file:
-edges_sgn	mesh.cpp	/^        int edges_sgn[3];$/;"	m	class:ElemTria	typeref:typename:int[3]	file:
-edges_sgn	mesh.cpp	/^        int edges_sgn[4];$/;"	m	class:ElemQuad	typeref:typename:int[4]	file:
-face_normal	mesh.cpp	/^        Real face_normal[3];		 \/\/ face outer normal$/;"	m	class:ElemQuad	typeref:typename:Real[3]	file:
-face_normal	mesh.cpp	/^        Real face_normal[3];		 \/\/ face outer normal$/;"	m	class:ElemTria	typeref:typename:Real[3]	file:
+edges	mesh.hpp	/^        Edge *edges = nullptr;$/;"	m	class:Grid	typeref:typename:Edge *
+edges	mesh.hpp	/^        int edges[3];$/;"	m	class:TriaElem	typeref:typename:int[3]
+edges	mesh.hpp	/^        int edges[4];$/;"	m	class:QuadElem	typeref:typename:int[4]
+edges_sgn	mesh.hpp	/^        int edges_sgn[3];$/;"	m	class:TriaElem	typeref:typename:int[3]
+edges_sgn	mesh.hpp	/^        int edges_sgn[4];$/;"	m	class:QuadElem	typeref:typename:int[4]
+face_normal	mesh.hpp	/^        Real face_normal[3];		 \/\/ face outer normal$/;"	m	class:QuadElem	typeref:typename:Real[3]
+face_normal	mesh.hpp	/^        Real face_normal[3];		 \/\/ face outer normal$/;"	m	class:TriaElem	typeref:typename:Real[3]
 func1d	testcpp.cpp	/^double func1d(double x) {$/;"	f	typeref:typename:double
 func2d	testcpp.cpp	/^double func2d(double x, double y) {$/;"	f	typeref:typename:double
 func_f	poisson-rt.cpp	/^        double func_f(const Coord &phy_coord) {$/;"	f	class:Test	typeref:typename:double	file:
@@ -184,13 +204,14 @@ func_u	poisson-rt.cpp	/^        void func_u(const Coord &phy_coord, double *u) {
 func_u	poisson-rt.cpp	/^        void func_u(double x, double y, double *u) {$/;"	f	class:Test	typeref:typename:void	file:
 generate_elements	poisson.c	/^void generate_elements(int elem[NE][3]) {$/;"	f	typeref:typename:void
 generate_nodes	poisson.c	/^void generate_nodes(double *x, double *y) {$/;"	f	typeref:typename:void
+get_local_grid	mesh.hpp	/^        virtual void get_local_grid() {}$/;"	f	class:Grid	typeref:typename:void
 get_token	mesh.cpp	/^bool get_token(FILE *fp, char *token)$/;"	f	typeref:typename:bool
 get_token	testc.c	/^bool get_token(FILE *fp, char *token)$/;"	f	typeref:typename:bool
 get_token_ret	mesh.cpp	/^static int get_token_ret = 0;$/;"	v	typeref:typename:int	file:
 h	poisson-rt.cpp	/^#define h /;"	d	file:
 i	poisson-rt.cpp	/^        int i, j;$/;"	m	class:Elem	typeref:typename:int	file:
-index	mesh.cpp	/^        int index;$/;"	m	class:ElemQuad	typeref:typename:int	file:
-index	mesh.cpp	/^        int index;$/;"	m	class:ElemTria	typeref:typename:int	file:
+index	mesh.hpp	/^        int index;$/;"	m	class:QuadElem	typeref:typename:int
+index	mesh.hpp	/^        int index;$/;"	m	class:TriaElem	typeref:typename:int
 j	poisson-rt.cpp	/^        int i, j;$/;"	m	class:Elem	typeref:typename:int	file:
 learn	Makefile	/^learn: learn.o$/;"	t
 len	poisson-rt.cpp	/^#define len /;"	d	file:
@@ -205,17 +226,31 @@ main	testcpp.cpp	/^int main(int argc, char *argv[]) {$/;"	f	typeref:typename:int
 map_p	poisson-rt.cpp	/^int map_p(int i, int j) {$/;"	f	typeref:typename:int
 map_u	poisson-rt.cpp	/^int map_u(int i, int j, int ibas) {$/;"	f	typeref:typename:int
 mat	poisson-rt.cpp	/^        RealMat mat;$/;"	m	class:Solver	typeref:typename:RealMat	file:
+nbas	fe-rt.hpp	/^        const int nbas = 12;$/;"	m	class:FERT1	typeref:typename:const int
+nbas	fe-rt.hpp	/^        const int nbas = 4;$/;"	m	class:FERT0	typeref:typename:const int
 nbas	poisson-rt.cpp	/^        const int nbas = 4;$/;"	m	class:FERT0	typeref:typename:const int	file:
-neigh	mesh.cpp	/^        int neigh[3];  \/\/ >=0: elem index$/;"	m	class:ElemTria	typeref:typename:int[3]	file:
-neigh	mesh.cpp	/^        int neigh[4];  \/\/ >=0: elem index$/;"	m	class:ElemQuad	typeref:typename:int[4]	file:
-nelem	mesh.cpp	/^int nelem = 0;$/;"	v	typeref:typename:int
+nedge	mesh.hpp	/^        int nedge;$/;"	m	class:Grid	typeref:typename:int
+nedge_global	mesh.hpp	/^        virtual int nedge_global() {return nedge;};$/;"	f	class:Grid	typeref:typename:int
+neigh	mesh.hpp	/^        int neigh[3];  \/\/ >=0: elem index$/;"	m	class:TriaElem	typeref:typename:int[3]
+neigh	mesh.hpp	/^        int neigh[4];  \/\/ >=0: elem index$/;"	m	class:QuadElem	typeref:typename:int[4]
+nelem	mesh.hpp	/^        int nelem;$/;"	m	class:Grid	typeref:typename:int
+nelem	mesh.hpp	/^int nelem = 0;$/;"	v	typeref:typename:int
+nelem_global	mesh.hpp	/^        virtual int nelem_global() {return nelem;};$/;"	f	class:Grid	typeref:typename:int
+nk	fe-rt.hpp	/^        const double nk[8] =$/;"	m	class:FERT0	typeref:typename:const double[8]
+nk	fe-rt.hpp	/^        const double nk[8] =$/;"	m	class:FERT1	typeref:typename:const double[8]
 nk	poisson-rt.cpp	/^        const double nk[8] =$/;"	m	class:FERT0	typeref:typename:const double[8]	file:
+nlayer	mesh.hpp	/^        int nlayer;$/;"	m	class:Grid	typeref:typename:int
+nodes	fe-rt.hpp	/^        Coord *nodes; $/;"	m	class:FERT0	typeref:typename:Coord *
+nodes	fe-rt.hpp	/^        Coord *nodes; $/;"	m	class:FERT1	typeref:typename:Coord *
 nodes	poisson-rt.cpp	/^        Coord *nodes = nullptr;$/;"	m	class:FEDG0	typeref:typename:Coord *	file:
 nodes	poisson-rt.cpp	/^        Coord *nodes; $/;"	m	class:FERT0	typeref:typename:Coord *	file:
-nvert	mesh.cpp	/^static int nvert;$/;"	v	typeref:typename:int	file:
-ordering	mesh.cpp	/^        char ordering[3]; \/\/ Ordering of vertices:$/;"	m	class:ElemTria	typeref:typename:char[3]	file:
-ordering	mesh.cpp	/^        char ordering[4]; \/\/ Ordering of vertices:$/;"	m	class:ElemQuad	typeref:typename:char[4]	file:
+nprocs	mesh.hpp	/^        int nprocs;$/;"	m	class:Grid	typeref:typename:int
+nvert	mesh.hpp	/^        int nvert;$/;"	m	class:Grid	typeref:typename:int
+nvert_global	mesh.hpp	/^        virtual int nvert_global() {return nvert;};	$/;"	f	class:Grid	typeref:typename:int
+ordering	mesh.hpp	/^        char ordering[3]; \/\/ Ordering of vertices:$/;"	m	class:TriaElem	typeref:typename:char[3]
+ordering	mesh.hpp	/^        char ordering[4]; \/\/ Ordering of vertices:$/;"	m	class:QuadElem	typeref:typename:char[4]
 p	poisson-rt.cpp	/^        FEDG0 *p;$/;"	m	class:Solver	typeref:typename:FEDG0 *	file:
+partition	mesh.hpp	/^        virtual void partition(const char *part_file_name = nullptr) {}$/;"	f	class:Grid	typeref:typename:void
 points	poisson-rt.cpp	/^        double points[2] = {(1-1\/sqrt(3))\/2, (1+1\/sqrt(3))\/2};$/;"	m	class:Quad1d	typeref:typename:double[2]	file:
 points	poisson-rt.cpp	/^        double points[4][2] = {$/;"	m	class:Quad2d	typeref:typename:double[4][2]	file:
 points	testcpp.cpp	/^        double points[2] = {(1-1\/sqrt(3))\/2, (1+1\/sqrt(3))\/2};$/;"	m	class:Quad1d	typeref:typename:double[2]	file:
@@ -227,13 +262,14 @@ quad1d	poisson-rt.cpp	/^        Quad1d quad1d;$/;"	m	class:Quad2d	typeref:typena
 quad1d	poisson-rt.cpp	/^        Quad1d quad1d;$/;"	m	class:Solver	typeref:typename:Quad1d	file:
 quad1d	testcpp.cpp	/^        Quad1d quad1d;$/;"	m	class:Quad2d	typeref:typename:Quad1d	file:
 quad2d	poisson-rt.cpp	/^        Quad2d quad2d;$/;"	m	class:Solver	typeref:typename:Quad2d	file:
-quad_elems	mesh.cpp	/^ElemQuad *quad_elems;$/;"	v	typeref:typename:ElemQuad *
-read_mesh	mesh.cpp	/^void read_mesh(const char *mesh_file_name)$/;"	f	typeref:typename:void
+quad_elems	mesh.hpp	/^        QuadElem *quad_elems = nullptr;$/;"	m	class:Grid	typeref:typename:QuadElem *
+rank	mesh.hpp	/^        int rank;$/;"	m	class:Grid	typeref:typename:int
+read_mesh	mesh.cpp	/^void Grid::read_mesh(const char *mesh_file_name)$/;"	f	class:Grid	typeref:typename:void
 ref2phy	poisson-rt.cpp	/^        void ref2phy(const Coord ref_coord, Coord &phy_coord) {$/;"	f	class:Elem	typeref:typename:void	file:
 ref2phy	testcpp.cpp	/^void ref2phy(const Coord &ref_coord, Coord &phy_coord) {$/;"	f	typeref:typename:void
 rhs	poisson-rt.cpp	/^        RealVec rhs;$/;"	m	class:Solver	typeref:typename:RealVec	file:
-sgn	mesh.cpp	/^        int sgn;$/;"	m	class:ElemQuad	typeref:typename:int	file:
-sgn	mesh.cpp	/^        int sgn;$/;"	m	class:ElemTria	typeref:typename:int	file:
+sgn	mesh.hpp	/^        int sgn;$/;"	m	class:QuadElem	typeref:typename:int
+sgn	mesh.hpp	/^        int sgn;$/;"	m	class:TriaElem	typeref:typename:int
 solve	poisson-rt.cpp	/^void Solver::solve() {$/;"	f	class:Solver	typeref:typename:void
 solve	poisson.c	/^void solve(double K[NN][NN], double F[NN], double U[NN]) {$/;"	f	typeref:typename:void
 subtract	my-math.c	/^int subtract(int a, int b) {$/;"	f	typeref:typename:int
@@ -241,11 +277,12 @@ test	poisson-rt.cpp	/^Test test;$/;"	v	typeref:typename:Test
 testc	Makefile	/^testc: testc.o$/;"	t
 testcpp	Makefile	/^testcpp: testcpp.o$/;"	t
 total_dofs	poisson-rt.cpp	/^        int total_dofs = 2*N*(N+1) + N*N;$/;"	m	class:Solver	typeref:typename:int	file:
-tria_elems	mesh.cpp	/^ElemTria *tria_elems;$/;"	v	typeref:typename:ElemTria *
+tria_elems	mesh.hpp	/^        TriaElem *tria_elems = nullptr;$/;"	m	class:Grid	typeref:typename:TriaElem *
 u	poisson-rt.cpp	/^        FERT0 *u;$/;"	m	class:Solver	typeref:typename:FERT0 *	file:
-verts	mesh.cpp	/^        int verts[3];$/;"	m	class:ElemTria	typeref:typename:int[3]	file:
-verts	mesh.cpp	/^        int verts[4];$/;"	m	class:ElemQuad	typeref:typename:int[4]	file:
-verts	mesh.cpp	/^static Coord *verts;$/;"	v	typeref:typename:Coord *	file:
+verb	mesh.hpp	/^        int verb;$/;"	m	class:Grid	typeref:typename:int
+verts	mesh.hpp	/^        Coord *verts = nullptr;$/;"	m	class:Grid	typeref:typename:Coord *
+verts	mesh.hpp	/^        int verts[3];$/;"	m	class:TriaElem	typeref:typename:int[3]
+verts	mesh.hpp	/^        int verts[4];$/;"	m	class:QuadElem	typeref:typename:int[4]
 weights	poisson-rt.cpp	/^        double weights[2] = {0.5, 0.5};$/;"	m	class:Quad1d	typeref:typename:double[2]	file:
 weights	poisson-rt.cpp	/^        double weights[4] = {0.25, 0.25, 0.25, 0.25};$/;"	m	class:Quad2d	typeref:typename:double[4]	file:
 weights	testcpp.cpp	/^        double weights[2] = {0.5, 0.5};$/;"	m	class:Quad1d	typeref:typename:double[2]	file:
