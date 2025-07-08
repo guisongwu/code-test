@@ -45,17 +45,21 @@ void ref2phy(const Coord &ref_coord, Coord &phy_coord) {
 
 
 int main(int argc, char *argv[]) {
+    // ---------------------------------- unsigned int ----------------------------------------
+    unsigned int i = 10;
+    fprintf(stdout, "%d\n", i);
+    fprintf(stdout, "%u\n", i);
     // --------------------------------- ref2phy ----------------------------------------------
-    double points[4][2] = {
-        {1,2},
-        {2,1},
-        {0.5, 0.5},
-        {4,5}
-    };
-    Coord ref_coord = {points[2][0], points[2][1]};
-    Coord phy_coord;
-    ref2phy(ref_coord, phy_coord);
-    cout << phy_coord[0] << "\t" << phy_coord[1] << endl;
+    /* double points[4][2] = { */
+    /*     {1,2}, */
+    /*     {2,1}, */
+    /*     {0.5, 0.5}, */
+    /*     {4,5} */
+    /* }; */
+    /* Coord ref_coord = {points[2][0], points[2][1]}; */
+    /* Coord phy_coord; */
+    /* ref2phy(ref_coord, phy_coord); */
+    /* cout << phy_coord[0] << "\t" << phy_coord[1] << endl; */
 
     
     // ------------------------- COORD *verts and COORD *verts[2] -----------------------------

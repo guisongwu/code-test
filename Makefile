@@ -21,14 +21,17 @@ CXX = g++
 CFLAGS   = -g -Wall -Wextra -Wno-unused-variable -Wno-unused-parameter -Wno-unused-function -std=gnu17
 CXXFLAGS = -g -Wall -Wextra -Wno-unused-variable -Wno-unused-parameter -Wno-unused-function -std=c++20
 
-CPPFLAGS = -I/usr/include/eigen3 -I$(PETSC_DIR)/include -I$(MPI_DIR)/include
+CPPFLAGS = -I/usr/include/eigen3
+# CPPFLAGS = -I/usr/include/eigen3 -I$(PETSC_DIR)/include -I$(MPI_DIR)/include
 
-LDFLAGS = -L$(MPI_DIR)/lib -Wl,-rpath=$(MPI_DIR)/lib -L$(PETSC_DIR)/lib -Wl,-rpath=$(PETSC_DIR)/lib
-LDLIBS = -lm -lmpi -lpetsc
+LDFLAGS = 
+# LDFLAGS = -L$(MPI_DIR)/lib -Wl,-rpath=$(MPI_DIR)/lib -L$(PETSC_DIR)/lib -Wl,-rpath=$(PETSC_DIR)/lib
+LDLIBS =
+# LDLIBS = -lm -lmpi -lpetsc
 
 
 # target files 
-TARGETS = main poisson learn testc testcpp poisson-rt
+TARGETS = main poisson learn testc testcpp poisson-rt mesh
 TARGETC = poisson learn testc
 TARGETCPP = testcpp poisson-rt
 

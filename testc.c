@@ -32,7 +32,10 @@ bool get_token(FILE *fp, char *token)
 
 
 int main(int argc, char* argv[]) {
-    
+    // ------------------------------- unsigned int -----------------------------------
+    unsigned int i = 10;
+    printf("%d\n", i);
+    printf("%u\n", i);
     // ------------------------------- isalpha(int c) ---------------------------------
     // instead of isalpha(char c)
     /* printf("%d\n", isalpha(9)); */
@@ -155,16 +158,15 @@ int main(int argc, char* argv[]) {
     /* printf("%c\n", a); */
 
     // ------------------------- COORD *verts and COORD *verts[2] -----------------------------
-    double points[4][2] = {
-        {1,2},
-        {2,1},
-        {3,4},
-        {4,5}
-    };
-
-    typedef double Coord[2];
-    Coord *ref_coord = &points[2];
-    printf("%f\t%f\n", (*ref_coord)[0], (*ref_coord)[1]);
+    /* double points[4][2] = { */
+    /*     {1,2}, */
+    /*     {2,1}, */
+    /*     {3,4}, */
+    /*     {4,5} */
+    /* }; */
+    /* typedef double Coord[2]; */
+    /* Coord *ref_coord = &points[2]; */
+    /* printf("%f\t%f\n", (*ref_coord)[0], (*ref_coord)[1]); */
 
     /* Coord *vert; */
     /* vert = (Coord *) calloc (5, sizeof(Coord)); */
