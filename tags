@@ -44,6 +44,9 @@
 !_TAG_KIND_DESCRIPTION!Markdown	s,section	/sections/
 !_TAG_KIND_DESCRIPTION!Markdown	t,subsubsection	/level 3 sections/
 !_TAG_KIND_DESCRIPTION!Markdown	u,l5subsection	/level 5 sections/
+!_TAG_KIND_DESCRIPTION!MatLab	c,class	/class/
+!_TAG_KIND_DESCRIPTION!MatLab	f,function	/function/
+!_TAG_KIND_DESCRIPTION!MatLab	v,variable	/variable/
 !_TAG_KIND_DESCRIPTION!Sh	a,alias	/aliases/
 !_TAG_KIND_DESCRIPTION!Sh	f,function	/functions/
 !_TAG_KIND_DESCRIPTION!Sh	h,heredoc	/label for here document/
@@ -56,6 +59,7 @@
 !_TAG_PARSER_VERSION!C++	1.1	/current.age/
 !_TAG_PARSER_VERSION!Make	0.0	/current.age/
 !_TAG_PARSER_VERSION!Markdown	1.1	/current.age/
+!_TAG_PARSER_VERSION!MatLab	0.0	/current.age/
 !_TAG_PARSER_VERSION!Sh	0.0	/current.age/
 !_TAG_PATTERN_LENGTH_LIMIT	96	/0 for no limit/
 !_TAG_PROC_CWD	/home/wugs/cprogram/	//
@@ -77,51 +81,110 @@
 !_TAG_ROLE_DESCRIPTION!Sh!script	loaded	/loaded/
 %.o	Makefile	/^%.o: %.c$/;"	t
 %.o	Makefile	/^%.o: %.cpp$/;"	t
+BC_FUNCTION	mesh.hpp	/^typedef Btype (*BC_FUNCTION)(int mark);$/;"	t	typeref:typename:Btype (*)(int mark)
+BDRY_MASK	testcpp.cpp	/^namespace BDRY_MASK {$/;"	n	file:
 BdryEdge	mesh.hpp	/^typedef int BdryEdge[3];$/;"	t	typeref:typename:int[3]
 Btype	mesh.hpp	/^typedef unsigned short Btype;$/;"	t	typeref:typename:unsigned short
 CC	Makefile	/^CC = gcc $/;"	m
-CPPFLAGS	Makefile	/^CPPFLAGS = -I\/usr\/include\/eigen3$/;"	m
+CPPFLAGS	Makefile	/^CPPFLAGS = -I\/usr\/include\/eigen3 -I$(CPROGRAM_DIR)$/;"	m
+CPROGRAM_DIR	Makefile	/^CPROGRAM_DIR=\/home\/wugs\/cprogram$/;"	m
+CROSS_PRODUCT	mesh.hpp	/^#define CROSS_PRODUCT(/;"	d
 CXX	Makefile	/^CXX = g++ $/;"	m
-CXXFLAGS	Makefile	/^CXXFLAGS = -g -Wall -Wextra -Wno-unused-variable -Wno-unused-parameter -Wno-unused-function -std/;"	m
+CXXFLAGS	Makefile	/^CXXFLAGS = -g -Wall -Wextra -Wno-unused-variable -Wno-unused-parameter -Wno-unused-function -Wno/;"	m
 CalcDivShape	fe-rt.cpp	/^void FERT0::CalcDivShape(const Elem &e, const double *ip, RealVec &divshape) {$/;"	f	class:FERT0	typeref:typename:void
 CalcDivShape	fe-rt.cpp	/^void FERT1::CalcDivShape(const Elem &e, const double *ip, RealVec &divshape) {$/;"	f	class:FERT1	typeref:typename:void
 CalcDivShape	poisson-rt.cpp	/^void FERT0::CalcDivShape(const Elem &e, const double *ip, RealVec &divshape) {$/;"	f	class:FERT0	typeref:typename:void
+CalcDivShape	poisson-rt0-mix-grid.cpp	/^void FERT0::CalcDivShape(const Elem &e, const double *ip, RealVec &divshape) {$/;"	f	class:FERT0	typeref:typename:void
+CalcDivShape	poisson-rt1.cpp	/^void FERT1::CalcDivShape(const Elem &e, const double *ip, RealVec &divshape) {$/;"	f	class:FERT1	typeref:typename:void
 CalcDivShapeRef	fe-rt.cpp	/^void FERT0::CalcDivShapeRef(const double *ip, RealVec &divshape) {$/;"	f	class:FERT0	typeref:typename:void
 CalcDivShapeRef	fe-rt.cpp	/^void FERT1::CalcDivShapeRef(const double *ip, RealVec &divshape) {$/;"	f	class:FERT1	typeref:typename:void
 CalcDivShapeRef	poisson-rt.cpp	/^void FERT0::CalcDivShapeRef(const double *ip, RealVec &divshape) const {$/;"	f	class:FERT0	typeref:typename:void
+CalcDivShapeRef	poisson-rt0-mix-grid.cpp	/^void FERT0::CalcDivShapeRef(const double *ip, RealVec &divshape) const {$/;"	f	class:FERT0	typeref:typename:void
+CalcDivShapeRef	poisson-rt1.cpp	/^void FERT1::CalcDivShapeRef(const double *ip, RealVec &divshape) {$/;"	f	class:FERT1	typeref:typename:void
+CalcGradShape	fe-dg.cpp	/^void FEDG0::CalcGradShape(const Elem &e, const double *ip, RealMat &gradshape) {$/;"	f	class:FEDG0	typeref:typename:void
+CalcGradShape	fe-dg.cpp	/^void FEDGQ1::CalcGradShape(const Elem &e, const double *ip, RealMat &gradshape) {$/;"	f	class:FEDGQ1	typeref:typename:void
 CalcGradShape	poisson-rt.cpp	/^void FEDG0::CalcGradShape(const Elem &e, const double *ip, RealMat &gradshape) {$/;"	f	class:FEDG0	typeref:typename:void
+CalcGradShape	poisson-rt0-mix-grid.cpp	/^void FEDG0::CalcGradShape(const Elem &e, const double *ip, RealMat &gradshape) {$/;"	f	class:FEDG0	typeref:typename:void
+CalcGradShape	poisson-rt1.cpp	/^void FEDGQ1::CalcGradShape(const Elem &e, const double *ip, RealMat &gradshape) {$/;"	f	class:FEDGQ1	typeref:typename:void
+CalcGradShapeRef	fe-dg.cpp	/^void FEDG0::CalcGradShapeRef(const double *ip, RealMat &gradshape) const {$/;"	f	class:FEDG0	typeref:typename:void
+CalcGradShapeRef	fe-dg.cpp	/^void FEDGQ1::CalcGradShapeRef(const double *ip, RealMat &gradshape) const {$/;"	f	class:FEDGQ1	typeref:typename:void
 CalcGradShapeRef	poisson-rt.cpp	/^void FEDG0::CalcGradShapeRef(const double *ip, RealMat &gradshape) const {$/;"	f	class:FEDG0	typeref:typename:void
+CalcGradShapeRef	poisson-rt0-mix-grid.cpp	/^void FEDG0::CalcGradShapeRef(const double *ip, RealMat &gradshape) const {$/;"	f	class:FEDG0	typeref:typename:void
+CalcGradShapeRef	poisson-rt1.cpp	/^void FEDGQ1::CalcGradShapeRef(const double *ip, RealMat &gradshape) const {$/;"	f	class:FEDGQ1	typeref:typename:void
+CalcShape	fe-dg.cpp	/^void FEDG0::CalcShape(const Elem &e, const double *ip, RealVec &shape) {$/;"	f	class:FEDG0	typeref:typename:void
+CalcShape	fe-dg.cpp	/^void FEDGQ1::CalcShape(const Elem &e, const double *ip, RealVec &shape) {$/;"	f	class:FEDGQ1	typeref:typename:void
 CalcShape	fe-rt.cpp	/^void FERT0::CalcShape(const Elem &e, const double *ip, RealMat &shape) {$/;"	f	class:FERT0	typeref:typename:void
 CalcShape	fe-rt.cpp	/^void FERT1::CalcShape(const Elem &e, const double *ip, RealMat &shape) {$/;"	f	class:FERT1	typeref:typename:void
 CalcShape	poisson-rt.cpp	/^void FEDG0::CalcShape(const Elem &e, const double *ip, RealVec &shape) {$/;"	f	class:FEDG0	typeref:typename:void
 CalcShape	poisson-rt.cpp	/^void FERT0::CalcShape(const Elem &e, const double *ip, RealMat &shape) {$/;"	f	class:FERT0	typeref:typename:void
+CalcShape	poisson-rt0-mix-grid.cpp	/^void FEDG0::CalcShape(const Elem &e, const double *ip, RealVec &shape) {$/;"	f	class:FEDG0	typeref:typename:void
+CalcShape	poisson-rt0-mix-grid.cpp	/^void FERT0::CalcShape(const Elem &e, const double *ip, RealMat &shape) {$/;"	f	class:FERT0	typeref:typename:void
+CalcShape	poisson-rt1.cpp	/^void FEDGQ1::CalcShape(const Elem &e, const double *ip, RealVec &shape) {$/;"	f	class:FEDGQ1	typeref:typename:void
+CalcShape	poisson-rt1.cpp	/^void FERT1::CalcShape(const Elem &e, const double *ip, RealMat &shape) {$/;"	f	class:FERT1	typeref:typename:void
+CalcShapeRef	fe-dg.cpp	/^void FEDG0::CalcShapeRef(const double *ip, RealVec &shape) const {$/;"	f	class:FEDG0	typeref:typename:void
+CalcShapeRef	fe-dg.cpp	/^void FEDGQ1::CalcShapeRef(const double *ip, RealVec &shape) const {$/;"	f	class:FEDGQ1	typeref:typename:void
 CalcShapeRef	fe-rt.cpp	/^void FERT0::CalcShapeRef(const double *ip, RealMat &shape) {$/;"	f	class:FERT0	typeref:typename:void
 CalcShapeRef	fe-rt.cpp	/^void FERT1::CalcShapeRef(const double *ip, RealMat &shape) {$/;"	f	class:FERT1	typeref:typename:void
 CalcShapeRef	poisson-rt.cpp	/^void FEDG0::CalcShapeRef(const double *ip, RealVec &shape) const {$/;"	f	class:FEDG0	typeref:typename:void
 CalcShapeRef	poisson-rt.cpp	/^void FERT0::CalcShapeRef(const double *ip, RealMat &shape) const {$/;"	f	class:FERT0	typeref:typename:void
-Coord	fe-rt.hpp	/^typedef double Coord[2];$/;"	t	typeref:typename:double[2]
+CalcShapeRef	poisson-rt0-mix-grid.cpp	/^void FEDG0::CalcShapeRef(const double *ip, RealVec &shape) const {$/;"	f	class:FEDG0	typeref:typename:void
+CalcShapeRef	poisson-rt0-mix-grid.cpp	/^void FERT0::CalcShapeRef(const double *ip, RealMat &shape) const {$/;"	f	class:FERT0	typeref:typename:void
+CalcShapeRef	poisson-rt1.cpp	/^void FEDGQ1::CalcShapeRef(const double *ip, RealVec &shape) const {$/;"	f	class:FEDGQ1	typeref:typename:void
+CalcShapeRef	poisson-rt1.cpp	/^void FERT1::CalcShapeRef(const double *ip, RealMat &shape) {$/;"	f	class:FERT1	typeref:typename:void
+Coord	header.hpp	/^typedef double Coord[2];$/;"	t	typeref:typename:double[2]
 Coord	mesh.hpp	/^typedef double Coord[3];$/;"	t	typeref:typename:double[3]
 Coord	poisson-rt.cpp	/^typedef double Coord[2];$/;"	t	typeref:typename:double[2]	file:
+Coord	poisson-rt0-mix-grid.cpp	/^typedef double Coord[2];$/;"	t	typeref:typename:double[2]	file:
+Coord	poisson-rt1.cpp	/^typedef double Coord[2];$/;"	t	typeref:typename:double[2]	file:
 Coord	testcpp.cpp	/^typedef double Coord[2];$/;"	t	typeref:typename:double[2]	file:
+DIRICHLET	testcpp.cpp	/^        DIRICHLET = 8,$/;"	e	enum:BDRY_MASK::__anon255f4fb90103	file:
 Det	mesh.hpp	/^        Real Det;$/;"	m	class:QuadElem	typeref:typename:Real
 Det	mesh.hpp	/^        Real Det;$/;"	m	class:TriaElem	typeref:typename:Real
 EIGEN_DIR	Makefile	/^EIGEN_DIR=\/usr\/include\/eigen3$/;"	m
+ELEM_HPP	elem.hpp	/^#define ELEM_HPP$/;"	d
 ERROR	mesh.cpp	/^#define ERROR /;"	d	file:
 Edge	mesh.hpp	/^typedef int Edge[2];$/;"	t	typeref:typename:int[2]
-Elem	poisson-rt.cpp	/^        Elem(int i, int j) : x_left(i*h), x_right((i+1)*h), y_down(j*h), y_up((j+1)*h) {$/;"	f	class:Elem	file:
+EdgeVert	mesh.cpp	/^	int EdgeVert[3][3] = {$/;"	v	namespace:REF_ELEM	typeref:typename:int[3][3]
+Elem	elem.hpp	/^        Elem(int i, int j) : x_left(i*h), x_right((i+1)*h), y_down(j*h), y_up((j+1)*h) {$/;"	f	class:Elem
+Elem	elem.hpp	/^class Elem {$/;"	c
+Elem	poisson-rt.cpp	/^        Elem(int i, int j) : ix(i), jy(j), x_left(i*h), y_down(j*h) {$/;"	f	class:Elem	file:
 Elem	poisson-rt.cpp	/^class Elem {$/;"	c	file:
+Elem	poisson-rt0-mix-grid.cpp	/^        Elem(int i, int j) : ix(i), jy(j), x_left(i*h), y_down(j*h) {$/;"	f	class:Elem	file:
+Elem	poisson-rt0-mix-grid.cpp	/^class Elem {$/;"	c	file:
+Elem	poisson-rt1.cpp	/^        Elem(int i, int j) : ix(i), jy(j), x_left(i*h), y_down(j*h) {$/;"	f	class:Elem	file:
+Elem	poisson-rt1.cpp	/^class Elem {$/;"	c	file:
+FEDG0	fe-dg.cpp	/^FEDG0::FEDG0() {$/;"	f	class:FEDG0
+FEDG0	fe-dg.hpp	/^class FEDG0 {$/;"	c
 FEDG0	poisson-rt.cpp	/^FEDG0::FEDG0() {$/;"	f	class:FEDG0
 FEDG0	poisson-rt.cpp	/^class FEDG0 {$/;"	c	file:
+FEDG0	poisson-rt0-mix-grid.cpp	/^FEDG0::FEDG0() {$/;"	f	class:FEDG0
+FEDG0	poisson-rt0-mix-grid.cpp	/^class FEDG0 {$/;"	c	file:
+FEDGQ1	fe-dg.cpp	/^FEDGQ1::FEDGQ1() {$/;"	f	class:FEDGQ1
+FEDGQ1	fe-dg.hpp	/^class FEDGQ1 {$/;"	c
+FEDGQ1	poisson-rt1.cpp	/^FEDGQ1::FEDGQ1() {$/;"	f	class:FEDGQ1
+FEDGQ1	poisson-rt1.cpp	/^class FEDGQ1 {$/;"	c	file:
 FERT0	fe-rt.cpp	/^FERT0::FERT0() {$/;"	f	class:FERT0
 FERT0	fe-rt.hpp	/^class FERT0 {$/;"	c
 FERT0	poisson-rt.cpp	/^FERT0::FERT0() {$/;"	f	class:FERT0
 FERT0	poisson-rt.cpp	/^class FERT0 {$/;"	c	file:
+FERT0	poisson-rt0-mix-grid.cpp	/^FERT0::FERT0() {$/;"	f	class:FERT0
+FERT0	poisson-rt0-mix-grid.cpp	/^class FERT0 {$/;"	c	file:
 FERT1	fe-rt.cpp	/^FERT1::FERT1() {$/;"	f	class:FERT1
 FERT1	fe-rt.hpp	/^class FERT1 {$/;"	c
+FERT1	poisson-rt1.cpp	/^FERT1::FERT1() {$/;"	f	class:FERT1
+FERT1	poisson-rt1.cpp	/^class FERT1 {$/;"	c	file:
+FE_DG_HPP	fe-dg.hpp	/^#define FE_DG_HPP$/;"	d
+FE_RT_HPP	fe-rt.hpp	/^#define FE_RT_HPP$/;"	d
 First	poisson-rt.cpp	/^#define First /;"	d	file:
+First	poisson-rt0-mix-grid.cpp	/^#define First /;"	d	file:
+ForElements	mesh.hpp	/^#define ForElements(/;"	d
 GMP_DIR	Makefile	/^GMP_DIR=\/usr\/lib\/x86_64-linux-gnu$/;"	m
+Grid	mesh.hpp	/^        Grid() : verb(1) {} $/;"	f	class:Grid
 Grid	mesh.hpp	/^class Grid {$/;"	c
+HEADER_HPP	header.hpp	/^#define HEADER_HPP$/;"	d
 IDX	poisson.c	/^#define IDX(/;"	d	file:
+INNER_PRODUCT	mesh.hpp	/^#define INNER_PRODUCT(/;"	d
+INTERIOR	testcpp.cpp	/^        INTERIOR = 1,$/;"	e	enum:BDRY_MASK::__anon255f4fb90103	file:
 Jac	mesh.hpp	/^        Eigen::Matrix<Real, 2, 3> Jac;$/;"	m	class:QuadElem	typeref:typename:Eigen::Matrix<Real,2,3>
 Jac	mesh.hpp	/^        Eigen::Matrix<Real, 2, 3> Jac;$/;"	m	class:TriaElem	typeref:typename:Eigen::Matrix<Real,2,3>
 LAPACK_DIR	Makefile	/^LAPACK_DIR=\/opt\/OpenBLAS-0.3.29$/;"	m
@@ -131,104 +194,222 @@ MATH_H	my-math.h	/^#define MATH_H$/;"	d
 MPFR_DIR	Makefile	/^MPFR_DIR=\/usr\/lib\/x86_64-linux-gnu$/;"	m
 MPI_DIR	Makefile	/^MPI_DIR=\/usr\/lib\/x86_64-linux-gnu\/openmpi$/;"	m
 MPREAL_DIR	Makefile	/^MPREAL_DIR=$/;"	m
+N	conv_test.m	/^N = [2,4,8,16,32];$/;"	v
+N	generate_mesh.m	/^N = 4;$/;"	v
 N	poisson-rt.cpp	/^#define N /;"	d	file:
+N	poisson-rt0-mix-grid.cpp	/^#define N /;"	d	file:
+N	poisson-rt1.cpp	/^#define N /;"	d	file:
 N	poisson.c	/^#define N 5  \/\/ Nu/;"	d	file:
 NE	poisson.c	/^#define NE /;"	d	file:
+NEUMANN	testcpp.cpp	/^        NEUMANN = 16$/;"	e	enum:BDRY_MASK::__anon255f4fb90103	file:
 NN	poisson.c	/^#define NN /;"	d	file:
+NORMALIZE	mesh.hpp	/^#define NORMALIZE(/;"	d
+OWNER	testcpp.cpp	/^        OWNER = 2,$/;"	e	enum:BDRY_MASK::__anon255f4fb90103	file:
 PETSC_ARCH	Makefile	/^PETSC_ARCH=$/;"	m
 PETSC_DIR	Makefile	/^PETSC_DIR=\/opt\/petsc-3.23.2$/;"	m
 Quad1d	poisson-rt.cpp	/^class Quad1d {$/;"	c	file:
+Quad1d	poisson-rt0-mix-grid.cpp	/^class Quad1d {$/;"	c	file:
+Quad1d	poisson-rt1.cpp	/^class Quad1d {$/;"	c	file:
 Quad1d	testcpp.cpp	/^class Quad1d {$/;"	c	file:
 Quad2d	poisson-rt.cpp	/^class Quad2d {$/;"	c	file:
+Quad2d	poisson-rt0-mix-grid.cpp	/^class Quad2d {$/;"	c	file:
+Quad2d	poisson-rt1.cpp	/^class Quad2d {$/;"	c	file:
 Quad2d	testcpp.cpp	/^class Quad2d {$/;"	c	file:
 QuadElem	mesh.hpp	/^class QuadElem {$/;"	c
 READ_NUMBER	mesh.cpp	/^#define READ_NUMBER	/;"	d	file:
+REF_ELEM	mesh.cpp	/^namespace REF_ELEM {$/;"	n	file:
+REMOTE	testcpp.cpp	/^        REMOTE = 4,$/;"	e	enum:BDRY_MASK::__anon255f4fb90103	file:
 Real	mesh.hpp	/^typedef double Real;$/;"	t	typeref:typename:double
 Real3	mesh.hpp	/^using Real3 = Eigen::Vector3d;$/;"	t	typeref:typename:Eigen::Vector3d
-RealMat	fe-rt.hpp	/^using RealMat = Eigen::MatrixXd;$/;"	t	typeref:typename:Eigen::MatrixXd
+RealMat	header.hpp	/^using RealMat = Eigen::MatrixXd;$/;"	t	typeref:typename:Eigen::MatrixXd
 RealMat	poisson-rt.cpp	/^using RealMat = Eigen::MatrixXd;$/;"	t	typeref:typename:Eigen::MatrixXd	file:
+RealMat	poisson-rt0-mix-grid.cpp	/^using RealMat = Eigen::MatrixXd;$/;"	t	typeref:typename:Eigen::MatrixXd	file:
+RealMat	poisson-rt1.cpp	/^using RealMat = Eigen::MatrixXd;$/;"	t	typeref:typename:Eigen::MatrixXd	file:
 RealMat	testcpp.cpp	/^using RealMat = Eigen::MatrixXd;$/;"	t	typeref:typename:Eigen::MatrixXd	file:
-RealVec	fe-rt.hpp	/^using RealVec = Eigen::VectorXd;$/;"	t	typeref:typename:Eigen::VectorXd
+RealVec	header.hpp	/^using RealVec = Eigen::VectorXd;$/;"	t	typeref:typename:Eigen::VectorXd
 RealVec	poisson-rt.cpp	/^using RealVec = Eigen::VectorXd;$/;"	t	typeref:typename:Eigen::VectorXd	file:
+RealVec	poisson-rt0-mix-grid.cpp	/^using RealVec = Eigen::VectorXd;$/;"	t	typeref:typename:Eigen::VectorXd	file:
+RealVec	poisson-rt1.cpp	/^using RealVec = Eigen::VectorXd;$/;"	t	typeref:typename:Eigen::VectorXd	file:
 RealVec	testcpp.cpp	/^using RealVec = Eigen::VectorXd;$/;"	t	typeref:typename:Eigen::VectorXd	file:
+SQUARE	mesh.hpp	/^#define SQUARE(/;"	d
 Second	poisson-rt.cpp	/^#define Second /;"	d	file:
+Second	poisson-rt0-mix-grid.cpp	/^#define Second /;"	d	file:
 Solver	poisson-rt.cpp	/^Solver::Solver() {$/;"	f	class:Solver
 Solver	poisson-rt.cpp	/^class Solver {$/;"	c	file:
+Solver	poisson-rt0-mix-grid.cpp	/^Solver::Solver() {$/;"	f	class:Solver
+Solver	poisson-rt0-mix-grid.cpp	/^class Solver {$/;"	c	file:
+Solver	poisson-rt1.cpp	/^Solver::Solver() {$/;"	f	class:Solver
+Solver	poisson-rt1.cpp	/^class Solver {$/;"	c	file:
 SortIndex	mesh.hpp	/^#define SortIndex(/;"	d
 TARGETC	Makefile	/^TARGETC = poisson learn testc$/;"	m
 TARGETCPP	Makefile	/^TARGETCPP = testcpp poisson-rt$/;"	m
-TARGETS	Makefile	/^TARGETS = main poisson learn testc testcpp poisson-rt mesh$/;"	m
+TARGETS	Makefile	/^TARGETS = main poisson learn testc testcpp poisson-rt mesh poisson-rt1$/;"	m
 Test	poisson-rt.cpp	/^class Test {$/;"	c	file:
+Test	poisson-rt0-mix-grid.cpp	/^class Test {$/;"	c	file:
+Test	poisson-rt1.cpp	/^class Test {$/;"	c	file:
+Ti	fe-dg.hpp	/^        Eigen::PartialPivLU<RealMat> Ti;$/;"	m	class:FEDGQ1	typeref:typename:Eigen::PartialPivLU<RealMat>
 Ti	fe-rt.hpp	/^        Eigen::PartialPivLU<RealMat> Ti;$/;"	m	class:FERT0	typeref:typename:Eigen::PartialPivLU<RealMat>
 Ti	fe-rt.hpp	/^        Eigen::PartialPivLU<RealMat> Ti;$/;"	m	class:FERT1	typeref:typename:Eigen::PartialPivLU<RealMat>
 Ti	poisson-rt.cpp	/^        Eigen::PartialPivLU<RealMat> Ti;$/;"	m	class:FERT0	typeref:typename:Eigen::PartialPivLU<RealMat>	file:
+Ti	poisson-rt0-mix-grid.cpp	/^        Eigen::PartialPivLU<RealMat> Ti;$/;"	m	class:FERT0	typeref:typename:Eigen::PartialPivLU<RealMat>	file:
+Ti	poisson-rt1.cpp	/^        Eigen::PartialPivLU<RealMat> Ti;$/;"	m	class:FEDGQ1	typeref:typename:Eigen::PartialPivLU<RealMat>	file:
+Ti	poisson-rt1.cpp	/^        Eigen::PartialPivLU<RealMat> Ti;$/;"	m	class:FERT1	typeref:typename:Eigen::PartialPivLU<RealMat>	file:
 TriaElem	mesh.hpp	/^class TriaElem {$/;"	c
 UTILS_H	utils.h	/^#define UTILS_H$/;"	d
+__anon255f4fb90103	testcpp.cpp	/^    enum {$/;"	g	namespace:BDRY_MASK	file:
+__anon862b08230102	mesh.cpp	/^			 [](gRef a, gRef b) {return a.eind > b.eind; });$/;"	f	function:Grid::init_gref	file:
 add	my-math.c	/^int add(int a, int b) {$/;"	f	typeref:typename:int
 all	Makefile	/^all: $(TARGETS)$/;"	t
 apply_bc	poisson.c	/^void apply_bc(double *x, double *y, double K[NN][NN], double F[NN], double U[NN]) {$/;"	f	typeref:typename:void
 area	mesh.hpp	/^        Real area;$/;"	m	class:QuadElem	typeref:typename:Real
 area	mesh.hpp	/^        Real area;$/;"	m	class:TriaElem	typeref:typename:Real
 area	poisson-rt.cpp	/^#define area /;"	d	file:
+area	poisson-rt0-mix-grid.cpp	/^#define area /;"	d	file:
+area	poisson-rt1.cpp	/^#define area /;"	d	file:
 assemble	poisson.c	/^void assemble(double *x, double *y, int elem[NE][3], double K[NN][NN], double F[NN]) {$/;"	f	typeref:typename:void
+bc_map	mesh.hpp	/^        BC_FUNCTION bc_map;$/;"	m	class:Grid	typeref:typename:BC_FUNCTION
 boundary	poisson.c	/^double boundary(double x, double y) {$/;"	f	typeref:typename:double
 btypes	mesh.hpp	/^        Btype btypes[3];$/;"	m	class:TriaElem	typeref:typename:Btype[3]
 btypes	mesh.hpp	/^        Btype btypes[4];$/;"	m	class:QuadElem	typeref:typename:Btype[4]
 build_mat	poisson-rt.cpp	/^void Solver::build_mat() {$/;"	f	class:Solver	typeref:typename:void
+build_mat	poisson-rt0-mix-grid.cpp	/^void Solver::build_mat() {$/;"	f	class:Solver	typeref:typename:void
+build_mat	poisson-rt1.cpp	/^void Solver::build_mat() {$/;"	f	class:Solver	typeref:typename:void
 build_rhs	poisson-rt.cpp	/^void Solver::build_rhs() {$/;"	f	class:Solver	typeref:typename:void
+build_rhs	poisson-rt0-mix-grid.cpp	/^void Solver::build_rhs() {$/;"	f	class:Solver	typeref:typename:void
+build_rhs	poisson-rt1.cpp	/^void Solver::build_rhs() {$/;"	f	class:Solver	typeref:typename:void
+check_conformal	mesh.cpp	/^Grid::check_conformal()$/;"	f	class:Grid	typeref:typename:void
+check_conformal2	mesh.cpp	/^Grid::check_conformal2()$/;"	f	class:Grid	typeref:typename:void
 clean	Makefile	/^clean:$/;"	t
+compare_bdry_edge	mesh.cpp	/^compare_bdry_edge(const void *p0, const void *p1)$/;"	f	typeref:typename:int
+compare_edge	mesh.cpp	/^Grid::compare_edge(const void *p0, const void *p1)$/;"	f	class:Grid	typeref:typename:int
+con_p_rt0_test1	conv_test.m	/^con_p_rt0_test1 = log2(error_p(1:4) .\/ error_p(2:5))$/;"	v
+con_p_rt0_test2	conv_test.m	/^con_p_rt0_test2 = log2(error_p(1:4) .\/ error_p(2:5))$/;"	v
+con_p_rt1_test1	conv_test.m	/^con_p_rt1_test1 = log2(error_p(1:4) .\/ error_p(2:5))$/;"	v
+con_p_rt1_test2	conv_test.m	/^con_p_rt1_test2 = log2(error_p(1:4) .\/ error_p(2:5))$/;"	v
+con_u_rt0_test1	conv_test.m	/^con_u_rt0_test1 = log2(error_u(1:4) .\/ error_u(2:5))$/;"	v
+con_u_rt0_test2	conv_test.m	/^con_u_rt0_test2 = log2(error_u(1:4) .\/ error_u(2:5))$/;"	v
+con_u_rt1_test1	conv_test.m	/^con_u_rt1_test1 = log2(error_u(1:4) .\/ error_u(2:5))$/;"	v
+con_u_rt1_test2	conv_test.m	/^con_u_rt1_test2 = log2(error_u(1:4) .\/ error_u(2:5))$/;"	v
 dFdx	mesh.hpp	/^        Eigen::Matrix<Real, 3, 2> dFdx;$/;"	m	class:QuadElem	typeref:typename:Eigen::Matrix<Real,3,2>
 dFdx	mesh.hpp	/^        Eigen::Matrix<Real, 3, 2> dFdx;$/;"	m	class:TriaElem	typeref:typename:Eigen::Matrix<Real,3,2>
 dof2nk	fe-rt.hpp	/^        vector<int> dof2nk;$/;"	m	class:FERT0	typeref:typename:vector<int>
 dof2nk	fe-rt.hpp	/^        vector<int> dof2nk;$/;"	m	class:FERT1	typeref:typename:vector<int>
 dof2nk	poisson-rt.cpp	/^        vector<int> dof2nk;$/;"	m	class:FERT0	typeref:typename:vector<int>	file:
+dof2nk	poisson-rt0-mix-grid.cpp	/^        vector<int> dof2nk;$/;"	m	class:FERT0	typeref:typename:vector<int>	file:
+dof2nk	poisson-rt1.cpp	/^        vector<int> dof2nk;$/;"	m	class:FERT1	typeref:typename:vector<int>	file:
 edge_length	mesh.hpp	/^        Real edge_length[3];$/;"	m	class:TriaElem	typeref:typename:Real[3]
 edge_length	mesh.hpp	/^        Real edge_length[4];$/;"	m	class:QuadElem	typeref:typename:Real[4]
 edge_normal	mesh.hpp	/^        Real edge_normal[3][3];  \/\/ edge outer normal$/;"	m	class:TriaElem	typeref:typename:Real[3][3]
 edge_normal	mesh.hpp	/^        Real edge_normal[4][3];  \/\/ edge outer normal$/;"	m	class:QuadElem	typeref:typename:Real[4][3]
+edge_sign	elem.hpp	/^        int edge_sign[12] = {1,1,1,1,1,1,1,1,1,1,1,1};$/;"	m	class:Elem	typeref:typename:int[12]
 edge_sign	poisson-rt.cpp	/^        int edge_sign[4] = {1,1,1,1};$/;"	m	class:Elem	typeref:typename:int[4]	file:
+edge_sign	poisson-rt0-mix-grid.cpp	/^        int edge_sign[4] = {1,1,1,1};$/;"	m	class:Elem	typeref:typename:int[4]	file:
+edge_sign	poisson-rt1.cpp	/^        int edge_sign[12] = {1,1,1,1,1,1,1,1,1,1,1,1};$/;"	m	class:Elem	typeref:typename:int[12]	file:
 edges	mesh.hpp	/^        Edge *edges = nullptr;$/;"	m	class:Grid	typeref:typename:Edge *
 edges	mesh.hpp	/^        int edges[3];$/;"	m	class:TriaElem	typeref:typename:int[3]
 edges	mesh.hpp	/^        int edges[4];$/;"	m	class:QuadElem	typeref:typename:int[4]
 edges_sgn	mesh.hpp	/^        int edges_sgn[3];$/;"	m	class:TriaElem	typeref:typename:int[3]
 edges_sgn	mesh.hpp	/^        int edges_sgn[4];$/;"	m	class:QuadElem	typeref:typename:int[4]
+elem	generate_mesh.m	/^elem = 1;$/;"	v
+elems	generate_mesh.m	/^elems = zeros(3*N*N\/2, 5); % first:  node one$/;"	v
+error	poisson-rt.cpp	/^void Solver::error() {$/;"	f	class:Solver	typeref:typename:void
+error	poisson-rt0-mix-grid.cpp	/^void Solver::error() {$/;"	f	class:Solver	typeref:typename:void
+error	poisson-rt1.cpp	/^void Solver::error() {$/;"	f	class:Solver	typeref:typename:void
+error_p	conv_test.m	/^error_p = [0.01178, 0.0029462, 0.000736568, 0.000184142, 4.60356e-05];$/;"	v
+error_p	conv_test.m	/^error_p = [0.0120607, 0.00305966, 0.000767673, 0.00019209, 4.80334e-05];$/;"	v
+error_p	conv_test.m	/^error_p = [0.0985922, 0.0518396, 0.0262438, 0.0131626, 0.00658638];$/;"	v
+error_p	conv_test.m	/^error_p = [0.255464, 0.128667, 0.0644539, 0.0322422, 0.016123];$/;"	v
+error_u	conv_test.m	/^error_u = [0.0163643, 0.00414508, 0.00103965, 0.000260123, 6.50441e-05];$/;"	v
+error_u	conv_test.m	/^error_u = [0.030429, 0.00760726, 0.00190181, 0.000475454, 0.000118863];$/;"	v
+error_u	conv_test.m	/^error_u = [0.263523, 0.135015, 0.0679084, 0.0340041, 0.0170083];$/;"	v
+error_u	conv_test.m	/^error_u = [0.309042, 0.155304, 0.0777524, 0.0388888, 0.019446];$/;"	v
 face_normal	mesh.hpp	/^        Real face_normal[3];		 \/\/ face outer normal$/;"	m	class:QuadElem	typeref:typename:Real[3]
 face_normal	mesh.hpp	/^        Real face_normal[3];		 \/\/ face outer normal$/;"	m	class:TriaElem	typeref:typename:Real[3]
+file	generate_mesh.m	/^file = fopen('mixed_struct_grid.msh','w');$/;"	v
 func1d	testcpp.cpp	/^double func1d(double x) {$/;"	f	typeref:typename:double
 func2d	testcpp.cpp	/^double func2d(double x, double y) {$/;"	f	typeref:typename:double
 func_f	poisson-rt.cpp	/^        double func_f(const Coord &phy_coord) {$/;"	f	class:Test	typeref:typename:double	file:
 func_f	poisson-rt.cpp	/^        double func_f(double x, double y) {$/;"	f	class:Test	typeref:typename:double	file:
+func_f	poisson-rt0-mix-grid.cpp	/^        double func_f(const Coord &phy_coord) {$/;"	f	class:Test	typeref:typename:double	file:
+func_f	poisson-rt0-mix-grid.cpp	/^        double func_f(double x, double y) {$/;"	f	class:Test	typeref:typename:double	file:
+func_f	poisson-rt1.cpp	/^        double func_f(const Coord &phy_coord) {$/;"	f	class:Test	typeref:typename:double	file:
+func_f	poisson-rt1.cpp	/^        double func_f(double x, double y) {$/;"	f	class:Test	typeref:typename:double	file:
 func_p	poisson-rt.cpp	/^        double func_p(const Coord &phy_coord) {$/;"	f	class:Test	typeref:typename:double	file:
 func_p	poisson-rt.cpp	/^        double func_p(double x, double y) {$/;"	f	class:Test	typeref:typename:double	file:
+func_p	poisson-rt0-mix-grid.cpp	/^        double func_p(const Coord &phy_coord) {$/;"	f	class:Test	typeref:typename:double	file:
+func_p	poisson-rt0-mix-grid.cpp	/^        double func_p(double x, double y) {$/;"	f	class:Test	typeref:typename:double	file:
+func_p	poisson-rt1.cpp	/^        double func_p(const Coord &phy_coord) {$/;"	f	class:Test	typeref:typename:double	file:
+func_p	poisson-rt1.cpp	/^        double func_p(double x, double y) {$/;"	f	class:Test	typeref:typename:double	file:
 func_u	poisson-rt.cpp	/^        void func_u(const Coord &phy_coord, double *u) {$/;"	f	class:Test	typeref:typename:void	file:
 func_u	poisson-rt.cpp	/^        void func_u(double x, double y, double *u) {$/;"	f	class:Test	typeref:typename:void	file:
+func_u	poisson-rt0-mix-grid.cpp	/^        void func_u(const Coord &phy_coord, double *u) {$/;"	f	class:Test	typeref:typename:void	file:
+func_u	poisson-rt0-mix-grid.cpp	/^        void func_u(double x, double y, double *u) {$/;"	f	class:Test	typeref:typename:void	file:
+func_u	poisson-rt1.cpp	/^        void func_u(const Coord &phy_coord, double *u) {$/;"	f	class:Test	typeref:typename:void	file:
+func_u	poisson-rt1.cpp	/^        void func_u(double x, double y, double *u) {$/;"	f	class:Test	typeref:typename:void	file:
 generate_elements	poisson.c	/^void generate_elements(int elem[NE][3]) {$/;"	f	typeref:typename:void
 generate_nodes	poisson.c	/^void generate_nodes(double *x, double *y) {$/;"	f	typeref:typename:void
+getArea	mesh.cpp	/^Elem::getArea(Real3 *normal, Real3 *df1, Real3 *df2)$/;"	f	class:Elem	typeref:typename:Real
+getEdgeLength	mesh.cpp	/^Elem::getEdgeLength(int iside, Real3 *gn)$/;"	f	class:Elem	typeref:typename:Real
+getFaceLambda	mesh.cpp	/^Grid::getFaceLambda(Elem &e, int iside, const Real *p, Real *lambda, bool do_swap) const$/;"	f	class:Grid	typeref:typename:bool
 get_local_grid	mesh.hpp	/^        virtual void get_local_grid() {}$/;"	f	class:Grid	typeref:typename:void
 get_token	mesh.cpp	/^bool get_token(FILE *fp, char *token)$/;"	f	typeref:typename:bool
 get_token	testc.c	/^bool get_token(FILE *fp, char *token)$/;"	f	typeref:typename:bool
 get_token_ret	mesh.cpp	/^static int get_token_ret = 0;$/;"	v	typeref:typename:int	file:
+h	generate_mesh.m	/^h = 1\/N;$/;"	v
 h	poisson-rt.cpp	/^#define h /;"	d	file:
-i	poisson-rt.cpp	/^        int i, j;$/;"	m	class:Elem	typeref:typename:int	file:
+h	poisson-rt0-mix-grid.cpp	/^#define h /;"	d	file:
+h	poisson-rt1.cpp	/^#define h /;"	d	file:
 index	mesh.hpp	/^        int index;$/;"	m	class:QuadElem	typeref:typename:int
 index	mesh.hpp	/^        int index;$/;"	m	class:TriaElem	typeref:typename:int
-j	poisson-rt.cpp	/^        int i, j;$/;"	m	class:Elem	typeref:typename:int	file:
+init_geom	mesh.cpp	/^Grid::init_geom()$/;"	f	class:Grid	typeref:typename:void
+init_gref	mesh.cpp	/^Grid::init_gref()$/;"	f	class:Grid	typeref:typename:void
+init_gref	mesh.cpp	/^ParallelGrid::init_gref()$/;"	f	class:ParallelGrid	typeref:typename:void
+init_gref	mesh.hpp	/^        virtual void init_gref() {} \/\/ vert_to_elem, edge_to_elem, edge sign$/;"	f	class:Grid	typeref:typename:void
+ix	poisson-rt.cpp	/^        int ix, jy;$/;"	m	class:Elem	typeref:typename:int	file:
+ix	poisson-rt0-mix-grid.cpp	/^        int ix, jy;$/;"	m	class:Elem	typeref:typename:int	file:
+ix	poisson-rt1.cpp	/^        int ix, jy;$/;"	m	class:Elem	typeref:typename:int	file:
+jy	poisson-rt.cpp	/^        int ix, jy;$/;"	m	class:Elem	typeref:typename:int	file:
+jy	poisson-rt0-mix-grid.cpp	/^        int ix, jy;$/;"	m	class:Elem	typeref:typename:int	file:
+jy	poisson-rt1.cpp	/^        int ix, jy;$/;"	m	class:Elem	typeref:typename:int	file:
+lambda2xyz	mesh.cpp	/^Grid::lambda2xyz(const Elem &e, Real xi, Real eta,$/;"	f	class:Grid	typeref:typename:void
+lambda2xyzDirect	mesh.cpp	/^Grid::lambda2xyzDirect(const Elem &e, Real xi, Real eta, Real &x, Real &y, Real &z) const$/;"	f	class:Grid	typeref:typename:void
 learn	Makefile	/^learn: learn.o$/;"	t
+len	generate_mesh.m	/^len = size(lines,1) + size(elems,1);$/;"	v
 len	poisson-rt.cpp	/^#define len /;"	d	file:
+len	poisson-rt0-mix-grid.cpp	/^#define len /;"	d	file:
+len	poisson-rt1.cpp	/^#define len /;"	d	file:
+line	generate_mesh.m	/^line = 1;$/;"	v
+lines	generate_mesh.m	/^lines = zeros(2*N*(N+1)+N*(N\/2), 3); % first:  node one$/;"	v
 main	Makefile	/^main: main.o utils.o my-math.o$/;"	t
 main	learn.cpp	/^int main() {$/;"	f	typeref:typename:int
 main	main.c	/^int main(){$/;"	f	typeref:typename:int
 main	mesh.cpp	/^int main(int argc, char *argv[]) {$/;"	f	typeref:typename:int
 main	poisson-rt.cpp	/^int main(int argc, char* argv[]) {$/;"	f	typeref:typename:int
+main	poisson-rt0-mix-grid.cpp	/^int main(int argc, char* argv[]) {$/;"	f	typeref:typename:int
+main	poisson-rt1.cpp	/^int main(int argc, char* argv[]) {$/;"	f	typeref:typename:int
 main	poisson.c	/^int main() {$/;"	f	typeref:typename:int
 main	testc.c	/^int main(int argc, char* argv[]) {$/;"	f	typeref:typename:int
 main	testcpp.cpp	/^int main(int argc, char *argv[]) {$/;"	f	typeref:typename:int
+main	testpetsc.c	/^int main(int argc, char **argv)$/;"	f	typeref:typename:int
 map_p	poisson-rt.cpp	/^int map_p(int i, int j) {$/;"	f	typeref:typename:int
+map_p	poisson-rt0-mix-grid.cpp	/^int map_p(int i, int j) {$/;"	f	typeref:typename:int
+map_p	poisson-rt1.cpp	/^int map_p(int i, int j, int ibas) {$/;"	f	typeref:typename:int
 map_u	poisson-rt.cpp	/^int map_u(int i, int j, int ibas) {$/;"	f	typeref:typename:int
+map_u	poisson-rt0-mix-grid.cpp	/^int map_u(int i, int j, int ibas) {$/;"	f	typeref:typename:int
+map_u	poisson-rt1.cpp	/^int map_u(int i, int j, int ibas) {$/;"	f	typeref:typename:int
+mapline	generate_mesh.m	/^mapline = @(i,j) 2*N*(i-1) + (2*j-1);$/;"	v
+mapnode	generate_mesh.m	/^mapnode = @(i,j) (i-1)*(N+1)+j;$/;"	v
 mat	poisson-rt.cpp	/^        RealMat mat;$/;"	m	class:Solver	typeref:typename:RealMat	file:
+mat	poisson-rt0-mix-grid.cpp	/^        RealMat mat;$/;"	m	class:Solver	typeref:typename:RealMat	file:
+mat	poisson-rt1.cpp	/^        RealMat mat;$/;"	m	class:Solver	typeref:typename:RealMat	file:
+nbas	fe-dg.hpp	/^        const int nbas = 1;$/;"	m	class:FEDG0	typeref:typename:const int
+nbas	fe-dg.hpp	/^        const int nbas = 4;$/;"	m	class:FEDGQ1	typeref:typename:const int
 nbas	fe-rt.hpp	/^        const int nbas = 12;$/;"	m	class:FERT1	typeref:typename:const int
 nbas	fe-rt.hpp	/^        const int nbas = 4;$/;"	m	class:FERT0	typeref:typename:const int
 nbas	poisson-rt.cpp	/^        const int nbas = 4;$/;"	m	class:FERT0	typeref:typename:const int	file:
+nbas	poisson-rt0-mix-grid.cpp	/^        const int nbas = 4;$/;"	m	class:FERT0	typeref:typename:const int	file:
+nbas	poisson-rt1.cpp	/^        const int nbas = 12;$/;"	m	class:FERT1	typeref:typename:const int	file:
+nbas	poisson-rt1.cpp	/^        const int nbas = 4;$/;"	m	class:FEDGQ1	typeref:typename:const int	file:
 nedge	mesh.hpp	/^        int nedge;$/;"	m	class:Grid	typeref:typename:int
 nedge_global	mesh.hpp	/^        virtual int nedge_global() {return nedge;};$/;"	f	class:Grid	typeref:typename:int
 neigh	mesh.hpp	/^        int neigh[3];  \/\/ >=0: elem index$/;"	m	class:TriaElem	typeref:typename:int[3]
@@ -239,58 +420,121 @@ nelem_global	mesh.hpp	/^        virtual int nelem_global() {return nelem;};$/;"	
 nk	fe-rt.hpp	/^        const double nk[8] =$/;"	m	class:FERT0	typeref:typename:const double[8]
 nk	fe-rt.hpp	/^        const double nk[8] =$/;"	m	class:FERT1	typeref:typename:const double[8]
 nk	poisson-rt.cpp	/^        const double nk[8] =$/;"	m	class:FERT0	typeref:typename:const double[8]	file:
+nk	poisson-rt0-mix-grid.cpp	/^        const double nk[8] =$/;"	m	class:FERT0	typeref:typename:const double[8]	file:
+nk	poisson-rt1.cpp	/^        const double nk[8] =$/;"	m	class:FERT1	typeref:typename:const double[8]	file:
 nlayer	mesh.hpp	/^        int nlayer;$/;"	m	class:Grid	typeref:typename:int
+nodes	fe-dg.hpp	/^        Coord *nodes = nullptr;$/;"	m	class:FEDG0	typeref:typename:Coord *
+nodes	fe-dg.hpp	/^        Coord *nodes = nullptr;$/;"	m	class:FEDGQ1	typeref:typename:Coord *
 nodes	fe-rt.hpp	/^        Coord *nodes; $/;"	m	class:FERT0	typeref:typename:Coord *
 nodes	fe-rt.hpp	/^        Coord *nodes; $/;"	m	class:FERT1	typeref:typename:Coord *
+nodes	generate_mesh.m	/^nodes = zeros((N+1)*(N+1), 3);$/;"	v
 nodes	poisson-rt.cpp	/^        Coord *nodes = nullptr;$/;"	m	class:FEDG0	typeref:typename:Coord *	file:
 nodes	poisson-rt.cpp	/^        Coord *nodes; $/;"	m	class:FERT0	typeref:typename:Coord *	file:
+nodes	poisson-rt0-mix-grid.cpp	/^        Coord *nodes = nullptr;$/;"	m	class:FEDG0	typeref:typename:Coord *	file:
+nodes	poisson-rt0-mix-grid.cpp	/^        Coord *nodes; $/;"	m	class:FERT0	typeref:typename:Coord *	file:
+nodes	poisson-rt1.cpp	/^        Coord *nodes = nullptr;$/;"	m	class:FEDGQ1	typeref:typename:Coord *	file:
+nodes	poisson-rt1.cpp	/^        Coord *nodes; $/;"	m	class:FERT1	typeref:typename:Coord *	file:
+npoints	poisson-rt1.cpp	/^        const int npoints = 3;$/;"	m	class:Quad1d	typeref:typename:const int	file:
+npoints	poisson-rt1.cpp	/^        const int npoints = 9;$/;"	m	class:Quad2d	typeref:typename:const int	file:
 nprocs	mesh.hpp	/^        int nprocs;$/;"	m	class:Grid	typeref:typename:int
 nvert	mesh.hpp	/^        int nvert;$/;"	m	class:Grid	typeref:typename:int
 nvert_global	mesh.hpp	/^        virtual int nvert_global() {return nvert;};	$/;"	f	class:Grid	typeref:typename:int
 ordering	mesh.hpp	/^        char ordering[3]; \/\/ Ordering of vertices:$/;"	m	class:TriaElem	typeref:typename:char[3]
 ordering	mesh.hpp	/^        char ordering[4]; \/\/ Ordering of vertices:$/;"	m	class:QuadElem	typeref:typename:char[4]
+output_gmsh	mesh.cpp	/^Grid::output_gmsh(const char *prefix, bool second_order)$/;"	f	class:Grid	typeref:typename:void
 p	poisson-rt.cpp	/^        FEDG0 *p;$/;"	m	class:Solver	typeref:typename:FEDG0 *	file:
+p	poisson-rt0-mix-grid.cpp	/^        FEDG0 *p;$/;"	m	class:Solver	typeref:typename:FEDG0 *	file:
+p	poisson-rt1.cpp	/^        FEDGQ1 *p;$/;"	m	class:Solver	typeref:typename:FEDGQ1 *	file:
+p_error_L2	poisson-rt.cpp	/^        double p_error_L2 = 0;$/;"	m	class:Solver	typeref:typename:double	file:
+p_error_L2	poisson-rt0-mix-grid.cpp	/^        double p_error_L2 = 0;$/;"	m	class:Solver	typeref:typename:double	file:
+p_error_L2	poisson-rt1.cpp	/^        double p_error_L2 = 0;$/;"	m	class:Solver	typeref:typename:double	file:
 partition	mesh.hpp	/^        virtual void partition(const char *part_file_name = nullptr) {}$/;"	f	class:Grid	typeref:typename:void
 points	poisson-rt.cpp	/^        double points[2] = {(1-1\/sqrt(3))\/2, (1+1\/sqrt(3))\/2};$/;"	m	class:Quad1d	typeref:typename:double[2]	file:
 points	poisson-rt.cpp	/^        double points[4][2] = {$/;"	m	class:Quad2d	typeref:typename:double[4][2]	file:
+points	poisson-rt0-mix-grid.cpp	/^        double points[2] = {(1-1\/sqrt(3))\/2, (1+1\/sqrt(3))\/2};$/;"	m	class:Quad1d	typeref:typename:double[2]	file:
+points	poisson-rt0-mix-grid.cpp	/^        double points[4][2] = {$/;"	m	class:Quad2d	typeref:typename:double[4][2]	file:
+points	poisson-rt1.cpp	/^        double points[3] = {0.112701665379258, 0.5, 0.887298334620742};$/;"	m	class:Quad1d	typeref:typename:double[3]	file:
+points	poisson-rt1.cpp	/^        double points[9][2] = {$/;"	m	class:Quad2d	typeref:typename:double[9][2]	file:
 points	testcpp.cpp	/^        double points[2] = {(1-1\/sqrt(3))\/2, (1+1\/sqrt(3))\/2};$/;"	m	class:Quad1d	typeref:typename:double[2]	file:
 points	testcpp.cpp	/^        double points[4][2] = {$/;"	m	class:Quad2d	typeref:typename:double[4][2]	file:
 poisson	Makefile	/^poisson: poisson.o$/;"	t
 poisson-rt	Makefile	/^poisson-rt: poisson-rt.o$/;"	t
+poisson-rt1	Makefile	/^poisson-rt1: poisson-rt1.o$/;"	t
 print_result	utils.c	/^void print_result(int result){$/;"	f	typeref:typename:void
 quad1d	poisson-rt.cpp	/^        Quad1d quad1d;$/;"	m	class:Quad2d	typeref:typename:Quad1d	file:
 quad1d	poisson-rt.cpp	/^        Quad1d quad1d;$/;"	m	class:Solver	typeref:typename:Quad1d	file:
+quad1d	poisson-rt0-mix-grid.cpp	/^        Quad1d quad1d;$/;"	m	class:Quad2d	typeref:typename:Quad1d	file:
+quad1d	poisson-rt0-mix-grid.cpp	/^        Quad1d quad1d;$/;"	m	class:Solver	typeref:typename:Quad1d	file:
+quad1d	poisson-rt1.cpp	/^        Quad1d quad1d;$/;"	m	class:Quad2d	typeref:typename:Quad1d	file:
+quad1d	poisson-rt1.cpp	/^        Quad1d quad1d;$/;"	m	class:Solver	typeref:typename:Quad1d	file:
 quad1d	testcpp.cpp	/^        Quad1d quad1d;$/;"	m	class:Quad2d	typeref:typename:Quad1d	file:
 quad2d	poisson-rt.cpp	/^        Quad2d quad2d;$/;"	m	class:Solver	typeref:typename:Quad2d	file:
+quad2d	poisson-rt0-mix-grid.cpp	/^        Quad2d quad2d;$/;"	m	class:Solver	typeref:typename:Quad2d	file:
+quad2d	poisson-rt1.cpp	/^        Quad2d quad2d;$/;"	m	class:Solver	typeref:typename:Quad2d	file:
 quad_elems	mesh.hpp	/^        QuadElem *quad_elems = nullptr;$/;"	m	class:Grid	typeref:typename:QuadElem *
 rank	mesh.hpp	/^        int rank;$/;"	m	class:Grid	typeref:typename:int
-read_mesh	mesh.cpp	/^void Grid::read_mesh(const char *mesh_file_name)$/;"	f	class:Grid	typeref:typename:void
+read_mesh	mesh.cpp	/^Grid::read_mesh(const char *mesh_file_name, BC_FUNCTION user_bc_map, const char *part_file_name)$/;"	f	class:Grid	typeref:typename:void
+ref2phy	elem.hpp	/^        void ref2phy(const Coord ref_coord, Coord &phy_coord) {$/;"	f	class:Elem	typeref:typename:void
 ref2phy	poisson-rt.cpp	/^        void ref2phy(const Coord ref_coord, Coord &phy_coord) {$/;"	f	class:Elem	typeref:typename:void	file:
+ref2phy	poisson-rt0-mix-grid.cpp	/^        void ref2phy(const Coord ref_coord, Coord &phy_coord) {$/;"	f	class:Elem	typeref:typename:void	file:
+ref2phy	poisson-rt1.cpp	/^        void ref2phy(const Coord ref_coord, Coord &phy_coord) {$/;"	f	class:Elem	typeref:typename:void	file:
 ref2phy	testcpp.cpp	/^void ref2phy(const Coord &ref_coord, Coord &phy_coord) {$/;"	f	typeref:typename:void
 rhs	poisson-rt.cpp	/^        RealVec rhs;$/;"	m	class:Solver	typeref:typename:RealVec	file:
+rhs	poisson-rt0-mix-grid.cpp	/^        RealVec rhs;$/;"	m	class:Solver	typeref:typename:RealVec	file:
+rhs	poisson-rt1.cpp	/^        RealVec rhs;$/;"	m	class:Solver	typeref:typename:RealVec	file:
 sgn	mesh.hpp	/^        int sgn;$/;"	m	class:QuadElem	typeref:typename:int
 sgn	mesh.hpp	/^        int sgn;$/;"	m	class:TriaElem	typeref:typename:int
 solve	poisson-rt.cpp	/^void Solver::solve() {$/;"	f	class:Solver	typeref:typename:void
+solve	poisson-rt0-mix-grid.cpp	/^void Solver::solve() {$/;"	f	class:Solver	typeref:typename:void
+solve	poisson-rt1.cpp	/^void Solver::solve() {$/;"	f	class:Solver	typeref:typename:void
 solve	poisson.c	/^void solve(double K[NN][NN], double F[NN], double U[NN]) {$/;"	f	typeref:typename:void
+statistic	mesh.cpp	/^Grid::statistic()$/;"	f	class:Grid	typeref:typename:void
 subtract	my-math.c	/^int subtract(int a, int b) {$/;"	f	typeref:typename:int
 test	poisson-rt.cpp	/^Test test;$/;"	v	typeref:typename:Test
+test	poisson-rt0-mix-grid.cpp	/^Test test;$/;"	v	typeref:typename:Test
+test	poisson-rt1.cpp	/^Test test;$/;"	v	typeref:typename:Test
 testc	Makefile	/^testc: testc.o$/;"	t
 testcpp	Makefile	/^testcpp: testcpp.o$/;"	t
 total_dofs	poisson-rt.cpp	/^        int total_dofs = 2*N*(N+1) + N*N;$/;"	m	class:Solver	typeref:typename:int	file:
+total_dofs	poisson-rt0-mix-grid.cpp	/^        int total_dofs = 2*N*(N+1) + N*N;$/;"	m	class:Solver	typeref:typename:int	file:
+total_dofs	poisson-rt1.cpp	/^        int total_dofs = 4*N*(2*N+1) + 4*N*N;$/;"	m	class:Solver	typeref:typename:int	file:
 tria_elems	mesh.hpp	/^        TriaElem *tria_elems = nullptr;$/;"	m	class:Grid	typeref:typename:TriaElem *
 u	poisson-rt.cpp	/^        FERT0 *u;$/;"	m	class:Solver	typeref:typename:FERT0 *	file:
+u	poisson-rt0-mix-grid.cpp	/^        FERT0 *u;$/;"	m	class:Solver	typeref:typename:FERT0 *	file:
+u	poisson-rt1.cpp	/^        FERT1 *u;$/;"	m	class:Solver	typeref:typename:FERT1 *	file:
+u_error_L2	poisson-rt.cpp	/^        double u_error_L2 = 0;$/;"	m	class:Solver	typeref:typename:double	file:
+u_error_L2	poisson-rt0-mix-grid.cpp	/^        double u_error_L2 = 0;$/;"	m	class:Solver	typeref:typename:double	file:
+u_error_L2	poisson-rt1.cpp	/^        double u_error_L2 = 0;$/;"	m	class:Solver	typeref:typename:double	file:
+udof_global	poisson-rt1.cpp	/^static int udof_global = 4*N*(2*N+1);$/;"	v	typeref:typename:int	file:
+until_elem	mesh.cpp	/^Grid::until_elem(unsigned int ielem, Btype btype)$/;"	f	class:Grid	typeref:typename:unsigned int
+updateJacobian	mesh.cpp	/^Grid::updateJacobian(Elem &e)$/;"	f	class:Grid	typeref:typename:void
+updateJacobian	mesh.cpp	/^Grid::updateJacobian(Elem &e, const double *lambda)$/;"	f	class:Grid	typeref:typename:void
 verb	mesh.hpp	/^        int verb;$/;"	m	class:Grid	typeref:typename:int
 verts	mesh.hpp	/^        Coord *verts = nullptr;$/;"	m	class:Grid	typeref:typename:Coord *
 verts	mesh.hpp	/^        int verts[3];$/;"	m	class:TriaElem	typeref:typename:int[3]
 verts	mesh.hpp	/^        int verts[4];$/;"	m	class:QuadElem	typeref:typename:int[4]
 weights	poisson-rt.cpp	/^        double weights[2] = {0.5, 0.5};$/;"	m	class:Quad1d	typeref:typename:double[2]	file:
 weights	poisson-rt.cpp	/^        double weights[4] = {0.25, 0.25, 0.25, 0.25};$/;"	m	class:Quad2d	typeref:typename:double[4]	file:
+weights	poisson-rt0-mix-grid.cpp	/^        double weights[2] = {0.5, 0.5};$/;"	m	class:Quad1d	typeref:typename:double[2]	file:
+weights	poisson-rt0-mix-grid.cpp	/^        double weights[4] = {0.25, 0.25, 0.25, 0.25};$/;"	m	class:Quad2d	typeref:typename:double[4]	file:
+weights	poisson-rt1.cpp	/^        double weights[3] = {0.277777777777778, 0.444444444444444, 0.277777777777778};$/;"	m	class:Quad1d	typeref:typename:double[3]	file:
+weights	poisson-rt1.cpp	/^        double weights[9] = {$/;"	m	class:Quad2d	typeref:typename:double[9]	file:
 weights	testcpp.cpp	/^        double weights[2] = {0.5, 0.5};$/;"	m	class:Quad1d	typeref:typename:double[2]	file:
 weights	testcpp.cpp	/^        double weights[4] = {0.25, 0.25, 0.25, 0.25};$/;"	m	class:Quad2d	typeref:typename:double[4]	file:
 x	poisson-rt.cpp	/^        RealVec x;$/;"	m	class:Solver	typeref:typename:RealVec	file:
-x_center	poisson-rt.cpp	/^        double x_center;$/;"	m	class:Elem	typeref:typename:double	file:
+x	poisson-rt0-mix-grid.cpp	/^        RealVec x;$/;"	m	class:Solver	typeref:typename:RealVec	file:
+x	poisson-rt1.cpp	/^        RealVec x;$/;"	m	class:Solver	typeref:typename:RealVec	file:
+x_center	elem.hpp	/^        double x_center;$/;"	m	class:Elem	typeref:typename:double
+x_left	elem.hpp	/^        double x_left;$/;"	m	class:Elem	typeref:typename:double
 x_left	poisson-rt.cpp	/^        double x_left;$/;"	m	class:Elem	typeref:typename:double	file:
-x_right	poisson-rt.cpp	/^        double x_right;$/;"	m	class:Elem	typeref:typename:double	file:
-y_center	poisson-rt.cpp	/^        double y_center;$/;"	m	class:Elem	typeref:typename:double	file:
+x_left	poisson-rt0-mix-grid.cpp	/^        double x_left;$/;"	m	class:Elem	typeref:typename:double	file:
+x_left	poisson-rt1.cpp	/^        double x_left;$/;"	m	class:Elem	typeref:typename:double	file:
+x_right	elem.hpp	/^        double x_right;$/;"	m	class:Elem	typeref:typename:double
+xyz2lambda	mesh.cpp	/^Grid::xyz2lambda(const Elem &e, Real x, Real y, Real z,$/;"	f	class:Grid	typeref:typename:void
+xyz2lambda	mesh.cpp	/^Grid::xyz2lambda(const Elem &e, Real x, Real y,$/;"	f	class:Grid	typeref:typename:void
+y_center	elem.hpp	/^        double y_center;$/;"	m	class:Elem	typeref:typename:double
+y_down	elem.hpp	/^        double y_down;$/;"	m	class:Elem	typeref:typename:double
 y_down	poisson-rt.cpp	/^        double y_down;$/;"	m	class:Elem	typeref:typename:double	file:
-y_up	poisson-rt.cpp	/^        double y_up;$/;"	m	class:Elem	typeref:typename:double	file:
+y_down	poisson-rt0-mix-grid.cpp	/^        double y_down;$/;"	m	class:Elem	typeref:typename:double	file:
+y_down	poisson-rt1.cpp	/^        double y_down;$/;"	m	class:Elem	typeref:typename:double	file:
+y_up	elem.hpp	/^        double y_up;$/;"	m	class:Elem	typeref:typename:double
