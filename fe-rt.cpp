@@ -2,77 +2,89 @@
 
 
 // ------------------------------ RT0 ---------------------------------
-FERT0::FERT0(Elem *e) {
+FERT0::FERT0() {
     int o = 0;
+    RealMat T;
+    nodes = (Coord *) calloc (4, sizeof(Coord)); // enough to put either tria or quad nodes.
 
-    if (elem->elem_type == 'T') {
-        nbas = 3;
-        nodes = (Coord *) calloc (nbas, sizeof(Coord));
-        dof2nk.resize(nbas);
-        nodes[o][0] = 1./2.; nodes[o][1] = 0.0;   dof2nk[o++] = 0;
-        nodes[o][0] = 1./2.; nodes[o][1] = 1./2.; dof2nk[o++] = 1;
-        nodes[o][0] = 0.0;   nodes[o][1] = 1./2.; dof2nk[o++] = 2;
-        RealMat T(nbas, nbas);
-        for (int k = 0; k < nbas; k++) {
-            const double *ip = nodes[k];
-            const double *n_k = nk_tria + 2*dof2nk[k];
+    // -------------------------- Tria ----------------------------
+    int nbas = nbas_[ELEM_TYPE::TRIA];
+    dof2nk.resize(nbas);
+    T.resize(nbas, nbas);
 
-            o = 0;
-            T(o++,k) = n_k[0];
-            T(o++,k) = n_k[1];
-            T(o++,k) = ip[0] * n_k[0] + ip[1] * n_k[1];
-        }
-    } else if (elem->elem_type == 'Q') {
-        nbas = 4;
-        nodes = (Coord *) calloc (nbas, sizeof(Coord));
-        dof2nk.resize(nbas);
-        nodes[o][0] = 1./2.; nodes[o][1] = 0.0;   dof2nk[o++] = 0;
-        nodes[o][0] = 1.;    nodes[o][1] = 1./2.; dof2nk[o++] = 1;
-        nodes[o][0] = 1./2.; nodes[o][1] = 1.0;   dof2nk[o++] = 2;
-        nodes[o][0] = 0.;    nodes[o][1] = 1./2.; dof2nk[o++] = 3;
-        RealMat T(nbas, nbas);
-        for (int k = 0; k < nbas; k++) {
-            const double *ip = nodes[k];
-            const double *n_k = nk_quad + 2*dof2nk[k];
+    nodes[o][0] = 1./2.; nodes[o][1] = 0.0;   dof2nk[o++] = 0;
+    nodes[o][0] = 1./2.; nodes[o][1] = 1./2.; dof2nk[o++] = 1;
+    nodes[o][0] = 0.0;   nodes[o][1] = 1./2.; dof2nk[o++] = 2;
 
-            o = 0;
-            T(o++,k) = n_k[0];
-            T(o++,k) = n_k[1];
-            T(o++,k) = ip[0] * n_k[0];
-            T(o++,k) = ip[1] * n_k[1];
-        }
-    } 
+    for (int k = 0; k < nbas; k++) {
+        const double *ip = nodes[k];
+        const double *n_k = nk_tria + 2*dof2nk[k];
+
+        o = 0;
+        T(o++,k) = n_k[0];
+        T(o++,k) = n_k[1];
+        T(o++,k) = ip[0] * n_k[0] + ip[1] * n_k[1];
+    }
+    TiTria = Eigen::PartialPivLU<RealMat> (T);
+
+    // -------------------------- Quad ----------------------------
+    nbas = nbas_[ELEM_TYPE::QUAD];
+    /* nodes = (Coord *) calloc (nbas, sizeof(Coord)); */
+    dof2nk.resize(nbas);
+    T.resize(nbas, nbas);
+
+    nodes[o][0] = 1./2.; nodes[o][1] = 0.0;   dof2nk[o++] = 0;
+    nodes[o][0] = 1.;    nodes[o][1] = 1./2.; dof2nk[o++] = 1;
+    nodes[o][0] = 1./2.; nodes[o][1] = 1.0;   dof2nk[o++] = 2;
+    nodes[o][0] = 0.;    nodes[o][1] = 1./2.; dof2nk[o++] = 3;
+
+    for (int k = 0; k < nbas; k++) {
+        const double *ip = nodes[k];
+        const double *n_k = nk_quad + 2*dof2nk[k];
+
+        o = 0;
+        T(o++,k) = n_k[0];
+        T(o++,k) = n_k[1];
+        T(o++,k) = ip[0] * n_k[0];
+        T(o++,k) = ip[1] * n_k[1];
+    }
     
-    Ti = Eigen::PartialPivLU<RealMat> (T);
+    TiQuad = Eigen::PartialPivLU<RealMat> (T);
 }
 
 
 
-void FERT0::CalcShapeRef(const double *ip, RealMat &shape) {
+
+void FERT0::CalcShapeRef(Btype type, const double *ip, RealMat &shape) {
+    int nbas = nbas_[type];
     RealMat u(nbas,2);
     int o = 0;
     double x = ip[0];
     double y = ip[1];
 
-    if (elem->elem_type == 'T') {
+    if (type == ELEM_TYPE::TRIA) {
         u(o,0) = 1; u(o,1) = 0; o++;
         u(o,0) = 0; u(o,1) = 1; o++;
         u(o,0) = x; u(o,1) = y; o++;
-    } else if (elem->elem_type == 'Q') {
+
+        /* assert(o == nbas[type]); */
+        shape = TiTria.solve(u);
+    } else if (type == ELEM_TYPE::QUAD) {
         u(o,0) = 1; u(o,1) = 0; o++;
         u(o,0) = 0; u(o,1) = 1; o++;
         u(o,0) = x; u(o,1) = 0; o++;
         u(o,0) = 0; u(o,1) = y; o++;
+
+        /* assert(o == nbas[type]); */
+        shape = TiQuad.solve(u);
     }
 
-    assert(o == nbas);
-    shape = Ti.solve(u);
 }
 
 
 // TODO
 void FERT0::CalcShape(const Elem &e, const double *ip, RealMat &shape) {
-    CalcShapeRef(ip, shape);
+    CalcShapeRef(e.elem_type, ip, shape);
     // apply edge signs
     for (int i = 0; i < nbas; i++) {
         shape.row(i) *= e.edge_sign[i];
@@ -81,27 +93,39 @@ void FERT0::CalcShape(const Elem &e, const double *ip, RealMat &shape) {
 
 
 
-void FERT0::CalcDivShapeRef(const double *ip, RealVec &divshape) {
-    int o = 0; 
+
+
+void FERT0::CalcDivShapeRef(Btype type, const double *ip, RealVec &divshape) {
+    int nbas = nbas_[type];
     RealVec divu(nbas);
-    if (elem->elem_type == 'T') {
+    int o = 0;
+    double x = ip[0];
+    double y = ip[1];
+
+    if (type == ELEM_TYPE::TRIA) {
         divu(o++) = 0; 
         divu(o++) = 0; 
         divu(o++) = 2; 
-    } else if (elem->elem_type == 'Q') {
+
+        /* assert(o == nbas[type]); */
+        divshape = TiTria.solve(divu);
+    } else if (type == ELEM_TYPE::QUAD) {
         divu(o++) = 0; 
         divu(o++) = 0; 
         divu(o++) = 1; 
         divu(o++) = 1; 
+
+        /* assert(o == nbas[type]); */
+        divshape = TiQuad.solve(divu);
     }
-    assert(o == nbas);
-    divshape = Ti.solve(divu);
 }
+
+
 
 
 // TODO
 void FERT0::CalcDivShape(const Elem &e, const double *ip, RealVec &divshape) {
-    CalcDivShapeRef(ip, divshape);
+    CalcDivShapeRef(e.elem_type, ip, divshape);
     // apply edge signs
     for (int i = 0; i < nbas; i++) {
         shape.row(i) *= e.edge_sign[i];
@@ -112,112 +136,113 @@ void FERT0::CalcDivShape(const Elem &e, const double *ip, RealVec &divshape) {
 
 
 // ------------------------------ RT1 ---------------------------------
-FERT1::FERT1(Elem *e) {
+FERT1::FERT1() {
     int o = 0;
     double gauss1 = (1-1/sqrt(3))/2;
     double gauss2 = (1+1/sqrt(3))/2;
+    RealMat T;
+    nodes = (Coord *) calloc (12, sizeof(Coord)); // enough to put either tria or quad nodes.
 
-    if (elem->elem_type == 'T') {
-        nbas = 8;
-        nodes = (Coord *) calloc (nbas, sizeof(Coord));
-        dof2nk.resize(nbas);
+    // -------------------------- Tria ----------------------------
+    int nbas = nbas_[ELEM_TYPE::TRIA];
+    dof2nk.resize(nbas);
+    T.resize(nbas, nbas);
 
-        // edge
-        nodes[o][0] = gauss1; nodes[o][1] = 0.0;    dof2nk[o++] = 0;
-        nodes[o][0] = gauss2; nodes[o][1] = 0.0;    dof2nk[o++] = 0;
-        nodes[o][0] = gauss2; nodes[o][1] = gauss1; dof2nk[o++] = 1;
-        nodes[o][0] = gauss1; nodes[o][1] = gauss2; dof2nk[o++] = 1;
-        nodes[o][0] = 0.0;    nodes[o][1] = gauss2; dof2nk[o++] = 2;
-        nodes[o][0] = 0.0;    nodes[o][1] = gauss1; dof2nk[o++] = 2;
-        // interior
-        nodes[o][0] = 1./3.;  nodes[o][1] = 1./3.;  dof2nk[o++] = 0;
-        nodes[o][0] = 1./3.;  nodes[o][1] = 1./3.;  dof2nk[o++] = 2;
+    // edge
+    nodes[o][0] = gauss1; nodes[o][1] = 0.0;    dof2nk[o++] = 0;
+    nodes[o][0] = gauss2; nodes[o][1] = 0.0;    dof2nk[o++] = 0;
+    nodes[o][0] = gauss2; nodes[o][1] = gauss1; dof2nk[o++] = 1;
+    nodes[o][0] = gauss1; nodes[o][1] = gauss2; dof2nk[o++] = 1;
+    nodes[o][0] = 0.0;    nodes[o][1] = gauss2; dof2nk[o++] = 2;
+    nodes[o][0] = 0.0;    nodes[o][1] = gauss1; dof2nk[o++] = 2;
+    // interior
+    nodes[o][0] = 1./3.;  nodes[o][1] = 1./3.;  dof2nk[o++] = 0;
+    nodes[o][0] = 1./3.;  nodes[o][1] = 1./3.;  dof2nk[o++] = 2;
 
-        RealMat T(nbas, nbas);
-        for (int k = 0; k < nbas; k++) {
-            const double *ip = nodes[k];
-            const double *n_k = nk_tria + 2*dof2nk[k];
+    for (int k = 0; k < nbas; k++) {
+        const double *ip = nodes[k];
+        const double *n_k = nk_tria + 2*dof2nk[k];
 
-            o = 0;
-            double x = ip[0];
-            double y = ip[1];
-            double n1 = n_k[0];
-            double n2 = n_k[1];
+        o = 0;
+        double x = ip[0];
+        double y = ip[1];
+        double n1 = n_k[0];
+        double n2 = n_k[1];
 
-            T(o++,k) = n1;
-            T(o++,k) = n2;
-            T(o++,k) = x*n1;
-            T(o++,k) = x*n2;
-            T(o++,k) = y*n1;
-            T(o++,k) = y*n2;
+        T(o++,k) = n1;
+        T(o++,k) = n2;
+        T(o++,k) = x*n1;
+        T(o++,k) = x*n2;
+        T(o++,k) = y*n1;
+        T(o++,k) = y*n2;
 
-            T(o++,k) = x*x*n1 + x*y*n2;
-            T(o++,k) = x*y*n1 + y*y*n2;
+        T(o++,k) = x*x*n1 + x*y*n2;
+        T(o++,k) = x*y*n1 + y*y*n2;
 
-            assert(o == nbas);
-        }
-    } else if (elem->elem_type == 'Q') {
-        nbas = 12;
-        nodes = (Coord *) calloc (nbas, sizeof(Coord));
-        dof2nk.resize(nbas);
-
-        // edge
-        nodes[o][0] = gauss1; nodes[o][1] = 0.0;    dof2nk[o++] = 0;
-        nodes[o][0] = gauss2; nodes[o][1] = 0.0;    dof2nk[o++] = 0;
-        nodes[o][0] = 1.;     nodes[o][1] = gauss1; dof2nk[o++] = 1;
-        nodes[o][0] = 1.;     nodes[o][1] = gauss2; dof2nk[o++] = 1;
-        nodes[o][0] = gauss2; nodes[o][1] = 1.0;    dof2nk[o++] = 2;
-        nodes[o][0] = gauss1; nodes[o][1] = 1.0;    dof2nk[o++] = 2;
-        nodes[o][0] = 0.;     nodes[o][1] = gauss2; dof2nk[o++] = 3;
-        nodes[o][0] = 0.;     nodes[o][1] = gauss1; dof2nk[o++] = 3;
-        // interior
-        nodes[o][0] = 0.5;    nodes[o][1] = gauss1; dof2nk[o++] = 1;
-        nodes[o][0] = gauss2; nodes[o][1] = 0.5;    dof2nk[o++] = 2;
-        nodes[o][0] = 0.5;    nodes[o][1] = gauss2; dof2nk[o++] = 1;
-        nodes[o][0] = gauss1; nodes[o][1] = 0.5;    dof2nk[o++] = 2;
-
-        RealMat T(nbas, nbas);
-        for (int k = 0; k < nbas; k++) {
-            const double *ip = nodes[k];
-            const double *n_k = nk_quad + 2*dof2nk[k];
-
-            o = 0;
-            double x = ip[0];
-            double y = ip[1];
-            double n1 = n_k[0];
-            double n2 = n_k[1];
-
-            T(o++,k) = n1;
-            T(o++,k) = n2;
-            T(o++,k) = x*n1;
-            T(o++,k) = x*n2;
-            T(o++,k) = y*n1;
-            T(o++,k) = y*n2;
-
-            T(o++,k) = x*x*n1;
-            T(o++,k) = y*y*n2;
-            T(o++,k) = x*y*n1;
-            T(o++,k) = x*y*n2;
-
-            T(o++,k) = x*x*y*n1;
-            T(o++,k) = x*y*y*n2;
-            assert(o == nbas);
-        }
+        assert(o == nbas);
     }
+    TiTria = Eigen::PartialPivLU<RealMat> (T);
 
-    Ti = Eigen::PartialPivLU<RealMat> (T);
+    // -------------------------- Quad ----------------------------
+    nbas = nbas_[ELEM_TYPE::QUAD];
+    /* nodes = (Coord *) calloc (nbas, sizeof(Coord)); */
+    dof2nk.resize(nbas);
+    T.resize(nbas, nbas);
+
+    // edge
+    nodes[o][0] = gauss1; nodes[o][1] = 0.0;    dof2nk[o++] = 0;
+    nodes[o][0] = gauss2; nodes[o][1] = 0.0;    dof2nk[o++] = 0;
+    nodes[o][0] = 1.;     nodes[o][1] = gauss1; dof2nk[o++] = 1;
+    nodes[o][0] = 1.;     nodes[o][1] = gauss2; dof2nk[o++] = 1;
+    nodes[o][0] = gauss2; nodes[o][1] = 1.0;    dof2nk[o++] = 2;
+    nodes[o][0] = gauss1; nodes[o][1] = 1.0;    dof2nk[o++] = 2;
+    nodes[o][0] = 0.;     nodes[o][1] = gauss2; dof2nk[o++] = 3;
+    nodes[o][0] = 0.;     nodes[o][1] = gauss1; dof2nk[o++] = 3;
+    // interior
+    nodes[o][0] = 0.5;    nodes[o][1] = gauss1; dof2nk[o++] = 1;
+    nodes[o][0] = gauss2; nodes[o][1] = 0.5;    dof2nk[o++] = 2;
+    nodes[o][0] = 0.5;    nodes[o][1] = gauss2; dof2nk[o++] = 1;
+    nodes[o][0] = gauss1; nodes[o][1] = 0.5;    dof2nk[o++] = 2;
+
+    for (int k = 0; k < nbas; k++) {
+        const double *ip = nodes[k];
+        const double *n_k = nk_quad + 2*dof2nk[k];
+
+        o = 0;
+        double x = ip[0];
+        double y = ip[1];
+        double n1 = n_k[0];
+        double n2 = n_k[1];
+
+        T(o++,k) = n1;
+        T(o++,k) = n2;
+        T(o++,k) = x*n1;
+        T(o++,k) = x*n2;
+        T(o++,k) = y*n1;
+        T(o++,k) = y*n2;
+
+        T(o++,k) = x*x*n1;
+        T(o++,k) = y*y*n2;
+        T(o++,k) = x*y*n1;
+        T(o++,k) = x*y*n2;
+
+        T(o++,k) = x*x*y*n1;
+        T(o++,k) = x*y*y*n2;
+        assert(o == nbas);
+    }
+    TiQuad = Eigen::PartialPivLU<RealMat> (T);
 }
 
 
 
-void FERT1::CalcShapeRef(const double *ip, RealMat &shape) {
+void FERT1::CalcShapeRef(Btype type, const double *ip, RealMat &shape) {
+    int nbas = nbas_[type];
     RealMat u(nbas,2);
     int o = 0;
-
     double x = ip[0];
     double y = ip[1];
 
-    if (elem->elem_type == 'T') {
+    if (type == ELEM_TYPE::TRIA) {
         // order 1
         u(o,0) = 1; u(o,1) = 0; o++;
         u(o,0) = 0; u(o,1) = 1; o++;
@@ -229,7 +254,9 @@ void FERT1::CalcShapeRef(const double *ip, RealMat &shape) {
         u(o,0) = x*x; u(o,1) = x*y; o++;
         u(o,0) = x*y; u(o,1) = y*y; o++;
 
-    } else if (elem->elem_type == 'Q') {
+        /* assert(o == nbas[type]); */
+        shape = TiTria.solve(u);
+    } else if (type == ELEM_TYPE::QUAD) {
         // order 1
         u(o,0) = 1; u(o,1) = 0; o++;
         u(o,0) = 0; u(o,1) = 1; o++;
@@ -245,16 +272,17 @@ void FERT1::CalcShapeRef(const double *ip, RealMat &shape) {
         // order 3 (not complete)
         u(o,0) = x*x*y; u(o,1) = 0; o++;
         u(o,0) = 0; u(o,1) = x*y*y; o++;
-    }
-    assert(o == nbas);
 
-    shape = Ti.solve(u);
+        /* assert(o == nbas[type]); */
+        shape = TiQuad.solve(u);
+    }
+
 }
 
 
-
+// TODO
 void FERT1::CalcShape(const Elem &e, const double *ip, RealMat &shape) {
-    CalcShapeRef(ip, shape);
+    CalcShapeRef(e.elem_type, ip, shape);
     // apply edge signs
     for (int i = 0; i < nbas; i++) {
         shape.row(i) *= e.edge_sign[i];
@@ -262,14 +290,14 @@ void FERT1::CalcShape(const Elem &e, const double *ip, RealMat &shape) {
 }
 
 
-
-void FERT1::CalcDivShapeRef(const double *ip, RealVec &divshape) {
-    int o = 0; 
+void FERT1::CalcDivShapeRef(Btype type, const double *ip, RealVec &divshape) {
+    int nbas = nbas_[type];
     RealVec divu(nbas);
+    int o = 0;
     double x = ip[0];
     double y = ip[1];
 
-    if (elem->elem_type == 'T') {
+    if (type == ELEM_TYPE::TRIA) {
         divu(o++) = 0; 
         divu(o++) = 0; 
         divu(o++) = 1; 
@@ -280,7 +308,9 @@ void FERT1::CalcDivShapeRef(const double *ip, RealVec &divshape) {
         divu(o++) = 2*x + x; 
         divu(o++) = y + 2*y; 
 
-    } else if (elem->elem_type == 'Q') {
+        /* assert(o == nbas[type]); */
+        divshape = TiTria.solve(divu);
+    } else if (type == ELEM_TYPE::QUAD) {
         divu(o++) = 0; 
         divu(o++) = 0; 
         divu(o++) = 1; 
@@ -295,15 +325,17 @@ void FERT1::CalcDivShapeRef(const double *ip, RealVec &divshape) {
 
         divu(o++) = 2*x*y; 
         divu(o++) = 2*x*y; 
+
+        /* assert(o == nbas[type]); */
+        divshape = TiQuad.solve(divu);
     }
-    assert(o == nbas);
-    divshape = Ti.solve(divu);
 }
 
 
 
+// TODO
 void FERT1::CalcDivShape(const Elem &e, const double *ip, RealVec &divshape) {
-    CalcDivShapeRef(ip, divshape);
+    CalcDivShapeRef(e.elem_type, ip, divshape);
     // apply edge signs
     for (int i = 0; i < nbas; i++) {
         shape.row(i) *= e.edge_sign[i];
@@ -313,7 +345,7 @@ void FERT1::CalcDivShape(const Elem &e, const double *ip, RealVec &divshape) {
 
 
 
-int main(int argc, char *argv[]) {
+/* int main(int argc, char *argv[]) { */
 
-    return 0;
-}
+/*     return 0; */
+/* } */

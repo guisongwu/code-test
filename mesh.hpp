@@ -38,11 +38,18 @@ namespace BDRY_MASK {
 }
 
 
+namespace ELEM_TYPE {
+    enum {
+        TRIA,
+        QUAD
+    };
+}
+
 class Elem {
     public:
         // Note: call after updateJacobian().
-        char elem_type; // 'T' for Triangle
-                        // 'Q' for Quadrilateral
+        short elem_type; 
+                            
         Real getArea(Real3 *face_normal = nullptr,
                      Real3 *face_df1 = nullptr,
                      Real3 *face_df2 = nullptr);

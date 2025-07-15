@@ -216,7 +216,7 @@ Grid::read_mesh(const char *mesh_file_name, BC_FUNCTION user_bc_map, const char 
 					READ_NUMBER;
 					/* TriaElem *e = &tria_elems[ntria_read]; */
 					Elem *e = &elems[nread];
-                    e->elem_type = 'T';
+                    e->elem_type = ELEM_TYPE::TRIA;
 					e->verts[0] = atoi(token) - 1;
 					if (!get_token(fp, token))
 						ERROR;
@@ -236,7 +236,7 @@ Grid::read_mesh(const char *mesh_file_name, BC_FUNCTION user_bc_map, const char 
 					READ_NUMBER;
 					/* QuadElem *e = &quad_elems[nquad_read]; */
 					Elem *e = &elems[nread];
-                    e->elem_type = 'Q';
+                    e->elem_type = ELEM_TYPE::QUAD;
 					e->verts[0] = atoi(token) - 1;
 					if (!get_token(fp, token))
 						ERROR;
@@ -306,7 +306,7 @@ Grid::read_mesh(const char *mesh_file_name, BC_FUNCTION user_bc_map, const char 
         int v0, v1;
         
         Elem e = elems[i]; 
-        if (e.elem_type == 'T') {
+        if (e.elem_type == ELEM_TYPE::TRIA) {
             for (unsigned int j = 0; j < 3; j++) {
                 v0 = e.verts[GetEdgeVertTria(j, 0)];
                 v1 = e.verts[GetEdgeVertTria(j, 1)];
@@ -340,7 +340,7 @@ Grid::read_mesh(const char *mesh_file_name, BC_FUNCTION user_bc_map, const char 
                 e.ordering[1] = v1;
                 e.ordering[2] = v2;
             }
-        } else if (e.elem_type == 'Q') {
+        } else if (e.elem_type == ELEM_TYPE::QUAD) {
             for (unsigned int j = 0; j < 4; j++) {
                 v0 = e.verts[GetEdgeVertQuad(j, 0)];
                 v1 = e.verts[GetEdgeVertQuad(j, 1)];
@@ -418,7 +418,7 @@ Grid::read_mesh(const char *mesh_file_name, BC_FUNCTION user_bc_map, const char 
 
     for (unsigned int ielem = 0; ielem < nelem; ielem++) {
         Elem *e = &elems[ielem];
-        if (e->elem_type == 'T') {
+        if (e->elem_type == ELEM_TYPE::TRIA) {
             for (unsigned int j = 0; j < 3; j++) {
                 int v0 = e->verts[GetEdgeVertTria(j, 0)];
                 int v1 = e->verts[GetEdgeVertTria(j, 1)];
@@ -443,7 +443,7 @@ Grid::read_mesh(const char *mesh_file_name, BC_FUNCTION user_bc_map, const char 
                     abort();
                 e->neigh[j] = -1;
             }
-        } else if (e->elem_type == 'Q') {
+        } else if (e->elem_type == ELEM_TYPE::QUAD) {
             for (unsigned int j = 0; j < 4; j++) {
                 int v0 = e->verts[GetEdgeVertQuad(j, 0)];
                 int v1 = e->verts[GetEdgeVertQuad(j, 1)];
@@ -513,7 +513,7 @@ Grid::read_mesh(const char *mesh_file_name, BC_FUNCTION user_bc_map, const char 
             Elem *e0 = &elems[ielem0];
             Elem *e1 = &elems[ielem1];
 
-            if (e0->elem_type == 'T') { // tria elem
+            if (e0->elem_type == ELEM_TYPE::TRIA) { // tria elem
                 for (j0 = 0; j0 < 3; j0++)
                     if (e0->edges[j0] == iedge)
                         break;
@@ -522,7 +522,7 @@ Grid::read_mesh(const char *mesh_file_name, BC_FUNCTION user_bc_map, const char 
                 v1 = e0->verts[GetEdgeVertTria(j0, 1)];
                 e0->btypes[j0] = BDRY_MASK::INTERIOR | btype;
                 e0->neigh[j0] = ielem1;
-            } else if (e0->elem_type == 'Q'){ // quad elem
+            } else if (e0->elem_type == ELEM_TYPE::QUAD){ // quad elem
                 for (j0 = 0; j0 < 4; j0++)
                     if (e0->edges[j0] == iedge)
                         break;
@@ -533,14 +533,14 @@ Grid::read_mesh(const char *mesh_file_name, BC_FUNCTION user_bc_map, const char 
                 e0->neigh[j0] = ielem1;
             }
 
-            if (e1->elem_type == 'T') { // tria elem
+            if (e1->elem_type == ELEM_TYPE::TRIA) { // tria elem
                 for (j1 = 0; j1 < 3; j1++)
                     if (e1->edges[j1] == iedge)
                         break;
                 assert(j1 < 3);
                 e1->btypes[j1] = BDRY_MASK::INTERIOR | btype;
                 e1->neigh[j1] = ielem0;
-            } else if (e1->elem_type == 'Q') { // quad elem
+            } else if (e1->elem_type == ELEM_TYPE::QUAD) { // quad elem
                 for (j1 = 0; j1 < 4; j1++)
                     if (e1->edges[j1] == iedge)
                         break;
@@ -559,7 +559,7 @@ Grid::read_mesh(const char *mesh_file_name, BC_FUNCTION user_bc_map, const char 
             int j0, v0, v1;
 
             Elem *e0 = &elems[ielem0];
-            if (e0->elem_type == 'T') {
+            if (e0->elem_type == ELEM_TYPE::TRIA) {
                 for (j0 = 0; j0 < 3; j0++)
                     if (e0->edges[j0] == iedge)
                         break;
@@ -568,7 +568,7 @@ Grid::read_mesh(const char *mesh_file_name, BC_FUNCTION user_bc_map, const char 
                 v1 = e0->verts[GetEdgeVertTria(j0, 1)];
                 e0->btypes[j0] = btype;
                 e0->neigh[j0] = -1;
-            } else if (e0->elem_type == 'Q') {
+            } else if (e0->elem_type == ELEM_TYPE::QUAD) {
                 for (j0 = 0; j0 < 4; j0++)
                     if (e0->edges[j0] == iedge)
                         break;
@@ -1872,7 +1872,7 @@ Grid::compare_edge(const void *p0, const void *p1)
 
 int main(int argc, char *argv[]) {
     Grid *g = new Grid();
-    g->read_mesh("mixedR1.msh");
+    g->read_mesh("mixedR0.msh");
 
     for (int i = 0; i < g->nelem; i++) {
         Elem e = g->elems[i];

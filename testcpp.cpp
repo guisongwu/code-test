@@ -116,13 +116,23 @@ double func2d(double x, double y) {
 }
 
 int main(int argc, char *argv[]) {
+    // -------------------------- resize of RealVec and RealMat ----------------------------------
+    RealVec vec;
+    vec.resize(4);
+    vec << 1.0, 2.0, 3.0, 4.0;
+    for (int i = 0; i < 4; i++)
+        cout << vec(i) << endl;
+    vec.resize(7);
+    vec << 1.0, 2.0, 3.0, 4.0, 3.0, 2.0, 1.0;
+    for (int i = 0; i < 7; i++)
+        cout << vec(i) << endl;
     // ----------------------------------- tria quad ---------------------------------------------
-    Quad2d_tria quad2d_tria;
-    double sum = 0;
-    for (int i = 0; i < 3; i++) {
-        sum += quad2d_tria.weights[i] * func2d(quad2d_tria.points[i][0], quad2d_tria.points[i][1]);
-    }
-    cout << sum << endl;
+    /* Quad2d_tria quad2d_tria; */
+    /* double sum = 0; */
+    /* for (int i = 0; i < 3; i++) { */
+    /*     sum += quad2d_tria.weights[i] * func2d(quad2d_tria.points[i][0], quad2d_tria.points[i][1]); */
+    /* } */
+    /* cout << sum << endl; */
 
 
     // --------------------------------------- const ---------------------------------------------
