@@ -48,7 +48,7 @@ namespace ELEM_TYPE {
 class Elem {
     public:
         // Note: call after updateJacobian().
-        short elem_type; 
+        Btype elem_type; 
                             
         Real getArea(Real3 *face_normal = nullptr,
                      Real3 *face_df1 = nullptr,

@@ -115,17 +115,74 @@ double func2d(double x, double y) {
     return 1; 
 }
 
+namespace ELEM_TYPE {
+    enum {
+        TRIA,
+        QUAD
+    };
+}
+
+typedef unsigned short Btype;
+
 int main(int argc, char *argv[]) {
+    // ------------------------------------ std::vector -------------------------------
+    /* vector<double> p(10); // 动态数组，自动管理内存 */
+    /* for (unsigned int i = 0; i < 10; i++) { */
+    /*     p[i] = (double)i; */
+    /* } */
+    /* // C++11 引入的 range-based for 循环（基于范围的 for 循环） */
+    /* for (auto val : p) {     // iterate every item */
+    /*     cout << val << " ";  // output this item */
+    /* } */
+    /* cout << endl; */
+
+    // -------------------------- stack memory --------------------------------
+    /* double p[10]; // 直接在栈上分配数组 */
+    /* for (unsigned int i = 0; i < 10; i++) { */
+    /*     p[i] = (double)i; */
+    /* } */
+    /* for (unsigned int i = 0; i < 10; i++) { */
+    /*     cout << p[i] << " "; */
+    /* } */
+    /* cout << endl; */
+
+    // ------------------------------ new for dynamic memory allocation ---------------------
+    /* double *p = new double[10]; // 动态分配10个double的内存 */
+    /* for (unsigned int i = 0; i < 10; i++) { */
+    /*     p[i] = (double)i; // 等价于 *(p+i) = i; */
+    /* } */
+
+    /* for (unsigned int i = 0; i < 10; i++) { */
+    /*     cout << p[i] << " "; */
+    /* } */
+    /* cout << endl; */
+    /* delete[] p; // 释放内存 */
+
+    // ----------------------------------- command line parameter ------------------------ 
+    /* cout << "the number of parameters: " << argc - 1 << endl; */
+    /* cout << "program name: " << argv[0] << endl; */
+    /* for (int i = 1; i < argc; ++i) { */
+    /*     cout << "parameter " << i << ": " << argv[i] << endl; */
+    /* } */
+
+    // ------------------------------------ ELEM_TYPE --------------------------------------------
+    /* Btype elem_type = ELEM_TYPE::TRIA; */
+    /* cout << (elem_type == 0 ? "TRIA" : "QUAD") << endl; */
+    /* elem_type = ELEM_TYPE::QUAD; */
+    /* /1* cout << elem_type == 0 ? "TRIA" : "QUAD" << endl; *1/ // Wrong! */
+    /* cout << (elem_type == 0 ? "TRIA" : "QUAD") << endl; */
+
     // -------------------------- resize of RealVec and RealMat ----------------------------------
-    RealVec vec;
-    vec.resize(4);
-    vec << 1.0, 2.0, 3.0, 4.0;
-    for (int i = 0; i < 4; i++)
-        cout << vec(i) << endl;
-    vec.resize(7);
-    vec << 1.0, 2.0, 3.0, 4.0, 3.0, 2.0, 1.0;
-    for (int i = 0; i < 7; i++)
-        cout << vec(i) << endl;
+    /* RealVec vec; */
+    /* vec.resize(4); */
+    /* vec << 1.0, 2.0, 3.0, 4.0; */
+    /* for (int i = 0; i < 4; i++) */
+    /*     cout << vec(i) << endl; */
+    /* vec.resize(7); */
+    /* vec << 1.0, 2.0, 3.0, 4.0, 3.0, 2.0, 1.0; */
+    /* for (int i = 0; i < 7; i++) */
+    /*     cout << vec(i) << endl; */
+
     // ----------------------------------- tria quad ---------------------------------------------
     /* Quad2d_tria quad2d_tria; */
     /* double sum = 0; */

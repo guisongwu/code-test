@@ -1,8 +1,8 @@
 // ================================================
 //  solve 
 //  \vec{u} + \nabla p = 0
-//  \nabla \cdot \vec{u} = f
-//  using RT0/DG0 or BDFM1/DG0 on quad meshes.
+//  \nabla \cdot \vec{u} + \beta p = f
+//  using RT0/DG0 on quad meshes and with mass-lumping.
 // ================================================
 #include <iostream>
 #include <vector>
@@ -10,7 +10,8 @@
 /* #include <petscksp.h> */
 #include <stdio.h>
 
-#define N 2
+#define N 8
+#define beta 1
 #define h (1.0/N)
 #define area (h*h)
 #define len h
@@ -24,65 +25,66 @@ typedef double Coord[2];
 
 
 
-/* class Test { */
-/*     public: */
-/*         double func_p(const Coord &phy_coord) { */
-/*             double x = phy_coord[0]; */
-/*             double y = phy_coord[1]; */
-/*             return x*x*y*y; */
-/*         } */
-/*         double func_p(double x, double y) { */
-/*             return x*x*y*y; */
-/*         } */
-
-/*         void func_u(const Coord &phy_coord, double *u) { */
-/*             double x = phy_coord[0]; */
-/*             double y = phy_coord[1]; */
-/*             u[0] = -2*x*y*y; */
-/*             u[1] = -2*x*x*y; */
-/*         } */
-/*         void func_u(double x, double y, double *u) { */
-/*             u[0] = -2*x*y*y; */
-/*             u[1] = -2*x*x*y; */
-/*         } */
-
-/*         double func_f(const Coord &phy_coord) { */
-/*             double x = phy_coord[0]; */
-/*             double y = phy_coord[1]; */
-/*             return -2*(x*x + y*y); */
-/*         } */
-/*         double func_f(double x, double y) { */
-/*             return -2*(x*x + y*y); */
-/*         } */
-/* }; */
-
 class Test {
     public:
         double func_p(const Coord &phy_coord) {
             double x = phy_coord[0];
             double y = phy_coord[1];
-            return exp(x)*sin(y);
+            return x*x*y*y;
         }
         double func_p(double x, double y) {
-            return exp(x)*sin(y);
+            return x*x*y*y;
         }
+
         void func_u(const Coord &phy_coord, double *u) {
             double x = phy_coord[0];
             double y = phy_coord[1];
-            u[0] = -exp(x)*sin(y);
-            u[1] = -exp(x)*cos(y);
+            u[0] = -2*x*y*y;
+            u[1] = -2*x*x*y;
         }
         void func_u(double x, double y, double *u) {
-            u[0] = -exp(x)*sin(y);
-            u[1] = -exp(x)*cos(y);
+            u[0] = -2*x*y*y;
+            u[1] = -2*x*x*y;
         }
+
         double func_f(const Coord &phy_coord) {
-            return 0;
+            double x = phy_coord[0];
+            double y = phy_coord[1];
+            return -2*(x*x + y*y) + beta * func_p(x,y);
         }
         double func_f(double x, double y) {
-            return 0;
+            return -2*(x*x + y*y) + beta * func_p(x,y);
         }
 };
+
+
+/* class Test { */
+/*     public: */
+/*         double func_p(const Coord &phy_coord) { */
+/*             double x = phy_coord[0]; */
+/*             double y = phy_coord[1]; */
+/*             return exp(x)*sin(y); */
+/*         } */
+/*         double func_p(double x, double y) { */
+/*             return exp(x)*sin(y); */
+/*         } */
+/*         void func_u(const Coord &phy_coord, double *u) { */
+/*             double x = phy_coord[0]; */
+/*             double y = phy_coord[1]; */
+/*             u[0] = -exp(x)*sin(y); */
+/*             u[1] = -exp(x)*cos(y); */
+/*         } */
+/*         void func_u(double x, double y, double *u) { */
+/*             u[0] = -exp(x)*sin(y); */
+/*             u[1] = -exp(x)*cos(y); */
+/*         } */
+/*         double func_f(const Coord &phy_coord) { */
+/*             return beta * func_p(x,y); */
+/*         } */
+/*         double func_f(double x, double y) { */
+/*             return beta * func_p(x,y); */
+/*         } */
+/* }; */
 
 Test test;
 
@@ -381,34 +383,18 @@ void Solver::build_mat() {
                     }
                 }
                 
-                // A(q,u)
                 for (int m = 0; m < Np; m++) {
+                    // A(q,u)
                     for (int n = 0; n < Nu; n++) {
                         A(m + Nu, n) += quad2d.weights[k] * area / h * (p_shape(m) * divu_shape(n));
+                    }
+                    // A(p,q)
+                    for (int n = 0; n < Np; n++) {
+                        A(m + Nu, n + Nu) += beta * quad2d.weights[k] * area * (p_shape(m) * p_shape(n));
                     }
                 }
             }
 
-            // Apply boundary conditions (Dirichlet)
-            /* if (i == 0) { */
-            /*     A.row(3).setZero(); */
-            /*     A(3,3) = 1; */ 
-            /* } */
-            /* if (i == N-1) { */
-            /*     A.row(1).setZero(); */
-            /*     A(1,1) = 1; */
-            /* } */
-            /* if (j == 0) { */
-            /*     A.row(0).setZero(); */
-            /*     A(0,0) = 1; */
-            /* } */
-            /* if (j == N-1) { */
-            /*     A.row(2).setZero(); */
-            /*     A(2,2) = 1; */
-            /* } */
-
-
-            /* cout << A << endl << endl; */
 
             // Add element matrix to global matrix
             for (int m = 0; m < Ndof; m++) {
@@ -438,6 +424,7 @@ void Solver::build_mat() {
     /*     cout << endl; */
     /* } */
 }
+
 
 
 void Solver::build_rhs() {

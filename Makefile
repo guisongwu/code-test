@@ -37,8 +37,8 @@ LDLIBS =
 
 
 # target files 
-TARGETS = main poisson learn testc testcpp poisson-rt0 mesh poisson-rt1 poisson-rt0-mix
-# TARGETC = poisson learn testc
+TARGETS = poisson testc testcpp poisson-rt0 helmholtz-rt0 helmholtz-rt1 mesh poisson-rt1 poisson-rt0-mix 
+# TARGETC = poisson testc
 # TARGETCPP = testcpp poisson-rt
 
 # default target(when "make" is called, all the target files will be built.)
@@ -56,16 +56,16 @@ testcpp: testcpp.o
 	$(CXX) $(CXXFLAGS) $^ -o $@
 poisson-rt0: poisson-rt0.o
 	$(CXX) $(CXXFLAGS) $^ -o $@
+helmholtz-rt0: helmholtz-rt0.o
+	$(CXX) $(CXXFLAGS) $^ -o $@
+helmholtz-rt1: helmholtz-rt1.o
+	$(CXX) $(CXXFLAGS) $^ -o $@
 poisson-rt0-mix: poisson-rt0-mix.o
 	$(CXX) $(CXXFLAGS) $^ -o $@
 poisson-rt1: poisson-rt1.o
 	$(CXX) $(CXXFLAGS) $^ -o $@
-main: main.o utils.o my-math.o
-	$(CC) $(CFLAGS) $^ -o $@
 poisson: poisson.o
 	$(CC) $(CFLAGS) $^ -o $@
-learn: learn.o
-	$(CXX) $(CXXFLAGS) $^ -o $@
 
 
 ######################### Compile #############################

@@ -426,10 +426,7 @@ Grid::read_mesh(const char *mesh_file_name, BC_FUNCTION user_bc_map, const char 
                 SortIndex(v0, v1);
 
                 Edge edge = {v0, v1}, *p;
-
-                p = (Edge *) bsearch(&edge, edges,
-                        nedge, sizeof(Edge),
-                        compare_edge);
+                p = (Edge *) bsearch(&edge, edges, nedge, sizeof(Edge), compare_edge);
                 assert (p != NULL);
                 int iedge = p - edges;
                 e->edges[j] = iedge;
@@ -451,9 +448,7 @@ Grid::read_mesh(const char *mesh_file_name, BC_FUNCTION user_bc_map, const char 
                 SortIndex(v0, v1);
                 Edge edge = {v0, v1}, *p;
 
-                p = (Edge *) bsearch(&edge, edges,
-                        nedge, sizeof(Edge),
-                        compare_edge);
+                p = (Edge *) bsearch(&edge, edges, nedge, sizeof(Edge), compare_edge);
                 assert (p != NULL);
                 int iedge = p - edges;
                 e->edges[j] = iedge;
@@ -1876,7 +1871,7 @@ int main(int argc, char *argv[]) {
 
     for (int i = 0; i < g->nelem; i++) {
         Elem e = g->elems[i];
-        cout << e.elem_type << endl; 
+        cout << (e.elem_type == 0 ? "TRIA" : "QUAD") << endl; 
     }
 
     // ------------------------------ edge test ------------------------------

@@ -78,7 +78,6 @@ void FERT0::CalcShapeRef(Btype type, const double *ip, RealMat &shape) {
         /* assert(o == nbas[type]); */
         shape = TiQuad.solve(u);
     }
-
 }
 
 
