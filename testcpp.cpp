@@ -125,7 +125,12 @@ namespace ELEM_TYPE {
 typedef unsigned short Btype;
 
 int main(int argc, char *argv[]) {
-    // ------------------------------------ std::vector -------------------------------
+    // ------------------------------------ sin --------------------------------------------------
+    cout << M_PI << endl;
+    double x = sin(M_PI);
+    cout << x << endl;
+
+    // --------------------------------------- std::vector ---------------------------------------
     /* vector<double> p(10); // 动态数组，自动管理内存 */
     /* for (unsigned int i = 0; i < 10; i++) { */
     /*     p[i] = (double)i; */
@@ -136,7 +141,7 @@ int main(int argc, char *argv[]) {
     /* } */
     /* cout << endl; */
 
-    // -------------------------- stack memory --------------------------------
+    // ---------------------------------- stack memory -------------------------------------------
     /* double p[10]; // 直接在栈上分配数组 */
     /* for (unsigned int i = 0; i < 10; i++) { */
     /*     p[i] = (double)i; */
@@ -146,7 +151,7 @@ int main(int argc, char *argv[]) {
     /* } */
     /* cout << endl; */
 
-    // ------------------------------ new for dynamic memory allocation ---------------------
+    // ------------------------------ new for dynamic memory allocation --------------------------
     /* double *p = new double[10]; // 动态分配10个double的内存 */
     /* for (unsigned int i = 0; i < 10; i++) { */
     /*     p[i] = (double)i; // 等价于 *(p+i) = i; */
@@ -158,7 +163,7 @@ int main(int argc, char *argv[]) {
     /* cout << endl; */
     /* delete[] p; // 释放内存 */
 
-    // ----------------------------------- command line parameter ------------------------ 
+    // ----------------------------------- command line parameter -------------------------------- 
     /* cout << "the number of parameters: " << argc - 1 << endl; */
     /* cout << "program name: " << argv[0] << endl; */
     /* for (int i = 1; i < argc; ++i) { */
