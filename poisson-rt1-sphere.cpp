@@ -7,7 +7,6 @@
 //       \theta \in [pi/4, 3*pi/4]
 //       \phi   \in [0,    pi/2]
 // ================================================
-=========================================
 #include <iostream>
 #include <vector>
 #include <Eigen/Dense>
@@ -18,7 +17,7 @@
 /* #include "header.hpp" */
 
 
-#define N 2
+#define N 32
 #define PI M_PI
 #define h (PI/2/N)
 #define area (h*h)
@@ -185,6 +184,56 @@ class Quad2d {
         };
 };
 
+
+
+class QuadError_ {
+    public:
+        int npoints = 4;
+        double points[4] = {0.0694318442029737, 0.33000947820757185, 0.6699905217924282, 0.9305681557970263};
+        double weights[4] = {0.1739274225687269, 0.32607257743127305, 0.32607257743127305, 0.1739274225687269
+        };
+};
+class QuadError {
+    public:
+        QuadError_ qe;
+        int npoints = 16;
+        double points[16][2] = {
+            {qe.points[0], qe.points[0]},
+            {qe.points[0], qe.points[1]},
+            {qe.points[0], qe.points[2]},
+            {qe.points[0], qe.points[3]},
+            {qe.points[1], qe.points[0]},
+            {qe.points[1], qe.points[1]},
+            {qe.points[1], qe.points[2]},
+            {qe.points[1], qe.points[3]},
+            {qe.points[2], qe.points[0]},
+            {qe.points[2], qe.points[1]},
+            {qe.points[2], qe.points[2]},
+            {qe.points[2], qe.points[3]},
+            {qe.points[3], qe.points[0]},
+            {qe.points[3], qe.points[1]},
+            {qe.points[3], qe.points[2]},
+            {qe.points[3], qe.points[3]}
+        };
+        double weights[16] = {
+            qe.weights[0]*qe.weights[0],
+            qe.weights[0]*qe.weights[1],
+            qe.weights[0]*qe.weights[2],
+            qe.weights[0]*qe.weights[3],
+            qe.weights[1]*qe.weights[0],
+            qe.weights[1]*qe.weights[1],
+            qe.weights[1]*qe.weights[2],
+            qe.weights[1]*qe.weights[3],
+            qe.weights[2]*qe.weights[0],
+            qe.weights[2]*qe.weights[1],
+            qe.weights[2]*qe.weights[2],
+            qe.weights[2]*qe.weights[3],
+            qe.weights[3]*qe.weights[0],
+            qe.weights[3]*qe.weights[1],
+            qe.weights[3]*qe.weights[2],
+            qe.weights[3]*qe.weights[3]
+        };
+};
 
 
 
@@ -372,33 +421,36 @@ void FERT1::CalcShape(const Elem &e, const double *ip, RealMat &shape) {
     }
 }
 
-void FERT1::CalcDivShapeRef(const double *ip, RealVec &divshape) {
+void FERT1::CalcDivShapeRef(const Elem &e, const double *ip, RealVec &divshape) {
     int o = 0; 
     RealVec divu(nbas);
     double x = ip[0];
     double y = ip[1];
+    double theta = x*h + e.theta_left; 
 
+    // order 1
+    divu(o++) = cos(theta) * h; 
     divu(o++) = 0; 
+    divu(o++) = cos(theta) * h * x + sin(theta); 
     divu(o++) = 0; 
+    divu(o++) = cos(theta) * h * y; 
     divu(o++) = 1; 
-    divu(o++) = 0; 
-    divu(o++) = 0; 
-    divu(o++) = 1; 
-
-    divu(o++) = 2*x; 
+    // order 2 (not complete)
+    divu(o++) = cos(theta)*h * x*x + sin(theta) * 2*x; 
     divu(o++) = 2*y; 
-    divu(o++) = y; 
+    divu(o++) = cos(theta)*h * x*y + sin(theta) * y; 
     divu(o++) = x; 
-
-    divu(o++) = 2*x*y; 
+    // order 3 (not complete)
+    divu(o++) = cos(theta)*h * x*x*y + sin(theta) * 2*x*y; 
     divu(o++) = 2*x*y; 
     assert(o == nbas);
 
     divshape = Ti.solve(divu);
 }
 
+
 void FERT1::CalcDivShape(const Elem &e, const double *ip, RealVec &divshape) {
-    CalcDivShapeRef(ip, divshape);
+    CalcDivShapeRef(e, ip, divshape);
     // apply edge signs
     for (int i = 0; i < nbas; i++) {
         divshape.row(i) *= e.edge_sign[i];
@@ -509,6 +561,7 @@ class Solver {
         /* Elem *e; */
         Quad2d quad2d;
         Quad1d quad1d;
+        QuadError quaderror;
         double u_error_L2 = 0;
         double p_error_L2 = 0;
         RealMat mat;
@@ -573,7 +626,7 @@ void Solver::build_mat() {
                 u->CalcShape(e, quad2d.points[k], u_shape);
                 u->CalcDivShape(e, quad2d.points[k], divu_shape);
                 p->CalcShape(e, quad2d.points[k], p_shape);
-                p->CalcGradShape(e, quad2d.points[k], dp_shape);
+                /* p->CalcGradShape(e, quad2d.points[k], dp_shape); */
 
                 /* if (i == 0 && j == 0) { */
                 /*     cout << "u_shape\n" << u_shape << endl; */ 
@@ -587,18 +640,18 @@ void Solver::build_mat() {
                 for (int m = 0; m < Nu; m++) {
                     // A(u,v)
                     for (int n = 0; n < Nu; n++) {
-                        A(m,n) += quad2d.weights[k] * area * (u_shape(m,0)*u_shape(n,0) + u_shape(m,1)*u_shape(n,1));
+                        A(m,n) += quad2d.weights[k] * area * (u_shape(m,0)*u_shape(n,0) + u_shape(m,1)*u_shape(n,1)) * sin(quad2d.points[k][0]*h + e.theta_left);
                     }
                     // A(p,v)
                     for (int n = 0; n < Np; n++) {
-                        A(m,n+Nu) += quad2d.weights[k] * area / h * (-divu_shape(m) * p_shape(n));
+                        A(m,n+Nu) += quad2d.weights[k] * h * (-divu_shape(m) * p_shape(n));
                     }
                 }
                 
                 // A(q,u)
                 for (int m = 0; m < Np; m++) {
                     for (int n = 0; n < Nu; n++) {
-                        A(m + Nu, n) += quad2d.weights[k] * area / h * (p_shape(m) * divu_shape(n));
+                        A(m + Nu, n) += quad2d.weights[k] * h * (p_shape(m) * divu_shape(n));
                     }
                 }
             }
@@ -695,7 +748,7 @@ void Solver::build_rhs() {
                 
                 // F(q)
                 for (int m = 0; m < Np; m++) {
-                    F(m + Nu) += quad2d.weights[k] * area * (p_shape(m) * vf);
+                    F(m + Nu) += quad2d.weights[k] * area * (p_shape(m) * vf) * sin(quad2d.points[k][0]*h+e.theta_left);
                 }
             }
             
@@ -713,7 +766,7 @@ void Solver::build_rhs() {
                     double pbc = test.func_p(sphere_coord);
                     u->CalcShape(e, ref_coord, u_shape);
                     for (int m = 0; m < Nu; m++) {
-                        F(m) += len * quad1d.weights[k] * (-1) * pbc * (u_shape(m,0) * n[0] + u_shape(m,1) * n[1]);
+                        F(m) += len * quad1d.weights[k] * (-1) * pbc * (u_shape(m,0) * n[0] + u_shape(m,1) * n[1]) * sqrt(2) / 2;
                     }
                 }
                 /* test.func_u(0, e.y_center, ubc); */
@@ -733,7 +786,7 @@ void Solver::build_rhs() {
                     double pbc = test.func_p(sphere_coord);
                     u->CalcShape(e, ref_coord, u_shape);
                     for (int m = 0; m < Nu; m++) {
-                        F(m) += len * quad1d.weights[k] * (-1) * pbc * (u_shape(m,0) * n[0] + u_shape(m,1) * n[1]);
+                        F(m) += len * quad1d.weights[k] * (-1) * pbc * (u_shape(m,0) * n[0] + u_shape(m,1) * n[1]) * sqrt(2) / 2;
                     }
                 }
                 /* test.func_u(1, e.y_center, ubc); */
@@ -854,10 +907,10 @@ void Solver::error() {
                 Iu[k] = map_u(i,j,k);
             }
 
-            for (int k = 0; k < 9; k++) {
-                u->CalcShape(e, quad2d.points[k], u_shape);
+            for (int k = 0; k < 16; k++) {
+                u->CalcShape(e, quaderror.points[k], u_shape);
 
-                Coord ref_coord = {quad2d.points[k][0], quad2d.points[k][1]}; 
+                Coord ref_coord = {quaderror.points[k][0], quaderror.points[k][1]}; 
                 Coord sphere_coord;
                 e.ref2sphere(ref_coord, sphere_coord);
                 test.func_u(sphere_coord, u_value);
@@ -870,7 +923,7 @@ void Solver::error() {
                 diff1 -= u_value[0];
                 diff2 -= u_value[1];
                 
-                u_error_L2 += quad2d.weights[k] * area * (diff1 * diff1 + diff2 * diff2);
+                u_error_L2 += quaderror.weights[k] * area * (diff1 * diff1 + diff2 * diff2) * sin(quaderror.points[k][0]*h+e.theta_left);
             }
         }
     }
@@ -889,20 +942,20 @@ void Solver::error() {
                 Ip[k] = map_p(i,j,k);
             }
 
-            for (int k = 0; k < 9; k++) {
+            for (int k = 0; k < 16; k++) {
                 /* u->CalcShape(e, quad2d.points[k], u_shape); */
-                Coord ref_coord = {quad2d.points[k][0], quad2d.points[k][1]}; 
+                Coord ref_coord = {quaderror.points[k][0], quaderror.points[k][1]}; 
                 Coord sphere_coord;
                 e.ref2sphere(ref_coord, sphere_coord);
                 exact_sol = test.func_p(sphere_coord);
-                p->CalcShape(e, quad2d.points[k], p_shape);
+                p->CalcShape(e, quaderror.points[k], p_shape);
 
                 double diff = 0;
                 for (int l = 0; l < 4; l++) {
                     diff += x[Ip[l]]*p_shape(l); 
                 }
                 diff -= exact_sol;
-                p_error_L2 += quad2d.weights[k] * area * (diff * diff);
+                p_error_L2 += quaderror.weights[k] * area * (diff * diff) * sin(quaderror.points[k][0]*h+e.theta_left);
             }
         }
     }

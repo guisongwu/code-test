@@ -37,7 +37,7 @@ LDLIBS =
 
 
 # target files 
-TARGETS = poisson testc testcpp poisson-rt0 helmholtz-rt0 helmholtz-rt1 mesh poisson-rt1 poisson-rt0-mix poisson-rt0-sphere
+TARGETS = poisson testc testcpp poisson-rt0 helmholtz-rt0 helmholtz-rt0-sphere helmholtz-rt1 helmholtz-rt1-sphere mesh poisson-rt1 poisson-rt0-mix poisson-rt0-sphere poisson-rt1-sphere
 # TARGETC = poisson testc
 # TARGETCPP = testcpp poisson-rt
 
@@ -58,7 +58,13 @@ poisson-rt0: poisson-rt0.o
 	$(CXX) $(CXXFLAGS) $^ -o $@
 poisson-rt0-sphere: poisson-rt0-sphere.o
 	$(CXX) $(CXXFLAGS) $^ -o $@
+poisson-rt1-sphere: poisson-rt1-sphere.o
+	$(CXX) $(CXXFLAGS) $^ -o $@
 helmholtz-rt0: helmholtz-rt0.o
+	$(CXX) $(CXXFLAGS) $^ -o $@
+helmholtz-rt0-sphere: helmholtz-rt0-sphere.o
+	$(CXX) $(CXXFLAGS) $^ -o $@
+helmholtz-rt1-sphere: helmholtz-rt1-sphere.o
 	$(CXX) $(CXXFLAGS) $^ -o $@
 helmholtz-rt1: helmholtz-rt1.o
 	$(CXX) $(CXXFLAGS) $^ -o $@

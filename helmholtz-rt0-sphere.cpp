@@ -10,13 +10,15 @@
 /* #include <petscksp.h> */
 #include <stdio.h>
 
-#define N 8
+#define N 32
 #define beta 1
-#define h (1.0/N)
+#define PI M_PI
+#define h (PI/2/N)
 #define area (h*h)
 #define len h
 #define First 0
 #define Second 1
+
 
 using namespace std;
 using RealMat = Eigen::MatrixXd;
@@ -24,67 +26,37 @@ using RealVec = Eigen::VectorXd;
 typedef double Coord[2];
 
 
-
 class Test {
     public:
-        double func_p(const Coord &phy_coord) {
-            double x = phy_coord[0];
-            double y = phy_coord[1];
-            return x*x*y*y;
+        double func_p(const Coord &sphere_coord) {
+            double x = sphere_coord[0];
+            double y = sphere_coord[1];
+            return x*x + y*y;
         }
         double func_p(double x, double y) {
-            return x*x*y*y;
+            return x*x + y*y;
         }
 
-        void func_u(const Coord &phy_coord, double *u) {
-            double x = phy_coord[0];
-            double y = phy_coord[1];
-            u[0] = -2*x*y*y;
-            u[1] = -2*x*x*y;
+        void func_u(const Coord &sphere_coord, double *u) {
+            double x = sphere_coord[0];
+            double y = sphere_coord[1];
+            u[0] = -2*x;
+            u[1] = -2*y/sin(x);
         }
         void func_u(double x, double y, double *u) {
-            u[0] = -2*x*y*y;
-            u[1] = -2*x*x*y;
+            u[0] = -2*x;
+            u[1] = -2*y/sin(x);
         }
 
-        double func_f(const Coord &phy_coord) {
-            double x = phy_coord[0];
-            double y = phy_coord[1];
-            return -2*(x*x + y*y) + beta * func_p(x,y);
+        double func_f(const Coord &sphere_coord) {
+            double x = sphere_coord[0];
+            double y = sphere_coord[1];
+            return -2*(1 + x*cos(x)/sin(x) + 1/sin(x)/sin(x)) + beta * func_p(x,y);
         }
         double func_f(double x, double y) {
-            return -2*(x*x + y*y) + beta * func_p(x,y);
+            return -2*(1 + x*cos(x)/sin(x) + 1/sin(x)/sin(x)) + beta * func_p(x,y);
         }
 };
-
-
-/* class Test { */
-/*     public: */
-/*         double func_p(const Coord &phy_coord) { */
-/*             double x = phy_coord[0]; */
-/*             double y = phy_coord[1]; */
-/*             return exp(x)*sin(y); */
-/*         } */
-/*         double func_p(double x, double y) { */
-/*             return exp(x)*sin(y); */
-/*         } */
-/*         void func_u(const Coord &phy_coord, double *u) { */
-/*             double x = phy_coord[0]; */
-/*             double y = phy_coord[1]; */
-/*             u[0] = -exp(x)*sin(y); */
-/*             u[1] = -exp(x)*cos(y); */
-/*         } */
-/*         void func_u(double x, double y, double *u) { */
-/*             u[0] = -exp(x)*sin(y); */
-/*             u[1] = -exp(x)*cos(y); */
-/*         } */
-/*         double func_f(const Coord &phy_coord) { */
-/*             return beta * func_p(x,y); */
-/*         } */
-/*         double func_f(double x, double y) { */
-/*             return beta * func_p(x,y); */
-/*         } */
-/* }; */
 
 Test test;
 
@@ -108,23 +80,74 @@ class Quad2d {
         double weights[4] = {0.25, 0.25, 0.25, 0.25};
 };
 
+class QuadError_ {
+    public:
+        int npoints = 4;
+        double points[4] = {0.0694318442029737, 0.33000947820757185, 0.6699905217924282, 0.9305681557970263};
+        double weights[4] = {0.1739274225687269, 0.32607257743127305, 0.32607257743127305, 0.1739274225687269
+        };
+};
+class QuadError {
+    public:
+        QuadError_ qe;
+        int npoints = 16;
+        double points[16][2] = {
+            {qe.points[0], qe.points[0]},
+            {qe.points[0], qe.points[1]},
+            {qe.points[0], qe.points[2]},
+            {qe.points[0], qe.points[3]},
+            {qe.points[1], qe.points[0]},
+            {qe.points[1], qe.points[1]},
+            {qe.points[1], qe.points[2]},
+            {qe.points[1], qe.points[3]},
+            {qe.points[2], qe.points[0]},
+            {qe.points[2], qe.points[1]},
+            {qe.points[2], qe.points[2]},
+            {qe.points[2], qe.points[3]},
+            {qe.points[3], qe.points[0]},
+            {qe.points[3], qe.points[1]},
+            {qe.points[3], qe.points[2]},
+            {qe.points[3], qe.points[3]}
+        };
+        double weights[16] = {
+            qe.weights[0]*qe.weights[0],
+            qe.weights[0]*qe.weights[1],
+            qe.weights[0]*qe.weights[2],
+            qe.weights[0]*qe.weights[3],
+            qe.weights[1]*qe.weights[0],
+            qe.weights[1]*qe.weights[1],
+            qe.weights[1]*qe.weights[2],
+            qe.weights[1]*qe.weights[3],
+            qe.weights[2]*qe.weights[0],
+            qe.weights[2]*qe.weights[1],
+            qe.weights[2]*qe.weights[2],
+            qe.weights[2]*qe.weights[3],
+            qe.weights[3]*qe.weights[0],
+            qe.weights[3]*qe.weights[1],
+            qe.weights[3]*qe.weights[2],
+            qe.weights[3]*qe.weights[3]
+        };
+};
+
+
+
 
 class Elem {
     public:
-        Elem(int i, int j) : ix(i), jy(j), x_left(i*h), y_down(j*h) {
+        Elem(int i, int j) : itheta(i), jphi(j), theta_left(PI/4+i*h), phi_down(j*h) {
             if (i > 0) edge_sign[3] = -1;
             if (j > 0) edge_sign[0] = -1;
         }
 
-        void ref2phy(const Coord ref_coord, Coord &phy_coord) {
-            phy_coord[0] = ref_coord[0]*h + x_left; 
-            phy_coord[1] = ref_coord[1]*h + y_down; 
+        void ref2sphere(const Coord ref_coord, Coord &sphere_coord) {
+            sphere_coord[0] = ref_coord[0]*h + theta_left; 
+            sphere_coord[1] = ref_coord[1]*h + phi_down; 
         }
 
-        int ix, jy;
+        int itheta, jphi;
         int edge_sign[4] = { 1,1,1,1 };
-        double x_left;
-        double y_down;
+        double theta_left;
+        double phi_down;
 };
 
 
@@ -158,7 +181,7 @@ class FERT0 {
         FERT0();
         void CalcShapeRef(const double *ip, RealMat &shape) const;
         void CalcShape(const Elem &e, const double *ip, RealMat &shape);
-        void CalcDivShapeRef(const double *ip, RealVec &divshape) const;
+        void CalcDivShapeRef(const Elem &e, const double *ip, RealVec &divshape) const;
         void CalcDivShape(const Elem &e, const double *ip, RealVec &divshape);
         Coord *nodes; 
         Eigen::PartialPivLU<RealMat> Ti;
@@ -220,12 +243,13 @@ void FERT0::CalcShape(const Elem &e, const double *ip, RealMat &shape) {
 }
 
 
-void FERT0::CalcDivShapeRef(const double *ip, RealVec &divshape) const {
+
+void FERT0::CalcDivShapeRef(const Elem &e, const double *ip, RealVec &divshape) const {
     int o = 0; 
     RealVec divu(nbas);
+    divu(o++) = cos(ip[0]*h+e.theta_left) * h; 
     divu(o++) = 0; 
-    divu(o++) = 0; 
-    divu(o++) = 1; 
+    divu(o++) = cos(ip[0]*h+e.theta_left) * h * ip[0] + sin(ip[0]*h+e.theta_left); 
     divu(o++) = 1; 
     assert(o == nbas);
 
@@ -234,7 +258,7 @@ void FERT0::CalcDivShapeRef(const double *ip, RealVec &divshape) const {
 
 
 void FERT0::CalcDivShape(const Elem &e, const double *ip, RealVec &divshape) {
-    CalcDivShapeRef(ip, divshape);
+    CalcDivShapeRef(e, ip, divshape);
     // apply edge signs
     for (int i = 0; i < 4; i++) {
         divshape.row(i) *= e.edge_sign[i];
@@ -300,6 +324,7 @@ class Solver {
         /* Elem *e; */
         Quad2d quad2d;
         Quad1d quad1d;
+        QuadError quaderror;
         double u_error_L2 = 0;
         double p_error_L2 = 0;
         RealMat mat;
@@ -361,36 +386,29 @@ void Solver::build_mat() {
                 u->CalcShape(e, quad2d.points[k], u_shape);
                 u->CalcDivShape(e, quad2d.points[k], divu_shape);
                 p->CalcShape(e, quad2d.points[k], p_shape);
-                p->CalcGradShape(e, quad2d.points[k], dp_shape);
+                /* p->CalcGradShape(e, quad2d.points[k], dp_shape); */
 
-                /* if (i == 0 && j == 0) { */
-                /*     cout << "u_shape\n" << u_shape << endl; */ 
-                /*     cout << "p_shape\n" << p_shape << endl; */ 
-                /* } */
-                /* if (i == 1 && j == 0) { */
-                /*     cout << "u_shape\n" << u_shape << endl; */ 
-                /*     cout << "p_shape\n" << p_shape << endl; */ 
-                /* } */
                 
                 for (int m = 0; m < Nu; m++) {
                     // A(u,v)
                     for (int n = 0; n < Nu; n++) {
-                        A(m,n) += quad2d.weights[k] * area * (u_shape(m,0)*u_shape(n,0) + u_shape(m,1)*u_shape(n,1));
+                        A(m,n) += quad2d.weights[k] * area * (u_shape(m,0)*u_shape(n,0) + u_shape(m,1)*u_shape(n,1)) * sin(quad2d.points[k][0]*h+e.theta_left);
                     }
                     // A(p,v)
                     for (int n = 0; n < Np; n++) {
-                        A(m,n+Nu) += quad2d.weights[k] * area / h * (-divu_shape(m) * p_shape(n));
+                        A(m,n+Nu) += quad2d.weights[k] * h * (-divu_shape(m) * p_shape(n));
                     }
                 }
                 
                 for (int m = 0; m < Np; m++) {
                     // A(q,u)
                     for (int n = 0; n < Nu; n++) {
-                        A(m + Nu, n) += quad2d.weights[k] * area / h * (p_shape(m) * divu_shape(n));
+                        A(m + Nu, n) += quad2d.weights[k] * h * (p_shape(m) * divu_shape(n));
                     }
                     // A(p,q)
                     for (int n = 0; n < Np; n++) {
-                        A(m + Nu, n + Nu) += beta * quad2d.weights[k] * area * (p_shape(m) * p_shape(n));
+                        /* A(m + Nu, n + Nu) += beta * quad2d.weights[k] * area * (p_shape(m) * p_shape(n)); */
+                        A(m + Nu, n + Nu) += beta * quad2d.weights[k] * area * (p_shape(m) * p_shape(n)) * sin(quad2d.points[k][0]*h+e.theta_left);
                     }
                 }
             }
@@ -462,13 +480,13 @@ void Solver::build_rhs() {
                 p->CalcShape(e, quad2d.points[k], p_shape);
                 
                 Coord ref_coord = {quad2d.points[k][0], quad2d.points[k][1]}; 
-                Coord phy_coord;
-                e.ref2phy(ref_coord, phy_coord);
-                vf = test.func_f(phy_coord);
+                Coord sphere_coord;
+                e.ref2sphere(ref_coord, sphere_coord);
+                vf = test.func_f(sphere_coord);
                 
                 // F(q)
                 for (int m = 0; m < Np; m++) {
-                    F(m + Nu) += quad2d.weights[k] * area * (p_shape(m) * vf);
+                    F(m + Nu) += quad2d.weights[k] * area * (p_shape(m) * vf) * sin(quad2d.points[k][0]*h+e.theta_left);
                 }
             }
             
@@ -477,17 +495,17 @@ void Solver::build_rhs() {
                 double n[2] = {-1,0};
                 for (int k = 0; k < 2; k++) {
                     Coord ref_coord = {0, quad1d.points[k]}; 
-                    Coord phy_coord;
-                    e.ref2phy(ref_coord, phy_coord);
+                    Coord sphere_coord;
+                    e.ref2sphere(ref_coord, sphere_coord);
 
                     /* if (j == 1) */
-                    /*     cout << "real physical coord:\n" << phy_coord[0] << endl << phy_coord[1] << endl; */
+                    /*     cout << "real spheresical coord:\n" << sphere_coord[0] << endl << sphere_coord[1] << endl; */
 
-                    double pbc = test.func_p(phy_coord);
-                    /* u->CalcShape(e, phy_coord, u_shape); */
+                    double pbc = test.func_p(sphere_coord);
+                    /* u->CalcShape(e, sphere_coord, u_shape); */
                     u->CalcShape(e, ref_coord, u_shape);
                     for (int m = 0; m < Nu; m++) {
-                        F(m) += len * quad1d.weights[k] * (-1) * pbc * (u_shape(m,0) * n[0] + u_shape(m,1) * n[1]);
+                        F(m) += len * quad1d.weights[k] * (-1) * pbc * (u_shape(m,0) * n[0] + u_shape(m,1) * n[1]) * sqrt(2) / 2;
                     }
                 }
                 /* test.func_u(0, e.y_center, ubc); */
@@ -498,17 +516,17 @@ void Solver::build_rhs() {
                 double n[2] = {1,0};
                 for (int k = 0; k < 2; k++) {
                     Coord ref_coord = {1, quad1d.points[k]}; 
-                    Coord phy_coord;
-                    e.ref2phy(ref_coord, phy_coord);
+                    Coord sphere_coord;
+                    e.ref2sphere(ref_coord, sphere_coord);
 
                     /* if (j == 0) */
-                    /*     cout << "real physical coord:\n" << phy_coord[0] << endl << phy_coord[1] << endl; */
+                    /*     cout << "real spheresical coord:\n" << sphere_coord[0] << endl << sphere_coord[1] << endl; */
 
-                    double pbc = test.func_p(phy_coord);
-                    /* u->CalcShape(e, phy_coord, u_shape); */
+                    double pbc = test.func_p(sphere_coord);
+                    /* u->CalcShape(e, sphere_coord, u_shape); */
                     u->CalcShape(e, ref_coord, u_shape);
                     for (int m = 0; m < Nu; m++) {
-                        F(m) += len * quad1d.weights[k] * (-1) * pbc * (u_shape(m,0) * n[0] + u_shape(m,1) * n[1]);
+                        F(m) += len * quad1d.weights[k] * (-1) * pbc * (u_shape(m,0) * n[0] + u_shape(m,1) * n[1]) * sqrt(2) / 2;
                     }
                 }
                 /* test.func_u(1, e.y_center, ubc); */
@@ -521,12 +539,12 @@ void Solver::build_rhs() {
                 double n[2] = {0,-1};
                 for (int k = 0; k < 2; k++) {
                     Coord ref_coord = {quad1d.points[k], 0}; 
-                    Coord phy_coord;
-                    e.ref2phy(ref_coord, phy_coord);
+                    Coord sphere_coord;
+                    e.ref2sphere(ref_coord, sphere_coord);
                     /* if (i == 1) */
-                    /*     cout << "real physical coord:\n" << phy_coord[0] << endl << phy_coord[1] << endl; */
-                    double pbc = test.func_p(phy_coord);
-                    /* u->CalcShape(e, phy_coord, u_shape); */
+                    /*     cout << "real spheresical coord:\n" << sphere_coord[0] << endl << sphere_coord[1] << endl; */
+                    double pbc = test.func_p(sphere_coord);
+                    /* u->CalcShape(e, sphere_coord, u_shape); */
                     u->CalcShape(e, ref_coord, u_shape);
                     for (int m = 0; m < Nu; m++) {
                         F(m) += len * quad1d.weights[k] * (-1) * pbc * (u_shape(m,0) * n[0] + u_shape(m,1) * n[1]);
@@ -540,12 +558,12 @@ void Solver::build_rhs() {
                 double n[2] = {0,1};
                 for (int k = 0; k < 2; k++) {
                     Coord ref_coord = {quad1d.points[k], 1}; 
-                    Coord phy_coord;
-                    e.ref2phy(ref_coord, phy_coord);
+                    Coord sphere_coord;
+                    e.ref2sphere(ref_coord, sphere_coord);
                     /* if (i == 0) */
-                    /*     cout << "real physical coord:\n" << phy_coord[0] << endl << phy_coord[1] << endl; */
-                    double pbc = test.func_p(phy_coord);
-                    /* u->CalcShape(e, phy_coord, u_shape); */
+                    /*     cout << "real spheresical coord:\n" << sphere_coord[0] << endl << sphere_coord[1] << endl; */
+                    double pbc = test.func_p(sphere_coord);
+                    /* u->CalcShape(e, sphere_coord, u_shape); */
                     u->CalcShape(e, ref_coord, u_shape);
                     for (int m = 0; m < Nu; m++) {
                         F(m) += len * quad1d.weights[k] * (-1) * pbc * (u_shape(m,0) * n[0] + u_shape(m,1) * n[1]);
@@ -609,7 +627,6 @@ void Solver::solve() {
 
 
 
-
 void Solver::error() {
     double exact_sol;
     double num_sol;
@@ -630,18 +647,18 @@ void Solver::error() {
                 Id[k] = map_u(i, j, k);
             }
 
-            for (int k = 0; k < 4; k++) {
-                u->CalcShape(e, quad2d.points[k], u_shape);
+            for (int k = 0; k < 16; k++) {
+                u->CalcShape(e, quaderror.points[k], u_shape);
 
-                Coord ref_coord = {quad2d.points[k][0], quad2d.points[k][1]}; 
-                Coord phy_coord;
-                e.ref2phy(ref_coord, phy_coord);
-                test.func_u(phy_coord, u_value);
+                Coord ref_coord = {quaderror.points[k][0], quaderror.points[k][1]}; 
+                Coord sphere_coord;
+                e.ref2sphere(ref_coord, sphere_coord);
+                test.func_u(sphere_coord, u_value);
 
                 double diff1 = x[Id[0]]*u_shape(0,0) + x[Id[1]]*u_shape(1,0) + x[Id[2]]*u_shape(2,0) + x[Id[3]]*u_shape(3,0) - u_value[0];
                 double diff2 = x[Id[0]]*u_shape(0,1) + x[Id[1]]*u_shape(1,1) + x[Id[2]]*u_shape(2,1) + x[Id[3]]*u_shape(3,1) - u_value[1];
                 
-                u_error_L2 += quad2d.weights[k] * area * (diff1 * diff1 + diff2 * diff2);
+                u_error_L2 += quaderror.weights[k] * area * (diff1 * diff1 + diff2 * diff2) * sin(quaderror.points[k][0]*h+e.theta_left);
             }
         }
     }
@@ -649,21 +666,19 @@ void Solver::error() {
     u_error_L2 = sqrt(u_error_L2);
 
 
-
-
     // ------------------------------ p L2 error -----------------------------------
     for (int i = 0; i < N; i++) { // iter elem
         for (int j = 0; j < N; j++) { // iter elem
             Elem e(i,j);
             
-            for (int k = 0; k < 4; k++) {
-                /* u->CalcShape(e, quad2d.points[k], u_shape); */
-                Coord ref_coord = {quad2d.points[k][0], quad2d.points[k][1]}; 
-                Coord phy_coord;
-                e.ref2phy(ref_coord, phy_coord);
-                exact_sol = test.func_p(phy_coord);
+            for (int k = 0; k < 16; k++) {
+                /* u->CalcShape(e, quaderror.points[k], u_shape); */
+                Coord ref_coord = {quaderror.points[k][0], quaderror.points[k][1]}; 
+                Coord sphere_coord;
+                e.ref2sphere(ref_coord, sphere_coord);
+                exact_sol = test.func_p(sphere_coord);
 
-                p_error_L2 += quad2d.weights[k] * area * (exact_sol-x[map_p(i,j)]) * (exact_sol-x[map_p(i,j)]);
+                p_error_L2 += quaderror.weights[k] * area * (exact_sol-x[map_p(i,j)]) * (exact_sol-x[map_p(i,j)]) * sin(quaderror.points[k][0]*h+e.theta_left);
             }
         }
     }
