@@ -1,6 +1,8 @@
 #include <iostream>
 #include <cstdio>
+#include <cstdarg>
 #include <cmath>
+#include <vector>
 #include <Eigen/Dense>
 using namespace std;
 
@@ -124,11 +126,135 @@ namespace ELEM_TYPE {
 
 typedef unsigned short Btype;
 
+
+/* void phgInfo(int verbose_level, const char *fmt, ...) */
+/* /1* writes formatted message to log_file when log_file != NULL, */
+/*  * if verbose_level < 0 then writes to stdout if log_file == NULL */
+/*  * verbose_level 表示消息的重要性/详细程度 */
+/*  * 后面 ... 表示可以接受任意数量的附加参数（比如 %d, %f 对应的参数）*/
+/* { */
+/*     va_list ap; // 声明一个变量，用来访问可变参数列表（... 部分） */
+/*     char s[1024]; */
+
+/*     sprintf(s, "%s", fmt); */
+
+/*     va_start(ap, fmt); */
+/*     vfprintf(stdout, s, ap); */
+/*     va_end(ap); */
+/*     fflush(stdout); */
+/* } */
+
+
+#define PHG_MIN_VERBOSE_LEVEL 2
+
+void phgInfo(int verbose_level, const char *fmt, ...) 
+{
+    // 检查详细级别是否满足输出条件
+    if (verbose_level < PHG_MIN_VERBOSE_LEVEL) {
+        return;
+    }
+
+    va_list ap;
+    va_start(ap, fmt);
+
+    // 直接格式化输出，避免缓冲区溢出风险
+    /* if (log_file != NULL) { */
+    /*     vfprintf(log_file, fmt, ap); */
+    /*     fflush(log_file); */
+    /* } else { */
+    /*     vfprintf(stdout, fmt, ap); */
+    /*     fflush(stdout); */
+    /* } */
+    vfprintf(stdout, fmt, ap);
+    fflush(stdout);
+
+    va_end(ap);
+}
+
+
+
 int main(int argc, char *argv[]) {
+    // ------------------------------- Operation of RealMat --------------------------------------
+    RealMat A(3,3);
+    A << 1,1,1,1,1,1,1,1,1;
+    A = A * 4;
+    cout << A << endl;
+
+    // ---------------------------------------- auto ---------------------------------------------
+    // auto 自动类型推导，必须进行初始化
+    /* auto x = 1; */
+    /* auto y = 1.5; */
+    /* cout << "bytes of x = " << sizeof(x) << " x = " <<  x << endl; */
+    /* cout << "bytes of y = " << sizeof(y) << " y = " <<  y << endl; */
+
+    // -------------------------------------- std::vector ----------------------------------------
+    // std::vector 是 C++ 中最常用的动态数组容器，可以自动管理内存，支持动态扩容、随机访问和多种高效操作。以下是 详细用法指南，包含基础操作、高级技巧和性能优化建议。    
+    // Initialization
+    /* std::vector<int> vec1; // 空向量 */
+    /* std::vector<int> vec2(5); // 指定初始大小和默认值（5个0） */
+    /* std::vector<int> vec3 = {1, 2, 3, 4, 5}; // 初始化列表 */
+    /* std::vector<int> vec4(vec3); // 复制另一个向量 */
+    /* std::vector<int> vec5(5, 42); // 指定大小和初始值（5个42） */
+
+    /* // 访问元素 */
+    /* std::vector<int> vec = {10, 20, 30}; */
+    /* int a = vec[0];  // 10 下标访问（不检查越界） */
+    /* int b = vec.at(1); // 20 at() 访问（越界抛出异常） */
+    /* int first = vec.front(); // 10 首元素 */
+    /* int last = vec.back();   // 30 末元素 */
+    /* for (auto it = vec.begin(); it != vec.end(); ++it) { // 迭代器访问 */
+    /*     std::cout << *it << std::endl; */
+    /* } */
+
+    /* // 添加元素 */
+    /* vec.push_back(1); // {10, 20, 30, 1} */
+    /* vec.push_back(2); // {10, 20, 30, 1, 2} 尾部插入 */
+    /* vec.insert(vec.begin() + 1, 99); // {10, 99, 20, 30, 1, 2} 插入到指定位置 */
+    /* vec.insert(vec.end(), {3, 4, 5}); // {10, 99, 20, 30, 1, 2, 3, 4, 5} 批量插入 */
+    /* for (auto it = vec.begin(); it != vec.end(); ++it) { */
+    /*     std::cout << *it << std::endl; */
+    /* } */
+
+    /* // 删除元素 */
+    /* vec.pop_back(); // {10, 99, 20, 30, 1, 2, 3, 4} 删除尾部元素 */
+    /* vec.erase(vec.begin() + 1); // {10, 20, 30, 1, 2, 3, 4} 删除指定位置元素 */
+    /* vec.clear(); // {} 删除所有元素 */
+    /* vec.resize(10); */
+    /* for (auto it = vec.begin(); it != vec.end(); ++it) { */
+    /*     std::cout << *it << std::endl; */
+    /* } */
+
+    // --------------------------------------- phgInfo -------------------------------------------
+    /* FILE* log_file = fopen("app.log", "w"); */
+    /* phgInfo(1, "System initialized. Version: %s\n", "1.0.0"); */
+    /* phgInfo(2, "Debug info: %d, %f\n", 42, 3.14); */
+
+    // ---------------------------------------- %04d ---------------------------------------------
+    /* char s[200]; */
+    /* char phgLogFilename[] = "log"; */
+    /* for (int i = 0; i < 10; i++) { */
+    /*     sprintf(s, "%s.%04d" "", phgLogFilename, (int)i); */
+    /*     cout << s << endl; */
+    /* } */
+    // %04d 中的 4 表示最小宽度为 4, 0 表示不足 4 位时用 0 填充。例如：
+    // •5 → 0005
+    // •123 → 0123
+    // •4567 → 4567
+
+    // ----------------------------------------- sprintf -----------------------------------------
+    /* char buffer[100];  // 确保足够大 */
+    /* int num = 42; */
+    /* double pi = 3.14159; */
+    /* sprintf(buffer, "Number: %d, Pi: %.2f", num, pi); // 在 C++ 中，sprintf 是一个 C 标准库函数，用于将格式化数据写入字符串缓冲区。它的功能类似于 printf，但不是输出到标准输出（stdout），而是写入指定的字符数组（C 风格字符串） */
+    /* std::cout << buffer << std::endl;  // 输出: "Number: 42, Pi: 3.14" */
+
+    // -------------------------------------- PATH_MAX -------------------------------------------
+    /* cout << PATH_MAX << endl; // PATH_MAX 是一个宏，用于表示系统支持的文件路径的最大长度(以字节为单位) = 4096 in Linux */
+
     // ------------------------------------ sin --------------------------------------------------
-    cout << M_PI << endl;
-    double x = sin(M_PI);
-    cout << x << endl;
+    /* cout << M_PI << endl; */
+    /* double x = sin(M_PI); */
+    /* cout << x << endl; */
 
     // --------------------------------------- std::vector ---------------------------------------
     /* vector<double> p(10); // 动态数组，自动管理内存 */
