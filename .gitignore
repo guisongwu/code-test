@@ -5,5 +5,10 @@ poisson
 tags
 testc
 testcpp
+testpetsc
 poisson-rt
 mesh
+poisson-rt0-sphere
+poisson-rt1-sphere
+helmholtz-rt0-sphere
+helmholtz-rt1-sphere

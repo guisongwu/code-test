@@ -124,11 +124,107 @@ namespace ELEM_TYPE {
 
 typedef unsigned short Btype;
 
+
+void CalcLegendre(const int p, const double x, RealVec &u)
+{
+	// use the recursive definition for [-1,1]:
+	// (n+1)*P_{n+1}(z) = (2*n+1)*z*P_n(z)-n*P_{n-1}(z)
+	double z;
+	u[0] = 1.;
+	if (p == 0) { return; }
+	u[1] = z = 2.*x - 1.;
+	for (int n = 1; n < p; n++)
+    {
+        u[n+1] = ((2*n + 1)*z*u[n] - n*u[n-1])/(n + 1);
+    }
+}
+
+void CalcLegendre(const int p, const double x, RealVec &u, RealVec &d)
+{
+	// use the recursive definition for [-1,1]:
+	// (n+1)*P_{n+1}(z) = (2*n+1)*z*P_n(z)-n*P_{n-1}(z)
+	// for the derivative use, z in [-1,1]:
+	// P'_{n+1}(z) = (2*n+1)*P_n(z)+P'_{n-1}(z)
+	double z;
+	u[0] = 1.;
+	d[0] = 0.;
+	if (p == 0) { return; }
+	u[1] = z = 2.*x - 1.;
+	d[1] = 2.;
+	for (int n = 1; n < p; n++)
+    {
+        u[n+1] = ((2*n + 1)*z*u[n] - n*u[n-1])/(n + 1);
+        d[n+1] = (4*n + 2)*u[n] + d[n-1];
+    }
+}
+
+
+void CalcChebyshev(const int p, const double x, RealVec &u)
+{
+	// recursive definition, z in [-1,1]
+	// T_0(z) = 1,  T_1(z) = z
+	// T_{n+1}(z) = 2*z*T_n(z) - T_{n-1}(z)
+	double z;
+	u[0] = 1.;
+	if (p == 0) { return; }
+	u[1] = z = 2.*x - 1.;
+	for (int n = 1; n < p; n++)
+    {
+        u[n+1] = 2*z*u[n] - u[n-1];
+    }
+}
+
+void CalcChebyshev(const int p, const double x, RealVec &u, RealVec &d, RealVec &dd)
+{
+	// recursive definition, z in [-1,1]
+	// T_0(z) = 1,  T_1(z) = z
+	// T_{n+1}(z) = 2*z*T_n(z) - T_{n-1}(z)
+	// T'_n(z) = n*U_{n-1}(z)
+	// U_0(z) = 1  U_1(z) = 2*z
+	// U_{n+1}(z) = 2*z*U_n(z) - U_{n-1}(z)
+	// U_n(z) = z*U_{n-1}(z) + T_n(z) = z*T'_n(z)/n + T_n(z)
+	// T'_{n+1}(z) = (n + 1)*(z*T'_n(z)/n + T_n(z))
+	// T''_{n+1}(z) = (n + 1)*(2*(n + 1)*T'_n(z) + z*T''_n(z)) / n
+	double z;
+	u[0] = 1.;
+	d[0] = 0.;
+	dd[0]= 0.;
+	if (p == 0) { return; }
+	u[1] = z = 2.*x - 1.;
+	d[1] = 2.;
+	dd[1] = 0;
+	for (int n = 1; n < p; n++)
+    {
+        u[n+1] = 2*z*u[n] - u[n-1];
+        d[n+1] = (n + 1)*(z*d[n]/n + 2*u[n]);
+        dd[n+1] = (n + 1)*(2.*(n + 1)*d[n] + z*dd[n])/n;
+    }
+}
+
 int main(int argc, char *argv[]) {
+    // ------------------------------------ Chebyshev --------------------------------------------
+    RealVec u(10);
+    RealVec d(10);
+    RealVec dd(10);
+    CalcChebyshev(9, 0.2, u, d, dd);
+    for (int i = 0; i < 10; i++) {
+        printf("%10.8f \t %10.8f \t %10.8f\n", u[i], d[i], dd[i]);
+        /* cout << u[i] << "\t" << d[i] << '\t' << dd[i] << endl; */
+    }
+
+    // ------------------------------------ Legendre ---------------------------------------------
+    /* RealVec u(10); */
+    /* RealVec d(10); */
+    /* CalcLegendre(9, 0.5, u); */
+    /* cout << u << endl << endl; */
+    /* CalcLegendre(9, 0.5, u, d); */
+    /* cout << u << endl << endl; */
+    /* cout << d << endl; */
+
     // ------------------------------------ sin --------------------------------------------------
-    cout << M_PI << endl;
-    double x = sin(M_PI);
-    cout << x << endl;
+    /* cout << M_PI << endl; */
+    /* double x = sin(M_PI); */
+    /* cout << x << endl; */
 
     // --------------------------------------- std::vector ---------------------------------------
     /* vector<double> p(10); // 动态数组，自动管理内存 */
