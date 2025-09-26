@@ -56,25 +56,52 @@ typedef double Coord[2];
 /*         } */
 /* }; */
 
+/* class Test { */
+/*     public: */
+/*         double func_p(const Coord &phy_coord) { */
+/*             double x = phy_coord[0]; */
+/*             double y = phy_coord[1]; */
+/*             return exp(x)*sin(y); */
+/*         } */
+/*         double func_p(double x, double y) { */
+/*             return exp(x)*sin(y); */
+/*         } */
+/*         void func_u(const Coord &phy_coord, double *u) { */
+/*             double x = phy_coord[0]; */
+/*             double y = phy_coord[1]; */
+/*             u[0] = -exp(x)*sin(y); */
+/*             u[1] = -exp(x)*cos(y); */
+/*         } */
+/*         void func_u(double x, double y, double *u) { */
+/*             u[0] = -exp(x)*sin(y); */
+/*             u[1] = -exp(x)*cos(y); */
+/*         } */
+/*         double func_f(const Coord &phy_coord) { */
+/*             return 0; */
+/*         } */
+/*         double func_f(double x, double y) { */
+/*             return 0; */
+/*         } */
+/* }; */
 class Test {
     public:
         double func_p(const Coord &phy_coord) {
             double x = phy_coord[0];
             double y = phy_coord[1];
-            return exp(x)*sin(y);
+            return 1;
         }
         double func_p(double x, double y) {
-            return exp(x)*sin(y);
+            return 1;
         }
         void func_u(const Coord &phy_coord, double *u) {
             double x = phy_coord[0];
             double y = phy_coord[1];
-            u[0] = -exp(x)*sin(y);
-            u[1] = -exp(x)*cos(y);
+            u[0] = 0;
+            u[1] = 0;
         }
         void func_u(double x, double y, double *u) {
-            u[0] = -exp(x)*sin(y);
-            u[1] = -exp(x)*cos(y);
+            u[0] = 0;
+            u[1] = 0;
         }
         double func_f(const Coord &phy_coord) {
             return 0;
@@ -83,6 +110,7 @@ class Test {
             return 0;
         }
 };
+
 
 Test test;
 
@@ -421,13 +449,13 @@ void Solver::build_mat() {
     cout << "Build Mat Done\n";
 
     // output full matrix
-    /* for (int i = 0; i < total_dofs; i++) { */
-    /*     printf("%d\t", i); */
-    /*     for (int j = 0; j < total_dofs; j++) */ 
-    /*         printf("%5.4f\t", mat(i,j)); */
-    /*         /1* cout << "%4.2f" << mat(i,j) << "\t"; *1/ */
-    /*     cout << endl; */
-    /* } */
+    for (int i = 0; i < total_dofs; i++) {
+        printf("%d\t", i);
+        for (int j = 0; j < total_dofs; j++) 
+            printf("%5.4f\t", mat(i,j));
+            /* cout << "%4.2f" << mat(i,j) << "\t"; */
+        cout << endl;
+    }
 
     // output only u-part matrix
     /* for (int i = 0; i < 2*(N)*(N+1); i++) { */
@@ -602,9 +630,9 @@ void Solver::build_rhs() {
     } // end iter elem
  
     // output rhs vector
-    /* for (int m = 0; m < total_dofs; m++) { */
-    /*     printf("%d\t%5.3f\n", m, rhs(m)); */
-    /* } */
+    for (int m = 0; m < total_dofs; m++) {
+        printf("%d\t%5.3f\n", m, rhs(m));
+    }
     cout << "Build Rhs Done\n";
 }
 

@@ -56,6 +56,7 @@ namespace BDRY_MASK {
 
 typedef int BdryEdge[3];
 typedef int Edge[2];
+	
 
 int compare_bdry_edge(const void *p0, const void *p1)
 /* compares two 'INT's (used in qsort and bsearch) */
@@ -204,6 +205,8 @@ void CalcChebyshev(const int p, const double x, RealVec &u, RealVec &d, RealVec 
     }
 }
 
+
+#define PHG_MIN_VERBOSE_LEVEL 2
 void phgInfo(int verbose_level, const char *fmt, ...) 
 {
     // 检查详细级别是否满足输出条件
@@ -228,6 +231,8 @@ void phgInfo(int verbose_level, const char *fmt, ...)
     va_end(ap);
 }
 
+
+#if 0
 class Elem {
   public:
 
@@ -919,18 +924,86 @@ void read_mesh(const char *mesh_file_name, BC_FUNCTION user_bc_map)
 
     return;
 }
+#endif
+
+
+
+static double x1 = 0.0694318442029735;
+static double x2 = 0.330009478207572;
+static double x3 = 0.669990521792428;
+static double x4 = 0.930568155797027;
+
+static double w1 = 0.347854845137454;
+static double w2 = 0.652145154862546;
+static double w3 = 0.652145154862546;
+static double w4 = 0.347854845137454;
+
+static double QUAD_2D_Q7_wts[] = {
+    w1 * w1,
+    w1 * w2,
+    w1 * w3,
+    w1 * w4,
+    w2 * w1,
+    w2 * w2,
+    w2 * w3,
+    w2 * w4,
+    w3 * w1,
+    w3 * w2,
+    w3 * w3,
+    w3 * w4,
+    w4 * w1,
+    w4 * w2,
+    w4 * w3,
+    w4 * w4 
+};
+
+static double QUAD_2D_Q7_pts[] = {
+    x1, x1,
+    x1, x2,
+    x1, x3,
+    x1, x4,
+    x2, x1,
+    x2, x2,
+    x2, x3,
+    x2, x4,
+    x3, x1,
+    x3, x2,
+    x3, x3,
+    x3, x4,
+    x4, x1,
+    x4, x2,
+    x4, x3,
+    x4, x4
+};
+
+
+double func_u(double x, double y) {
+    return pow(x, 7) + pow(y, 6);
+}
 
 
 int main(int argc, char *argv[]) {
-    // ------------------------------------ Chebyshev --------------------------------------------
-    RealVec u(10);
-    RealVec d(10);
-    RealVec dd(10);
-    CalcChebyshev(9, 0.2, u, d, dd);
-    for (int i = 0; i < 10; i++) {
-        printf("%10.8f \t %10.8f \t %10.8f\n", u[i], d[i], dd[i]);
-        /* cout << u[i] << "\t" << d[i] << '\t' << dd[i] << endl; */
+    // ------------------------------------- Quadrature ------------------------------------------
+    double numerical_integral = 0;
+    int npoints = 16;
+    double x;
+    double y;
+    for (int i = 0; i < npoints; i++) {
+        x = QUAD_2D_Q7_pts[2*i];
+        y = QUAD_2D_Q7_pts[2*i+1];
+        numerical_integral += QUAD_2D_Q7_wts[i] * func_u(x, y);
     }
+    cout << "numerical integral of func_u is: " << numerical_integral << endl;
+
+    // ------------------------------------ Chebyshev --------------------------------------------
+    /* RealVec u(10); */
+    /* RealVec d(10); */
+    /* RealVec dd(10); */
+    /* CalcChebyshev(9, 0.2, u, d, dd); */
+    /* for (int i = 0; i < 10; i++) { */
+    /*     printf("%10.8f \t %10.8f \t %10.8f\n", u[i], d[i], dd[i]); */
+    /*     /1* cout << u[i] << "\t" << d[i] << '\t' << dd[i] << endl; *1/ */
+    /* } */
 
     // ------------------------------------ Legendre ---------------------------------------------
     /* RealVec u(10); */
