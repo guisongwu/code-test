@@ -4,6 +4,8 @@
 #include <cmath>
 #include <vector>
 #include <Eigen/Dense>
+#include <cblas.h>
+
 using namespace std;
 
 using RealMat = Eigen::MatrixXd;
@@ -983,17 +985,33 @@ double func_u(double x, double y) {
 
 
 int main(int argc, char *argv[]) {
+	// ------------------------------------- blas ------------------------------------------------
+	int n = 5;
+    float x[5] = {1, 2, 3, 4, 5};
+    float y[5] = {6, 7, 8, 9, 10};
+	// Compute dot product using cblas_sdot
+	float result = cblas_sdot(n, x, 1, y, 1);
+	printf("Dot product: %f\n", result);	
+
+	// -------------------------------------- time_t ---------------------------------------------
+	/* time_t now = time(nullptr); */
+	/* cout << "size of time_t: " << sizeof(time_t) << endl; */
+	/* cout << "Seconds since epoch: " << now << endl; */
+	/* // Convert to human-readable format */
+	/* char* time_str = ctime(&now); */
+    /* std::cout << "Local time: " << time_str << endl; */
+
     // ------------------------------------- Quadrature ------------------------------------------
-    double numerical_integral = 0;
-    int npoints = 16;
-    double x;
-    double y;
-    for (int i = 0; i < npoints; i++) {
-        x = QUAD_2D_Q7_pts[2*i];
-        y = QUAD_2D_Q7_pts[2*i+1];
-        numerical_integral += QUAD_2D_Q7_wts[i] * func_u(x, y);
-    }
-    cout << "numerical integral of func_u is: " << numerical_integral << endl;
+    /* double numerical_integral = 0; */
+    /* int npoints = 16; */
+    /* double x; */
+    /* double y; */
+    /* for (int i = 0; i < npoints; i++) { */
+    /*     x = QUAD_2D_Q7_pts[2*i]; */
+    /*     y = QUAD_2D_Q7_pts[2*i+1]; */
+    /*     numerical_integral += QUAD_2D_Q7_wts[i] * func_u(x, y); */
+    /* } */
+    /* cout << "numerical integral of func_u is: " << numerical_integral << endl; */
 
     // ------------------------------------ Chebyshev --------------------------------------------
     /* RealVec u(10); */

@@ -33,7 +33,7 @@ bool get_token(FILE *fp, char *token)
 
 int main(int argc, char* argv[]) {
     // --------------------------- mpicc for c program --------------------------------
-    /* printf("hello world\n"); */
+    printf("hello world\n");
 
     // ------------------------------- unsigned int -----------------------------------
     /* unsigned int i = 10; */

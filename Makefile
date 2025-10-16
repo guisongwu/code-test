@@ -20,75 +20,60 @@ CPROGRAM_DIR=/home/wugs/cprogram
 CC = gcc 
 CXX = g++ 
 
+C_SRCS = $(wildcard *.c)
+CPP_SRCS = $(wildcard *.cpp)
+OBJS = $(C_SRCS:.c=.o) $(CPP_SRCS:.cpp=.o)
+
 CFLAGS   = -g -Wall -Wextra -Wno-unused-variable -Wno-unused-parameter -Wno-unused-function -std=gnu17
 CXXFLAGS = -g -Wall -Wextra -Wno-unused-variable -Wno-unused-parameter -Wno-unused-function -Wno-unused-but-set-variable -Wno-comment -Wno-sign-compare -std=c++20
 
-CPPFLAGS = -I/usr/include/eigen3 -I$(CPROGRAM_DIR)
-# CPPFLAGS = -I/usr/include/eigen3 -I$(PETSC_DIR)/include -I$(MPI_DIR)/include
-# CPPFLAGS = -I/usr/include/eigen3 -I$(PETSC_DIR)/include
-
-LDFLAGS = 
-# LDFLAGS = -L$(MPI_DIR)/lib -Wl,-rpath=$(MPI_DIR)/lib -L$(PETSC_DIR)/lib -Wl,-rpath=$(PETSC_DIR)/lib
-# LDFLAGS = -L$(PETSC_DIR)/lib -Wl,-rpath=$(PETSC_DIR)/lib
-
-LDLIBS =
-# LDLIBS = -lm -lmpi -lpetsc
-# LDLIBS = -lm -lpetsc
+# C/C++ PreProcessor options
+CPPFLAGS = -I/usr/include/eigen3 -I$(CPROGRAM_DIR) -I$(PETSC_DIR)/include -I$(MPI_DIR)/include
+# Library searching dir options
+LDFLAGS = -L$(MPI_DIR)/lib -Wl,-rpath=$(MPI_DIR)/lib -L$(PETSC_DIR)/lib -Wl,-rpath=$(PETSC_DIR)/lib
+# Library link options
+LDLIBS = -lm -lpetsc -lmpi
 
 
 # target files 
-TARGETS = poisson testc testcpp poisson-rt0 helmholtz-rt0 helmholtz-rt0-sphere helmholtz-rt1 helmholtz-rt1-sphere mesh poisson-rt1 poisson-rt0-mix poisson-rt0-sphere poisson-rt1-sphere
-# TARGETC = poisson testc
-# TARGETCPP = testcpp poisson-rt
+TARGETS = testcpp poisson-rt0 helmholtz-rt0 helmholtz-rt0-sphere helmholtz-rt1 helmholtz-rt1-sphere mesh poisson-rt1 poisson-rt0-mix poisson-rt0-sphere poisson-rt1-sphere
+CTARGETS = poisson testc testpetsc
 
 # default target(when "make" is called, all the target files will be built.)
 all: $(TARGETS)
 
 ########################### Link ################################
-
-# build rule of "testpetsc"
-# testpetsc: testpetsc.o
-# 	$(CC) $(CFLAGS) $(LDFLAGS) $(LDLIBS) $^ -o $@ 
-
-testc: testc.o
-	$(CC) $(CFLAGS) $^ -o $@ 
-testcpp: testcpp.o
-	$(CXX) $(CXXFLAGS) $^ -o $@
-poisson-rt0: poisson-rt0.o
-	$(CXX) $(CXXFLAGS) $^ -o $@
-poisson-rt0-sphere: poisson-rt0-sphere.o
-	$(CXX) $(CXXFLAGS) $^ -o $@
-poisson-rt1-sphere: poisson-rt1-sphere.o
-	$(CXX) $(CXXFLAGS) $^ -o $@
-helmholtz-rt0: helmholtz-rt0.o
-	$(CXX) $(CXXFLAGS) $^ -o $@
-helmholtz-rt0-sphere: helmholtz-rt0-sphere.o
-	$(CXX) $(CXXFLAGS) $^ -o $@
-helmholtz-rt1-sphere: helmholtz-rt1-sphere.o
-	$(CXX) $(CXXFLAGS) $^ -o $@
-helmholtz-rt1: helmholtz-rt1.o
-	$(CXX) $(CXXFLAGS) $^ -o $@
-poisson-rt0-mix: poisson-rt0-mix.o
-	$(CXX) $(CXXFLAGS) $^ -o $@
-poisson-rt1: poisson-rt1.o
-	$(CXX) $(CXXFLAGS) $^ -o $@
-poisson: poisson.o
-	$(CC) $(CFLAGS) $^ -o $@
+# Generic link rule for c program single .o -> executable
+$(CTARGETS): %: %.o
+	$(CC) $(CFLAGS) $^ -o $@ $(LDFLAGS) $(LDLIBS)
+# Generic link rule for cpp program single .o -> executable
+$(TARGETS): %: %.o
+	$(CXX) $(CXXFLAGS) $^ -o $@ $(LDFLAGS) $(LDLIBS)
 
 
-######################### Compile #############################
-
-# general build rule for C program to object file
-%.o: %.c
+########################### Compile #############################
+# 显式声明 C 文件编译规则
+$(filter %.o,$(C_SRCS:.c=.o)): %.o: %.c
 	$(CC) $(CFLAGS) $(CPPFLAGS) -c $< -o $@
 
-# general build rule for CPP program to object file
-%.o: %.cpp
+# 显式声明 C++ 文件编译规则
+$(filter %.o,$(CPP_SRCS:.cpp=.o)): %.o: %.cpp
 	$(CXX) $(CXXFLAGS) $(CPPFLAGS) -c $< -o $@
+
+
+
+# general build rule for C program to object file
+# %.o: %.c
+# 	$(CC) $(CFLAGS) $(CPPFLAGS) -c $< -o $@
+# general build rule for CPP program to object file
+# %.o: %.cpp
+# 	$(CXX) $(CXXFLAGS) $(CPPFLAGS) -c $< -o $@
+
+
 
 # clean object and target files
 clean:
-	rm -f *.o $(TARGETS)
+	rm -f *.o $(TARGETS) $(CTARGETS)
 
 # 伪目标声明
 .PHONY: all clean
