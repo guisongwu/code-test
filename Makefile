@@ -8,12 +8,15 @@ EIGEN_DIR=/usr/include/eigen3
 # include ${PETSC_DIR}/lib/petsc/conf/variables
 # include ${PETSC_DIR}/lib/petsc/conf/rules
 
-LAPACK_DIR=/opt/OpenBLAS-0.3.29
-MPREAL_DIR=
-MPFR_DIR=/usr/lib/x86_64-linux-gnu
-GMP_DIR=/usr/lib/x86_64-linux-gnu
-CPROGRAM_DIR=/home/wugs/cprogram
+# INCLUDE_DIR_ARCH=/usr/include/x86_64-linux-gnu 
+# # gmp.h, cblas.h
+# LIB_DIR_ARCH=/usr/lib/x86_64-linux-gnu
+# # libgmp.so, libmpfr.so, libblas.so, liblapack.so
+# INCLUDE_DIR=/usr/include
+# # mpfr.h, mpreal.h, lapack.h, lapacke.h
+# LIB_DIR=/usr/lib
 
+CPROGRAM_DIR=/home/wugs/cprogram
 
 # CC = mpicc 
 # CXX = mpicxx 
@@ -30,9 +33,9 @@ CXXFLAGS = -g -Wall -Wextra -Wno-unused-variable -Wno-unused-parameter -Wno-unus
 # C/C++ PreProcessor options
 CPPFLAGS = -I/usr/include/eigen3 -I$(CPROGRAM_DIR) -I$(PETSC_DIR)/include -I$(MPI_DIR)/include
 # Library searching dir options
-LDFLAGS = -L$(MPI_DIR)/lib -Wl,-rpath=$(MPI_DIR)/lib -L$(PETSC_DIR)/lib -Wl,-rpath=$(PETSC_DIR)/lib
+LDFLAGS = -L$(MPI_DIR)/lib -Wl,-rpath,$(MPI_DIR)/lib -L$(PETSC_DIR)/lib -Wl,-rpath,$(PETSC_DIR)/lib
 # Library link options
-LDLIBS = -lm -lpetsc -lmpi
+LDLIBS = -lm -lpetsc -lmpi -llapack -lblas
 
 
 # target files 
@@ -52,11 +55,11 @@ $(TARGETS): %: %.o
 
 
 ########################### Compile #############################
-# 显式声明 C 文件编译规则
+# C program compile rules
 $(filter %.o,$(C_SRCS:.c=.o)): %.o: %.c
 	$(CC) $(CFLAGS) $(CPPFLAGS) -c $< -o $@
 
-# 显式声明 C++ 文件编译规则
+# C++ program compile rules
 $(filter %.o,$(CPP_SRCS:.cpp=.o)): %.o: %.cpp
 	$(CXX) $(CXXFLAGS) $(CPPFLAGS) -c $< -o $@
 
