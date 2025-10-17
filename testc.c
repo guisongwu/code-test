@@ -4,6 +4,7 @@
 #include <string.h>
 #include <stdbool.h>
 #include <ctype.h>
+#include <lapacke.h>
 
 
 
@@ -32,8 +33,21 @@ bool get_token(FILE *fp, char *token)
 
 
 int main(int argc, char* argv[]) {
+	// ------------------------------- lapacke ----------------------------------------
+	double a[4] = { 1., 3., 2., 4. };
+	double b[2] = { 5., 6. };
+	int n = 2, ipiv[2];
+	int info1 = LAPACKE_dgesv( LAPACK_ROW_MAJOR, n, 1, a, n, ipiv, b, 1);
+	int info2 = LAPACKE_dgesv( LAPACK_COL_MAJOR, n, 1, a, n, ipiv, b, n);
+
+	if (info1 == 0) {
+		printf("Solution: x0 = %f, x1 = %f\n", b[0], b[1]);
+	}
+	if (info2 == 0) {
+		printf("Solution: x0 = %f, x1 = %f\n", b[0], b[1]);
+	}
+
     // --------------------------- mpicc for c program --------------------------------
-    printf("hello world\n");
 
     // ------------------------------- unsigned int -----------------------------------
     /* unsigned int i = 10; */

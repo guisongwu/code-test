@@ -35,7 +35,7 @@ CPPFLAGS = -I/usr/include/eigen3 -I$(CPROGRAM_DIR) -I$(PETSC_DIR)/include -I$(MP
 # Library searching dir options
 LDFLAGS = -L$(MPI_DIR)/lib -Wl,-rpath,$(MPI_DIR)/lib -L$(PETSC_DIR)/lib -Wl,-rpath,$(PETSC_DIR)/lib
 # Library link options
-LDLIBS = -lm -lpetsc -lmpi -llapack -lblas
+LDLIBS = -lm -lpetsc -lmpi -llapacke -llapack -lblas
 
 
 # target files 

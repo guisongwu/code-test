@@ -986,12 +986,12 @@ double func_u(double x, double y) {
 
 int main(int argc, char *argv[]) {
 	// ------------------------------------- blas ------------------------------------------------
-	int n = 5;
-    float x[5] = {1, 2, 3, 4, 5};
-    float y[5] = {6, 7, 8, 9, 10};
-	// Compute dot product using cblas_sdot
-	float result = cblas_sdot(n, x, 1, y, 1);
-	printf("Dot product: %f\n", result);	
+	/* int n = 5; */
+    /* float x[5] = {1, 2, 3, 4, 5}; */
+    /* float y[5] = {6, 7, 8, 9, 10}; */
+	/* // Compute dot product using cblas_sdot */
+	/* float result = cblas_sdot(n, x, 1, y, 1); */
+	/* printf("Dot product: %f\n", result); */	
 
 	// -------------------------------------- time_t ---------------------------------------------
 	/* time_t now = time(nullptr); */
