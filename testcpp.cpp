@@ -1001,6 +1001,17 @@ int main(int argc, char *argv[]) {
 	/* char* time_str = ctime(&now); */
     /* std::cout << "Local time: " << time_str << endl; */
 
+	// ---------------------------------- unsigned char & char -----------------------------------
+	/* unsigned char a = 255; // 0 ~ 255 */
+	/* printf("%d\n", a); */
+	/* char b = 127; // -128 ~ 127 */
+	/* printf("%d\n", b); */
+	/* printf("%c\n", 97); */
+	/* printf("%c\n", 65); */
+
+	// ------------------------------------------- gmp -------------------------------------------
+
+
     // ------------------------------------- Quadrature ------------------------------------------
     /* double numerical_integral = 0; */
     /* int npoints = 16; */
