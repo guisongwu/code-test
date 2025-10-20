@@ -32,20 +32,35 @@ bool get_token(FILE *fp, char *token)
 }
 
 
-int main(int argc, char* argv[]) {
-	// ------------------------------- lapacke ----------------------------------------
-	double a[4] = { 1., 3., 2., 4. };
-	double b[2] = { 5., 6. };
-	int n = 2, ipiv[2];
-	int info1 = LAPACKE_dgesv( LAPACK_ROW_MAJOR, n, 1, a, n, ipiv, b, 1);
-	int info2 = LAPACKE_dgesv( LAPACK_COL_MAJOR, n, 1, a, n, ipiv, b, n);
+/* int g_var; */
+/* int g_var = 1; */
 
-	if (info1 == 0) {
-		printf("Solution: x0 = %f, x1 = %f\n", b[0], b[1]);
-	}
-	if (info2 == 0) {
-		printf("Solution: x0 = %f, x1 = %f\n", b[0], b[1]);
-	}
+int main(int argc, char* argv[]) {
+	// ---------------------------- global variables with same name --------------------------
+	// In C, there can be global variables with the same name.
+	/* printf("%d\n", g_var); // 1 */
+
+	// -------------------------------- variable def location --------------------------------
+	// variables can be defined whenever it's needed.
+	/* int i = 0; */
+	/* printf("i = %d\n", i); */
+	/* int k; */
+	/* k = 1; */
+	/* printf("k = %d\n", k); */
+
+	// -------------------------------------- lapacke ----------------------------------------
+	/* double a[4] = { 1., 3., 2., 4. }; */
+	/* double b[2] = { 5., 6. }; */
+	/* int n = 2, ipiv[2]; */
+	/* int info1 = LAPACKE_dgesv( LAPACK_ROW_MAJOR, n, 1, a, n, ipiv, b, 1); */
+	/* int info2 = LAPACKE_dgesv( LAPACK_COL_MAJOR, n, 1, a, n, ipiv, b, n); */
+
+	/* if (info1 == 0) { */
+	/* 	printf("Solution: x0 = %f, x1 = %f\n", b[0], b[1]); */
+	/* } */
+	/* if (info2 == 0) { */
+	/* 	printf("Solution: x0 = %f, x1 = %f\n", b[0], b[1]); */
+	/* } */
 
     // --------------------------- mpicc for c program --------------------------------
 

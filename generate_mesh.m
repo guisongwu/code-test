@@ -2,7 +2,7 @@
 clear;
 clc;
 
-N = 8;
+N = 2;
 h = 1/N;
 
 mapnode = @(i,j) (i-1)*(N+1)+j;

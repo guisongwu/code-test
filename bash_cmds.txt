@@ -1,0 +1,13 @@
+# Some commands in bash
+
+echo | gcc -E -Wp,-v -                        // 查看 gcc 默认的头文件搜索路径
+gcc -print-search-dirs | grep libraries       // 查看 gcc 默认的库搜索路径
+file -i filename                              // 查看文件编码方式
+
+tmux list-windows                             // 查看 byobu 窗口
+tmux kill-window -t 2                         // 关闭 2 号 byobu 窗口
+
+wc -l filename                                // 查看文件行数
+find . -name "*.cpp" | xargs wc -l            // 查看当前目录下所有 cpp 文件的行数
+
+

@@ -121,12 +121,6 @@ double func2d(double x, double y) {
     return 1; 
 }
 
-namespace ELEM_TYPE {
-    enum {
-        TRIA,
-        QUAD
-    };
-}
 
 typedef unsigned short Btype;
 
@@ -234,237 +228,240 @@ void phgInfo(int verbose_level, const char *fmt, ...)
 }
 
 
-#if 0
-class Elem {
-  public:
+using Real3 = Eigen::Vector3d;
+#define NVert 4
+#define NEdge 4
 
-	// Note: call after updateJacobian().
-    Real getArea(Real3 *face_normal = nullptr,
-				 Real3 *face_df1 = nullptr,
-				 Real3 *face_df2 = nullptr);
-    Real getEdgeLength(int iside, Real3 *edge_normal = nullptr);
 
-    int index;
-    int verts[NVert];
-    int edges[NEdge];
-    int neigh[NEdge];  // >=0: elem index
-		       // -1:  boundry
-		       // -2:  remote neigh
-    //int rneigh[NEdge];
 
-    char ordering[NVert]; // Ordering of vertices:
+/* void linear_proj(Real xi, Real eta, RealVec &shape) { */
+/*     shape << (1.-xi)*(1.-eta), */ 
+/*              xi*(1.-eta), */ 
+/*              xi*eta, */ 
+/*              (1.-xi)*eta; */
+/* } */
 
+/* void updateJacobian(Elem &e, const double *lambda) */
+/* // */
+/* // Update elem's dFdx[3][2], Jac[2][3], det */
+/* // with simple linear projection */
+/* // */
+/* { */
+/*     int N = 4; */
+/*     Real xi = lambda[0]; */
+/*     Real eta = lambda[1]; */
+/*     RealVec shape(N), xyz(3); */
+/*     linear_proj(xi, eta, shape); */
+
+/*     Real x0 = e.verts[0][0]; */
+/*     Real x1 = e.verts[1][0]; */
+/*     Real x2 = e.verts[2][0]; */
+/*     Real x3 = e.verts[3][0]; */
     
-    Btype btypes[NEdge];
-    //char ordering[NVert];
-    int edges_sgn[NEdge];
+/*     Real y0 = e.verts[0][1]; */
+/*     Real y1 = e.verts[1][1]; */
+/*     Real y2 = e.verts[2][1]; */
+/*     Real y3 = e.verts[3][1]; */
 
-    // Geom 
-    Real area;
-    Real edge_length[NEdge];
-    Real edge_normal[NEdge][3];  // edge outer normal
-    Real face_normal[3];		 // face outer normal
-	
-    
-    // Update for each quad point
-    // Eigen::Matrix2d dFdx;
-    // Eigen::Matrix2d Jac;
-    Eigen::Matrix<Real, 3, 2> dFdx;
-    Eigen::Matrix<Real, 2, 3> Jac;
-    Real Det;
-    int  sgn;
+/*     Real z0 = e.verts[0][2]; */
+/*     Real z1 = e.verts[1][2]; */
+/*     Real z2 = e.verts[2][2]; */
+/*     Real z3 = e.verts[3][2]; */
 
-	// // Linearized 
-    // Eigen::Matrix<Real, 3, 2> dFdxLn;
-    // Eigen::Matrix<Real, 2, 3> JacLn;
-    // Real DetLn;
+/*     e.dFdx << (1.-eta)*(x1-x0) + eta*(x2-x3), (1.-xi)*(x3-x0) + xi*(x2-x1), */
+/*               (1.-eta)*(y1-y0) + eta*(y2-y3), (1.-xi)*(y3-y0) + xi*(y2-y1), */
+/*               (1.-eta)*(z1-z0) + eta*(z2-z3), (1.-xi)*(z3-z0) + xi*(z2-z1); */
 
-  private:
-};
+/*     xyz(0) = x0*shape(0) + x1*shape(1) + x2*shape(2) + x3*shape(3); */
+/*     xyz(1) = y0*shape(0) + y1*shape(1) + y2*shape(2) + y3*shape(3); */
+/*     xyz(2) = z0*shape(0) + z1*shape(1) + z2*shape(2) + z3*shape(3); */
 
 
-class Elem {
-    public:
-        Elem();
-        double verts[4][3];
-        RealMat dFdx;
-        RealMat Jac;
-        double Det;
-        int sgn;
-};
+/*     //      Mult(PointMat, dshape, dFdx); */
+/*     //           3 x nbas  nbas x 2    3x2 */
+/*     // */
+/* 	// Det = || dF1 x dF2 || */
+/* 	// Jac = (A^T A)^{-1} A^T */
+/* 	// */ 
 
-
-Elem::Elem() : dFdx(3,2), Jac(2,3)
-{
-    double external_data[4][3] = {
-        {0.0, 0.0, 0.0},
-        {2.0, 0.0, 4.0},
-        {2.0, 2.0, 4.0},
-        {0.0, 2.0, 0.0}
-    };
-    for(int i=0; i<4; ++i) {
-        for(int j=0; j<3; ++j) {
-            verts[i][j] = external_data[i][j];
-        }
-    }
-}
-
-
-void linear_proj(Real xi, Real eta, RealVec &shape) {
-    shape << (1.-xi)*(1.-eta), 
-             xi*(1.-eta), 
-             xi*eta, 
-             (1.-xi)*eta;
-}
-
-
-void updateJacobian(Elem &e, const double *lambda)
-//
-// Update elem's dFdx[3][2], Jac[2][3], det
-// with simple linear projection
-//
-{
-    int N = 4;
-    Real xi = lambda[0];
-    Real eta = lambda[1];
-    RealVec shape(N), xyz(3);
-    linear_proj(xi, eta, shape);
-
-    Real x0 = e.verts[0][0];
-    Real x1 = e.verts[1][0];
-    Real x2 = e.verts[2][0];
-    Real x3 = e.verts[3][0];
-    
-    Real y0 = e.verts[0][1];
-    Real y1 = e.verts[1][1];
-    Real y2 = e.verts[2][1];
-    Real y3 = e.verts[3][1];
-
-    Real z0 = e.verts[0][2];
-    Real z1 = e.verts[1][2];
-    Real z2 = e.verts[2][2];
-    Real z3 = e.verts[3][2];
-
-    e.dFdx << (1.-eta)*(x1-x0) + eta*(x2-x3), (1.-xi)*(x3-x0) + xi*(x2-x1),
-              (1.-eta)*(y1-y0) + eta*(y2-y3), (1.-xi)*(y3-y0) + xi*(y2-y1),
-              (1.-eta)*(z1-z0) + eta*(z2-z3), (1.-xi)*(z3-z0) + xi*(z2-z1);
-
-    xyz(0) = x0*shape(0) + x1*shape(1) + x2*shape(2) + x3*shape(3);
-    xyz(1) = y0*shape(0) + y1*shape(1) + y2*shape(2) + y3*shape(3);
-    xyz(2) = z0*shape(0) + z1*shape(1) + z2*shape(2) + z3*shape(3);
-
-
-    //      Mult(PointMat, dshape, dFdx);
-    //           3 x nbas  nbas x 2    3x2
-    //
-	// Det = || dF1 x dF2 ||
-	// Jac = (A^T A)^{-1} A^T
-	// 
-
-	/* if (Params->use_proj_sphere) { */
-	/* 	const Real R = proj_sphere_radius; */
-	/* 	Real x = xyz(0); */
-	/* 	Real y = xyz(1); */
-	/* 	Real z = xyz(2); */
-	/* 	Real r = sqrt(x*x + y*y + z*z); */
+/* 	/1* if (Params->use_proj_sphere) { *1/ */
+/* 	/1* 	const Real R = proj_sphere_radius; *1/ */
+/* 	/1* 	Real x = xyz(0); *1/ */
+/* 	/1* 	Real y = xyz(1); *1/ */
+/* 	/1* 	Real z = xyz(2); *1/ */
+/* 	/1* 	Real r = sqrt(x*x + y*y + z*z); *1/ */
 			
-	/* 	RealMat	Jx(3, 3); */
+/* 	/1* 	RealMat	Jx(3, 3); *1/ */
 
-	/* 	Jx << y*y + z*z, -x*y	 , -x*z, */
-	/* 	    -x*y	  , x*x + z*z, -y*z, */
-	/* 	    -x*z	  , -y*z	 , x*x + y*y; */
+/* 	/1* 	Jx << y*y + z*z, -x*y	 , -x*z, *1/ */
+/* 	/1* 	    -x*y	  , x*x + z*z, -y*z, *1/ */
+/* 	/1* 	    -x*z	  , -y*z	 , x*x + y*y; *1/ */
 
-	/* 	Jx *= R / (r*r*r); */
+/* 	/1* 	Jx *= R / (r*r*r); *1/ */
 
-	/* 	e.dFdx = Jx * e.dFdx; */
-	/* } */
+/* 	/1* 	e.dFdx = Jx * e.dFdx; *1/ */
+/* 	/1* } *1/ */
 
 	
-    {
-		//
-		//
-		// Physical 
-		// 
-		// 
-		Real d[6] = {e.dFdx(0,0), e.dFdx(1,0), e.dFdx(2,0),  // DF^T (2x3)
-					 e.dFdx(0,1), e.dFdx(1,1), e.dFdx(2,1)}; 
-		Real ad[6];
-		Real e_, g_, f_;
-		// DF^T DF = [e f]
-		//           [f g]
-		// adj(...) = [g, -f]          
-		//            [-f, e]
-		e_ = d[0]*d[0] + d[1]*d[1] + d[2]*d[2];
-		g_ = d[3]*d[3] + d[4]*d[4] + d[5]*d[5];
-		f_ = d[0]*d[3] + d[1]*d[4] + d[2]*d[5];
+/*     { */
+/* 		// */
+/* 		// */
+/* 		// Physical */ 
+/* 		// */ 
+/* 		// */ 
+/* 		Real d[6] = {e.dFdx(0,0), e.dFdx(1,0), e.dFdx(2,0),  // DF^T (2x3) */
+/* 					 e.dFdx(0,1), e.dFdx(1,1), e.dFdx(2,1)}; */ 
+/* 		Real ad[6]; */
+/* 		Real e_, g_, f_; */
+/* 		// DF^T DF = [e f] */
+/* 		//           [f g] */
+/* 		// adj(...) = [g, -f] */          
+/* 		//            [-f, e] */
+/* 		e_ = d[0]*d[0] + d[1]*d[1] + d[2]*d[2]; */
+/* 		g_ = d[3]*d[3] + d[4]*d[4] + d[5]*d[5]; */
+/* 		f_ = d[0]*d[3] + d[1]*d[4] + d[2]*d[5]; */
 
-		//  adj(DF^T x DF) x DF^T
-		ad[0] = d[0]*g_ - d[3]*f_;	
-		ad[1] = d[3]*e_ - d[0]*f_;
-		ad[2] = d[1]*g_ - d[4]*f_;
-		ad[3] = d[4]*e_ - d[1]*f_;
-		ad[4] = d[2]*g_ - d[5]*f_;
-		ad[5] = d[5]*e_ - d[2]*f_;
+/* 		//  adj(DF^T x DF) x DF^T */
+/* 		ad[0] = d[0]*g_ - d[3]*f_; */	
+/* 		ad[1] = d[3]*e_ - d[0]*f_; */
+/* 		ad[2] = d[1]*g_ - d[4]*f_; */
+/* 		ad[3] = d[4]*e_ - d[1]*f_; */
+/* 		ad[4] = d[2]*g_ - d[5]*f_; */
+/* 		ad[5] = d[5]*e_ - d[2]*f_; */
 
-		e.Det = e_ * g_ - f_ * f_;	// det^2
-		e.Jac << ad[0], ad[2], ad[4], ad[1], ad[3], ad[5];
-		e.Jac /= e.Det; // inv(DF^T x DF) x DF
-		e.Det = sqrt(e.Det);
-		e.sgn = 1;
-	}
+/* 		e.Det = e_ * g_ - f_ * f_;	// det^2 */
+/* 		e.Jac << ad[0], ad[2], ad[4], ad[1], ad[3], ad[5]; */
+/* 		e.Jac /= e.Det; // inv(DF^T x DF) x DF */
+/* 		e.Det = sqrt(e.Det); */
+/* 		e.sgn = 1; */
+/* 	} */
 
-    return;
-}
+/*     return; */
+/* } */
 
-void lambda2xyzDirect(const Elem &e, Real xi, Real eta,
-				  Real &x, Real &y, Real &z) 
-//
-// lambda -> xyz using simple linear projection
-// 
-{
-    Real N0 = (1.-xi) * (1.-eta);
-    Real N1 = xi * (1.-eta);
-    Real N2 = xi * eta;
-    Real N3 = (1.-xi) * eta;
+/* void lambda2xyzDirect(const Elem &e, Real xi, Real eta, */
+/* 				  Real &x, Real &y, Real &z) */ 
+/* // */
+/* // lambda -> xyz using simple linear projection */
+/* // */ 
+/* { */
+/*     Real N0 = (1.-xi) * (1.-eta); */
+/*     Real N1 = xi * (1.-eta); */
+/*     Real N2 = xi * eta; */
+/*     Real N3 = (1.-xi) * eta; */
 
-    // Use simple linear
-    x = e.verts[0][0] * N0
-	    + e.verts[1][0] * N1
-	    + e.verts[2][0] * N2
-	    + e.verts[3][0] * N3;
-    y = e.verts[0][1] * N0
-	    + e.verts[1][1] * N1
-	    + e.verts[2][1] * N2
-	    + e.verts[3][1] * N3;
-    z = e.verts[0][2] * N0
-	    + e.verts[1][2] * N1
-	    + e.verts[2][2] * N2
-	    + e.verts[3][2] * N3;
-    return;
-}
+/*     // Use simple linear */
+/*     x = e.verts[0][0] * N0 */
+/* 	    + e.verts[1][0] * N1 */
+/* 	    + e.verts[2][0] * N2 */
+/* 	    + e.verts[3][0] * N3; */
+/*     y = e.verts[0][1] * N0 */
+/* 	    + e.verts[1][1] * N1 */
+/* 	    + e.verts[2][1] * N2 */
+/* 	    + e.verts[3][1] * N3; */
+/*     z = e.verts[0][2] * N0 */
+/* 	    + e.verts[1][2] * N1 */
+/* 	    + e.verts[2][2] * N2 */
+/* 	    + e.verts[3][2] * N3; */
+/*     return; */
+/* } */
+
+/* void xyz2lambdaDirect(const Elem &e, Real x, Real y, Real z, */
+/* 				 Real &xi, Real &eta) */
+/* // */
+/* //  xyz -------------> lambda */
+/* //        Affine map */
+/* // */        
+/* { */
+/* 	// */
+/* 	// x - x0 */
+/* 	// */ 
+/* 	x -= e.verts[0][0]; */
+/* 	y -= e.verts[0][1]; */
+/* 	z -= e.verts[0][2]; */
+
+/*     xi   = e.Jac(0, 0) * x + e.Jac(0, 1) * y + e.Jac(0, 2) * z; */
+/*     eta  = e.Jac(1, 0) * x + e.Jac(1, 1) * y + e.Jac(1, 2) * z; */
+/* 	return; */
+/* } */
 
 
-void xyz2lambdaDirect(const Elem &e, Real x, Real y, Real z,
-				 Real &xi, Real &eta)
-//
-//  xyz -------------> lambda
-//        Affine map
-//        
-{
-	//
-	// x - x0
-	// 
-	x -= e.verts[0][0];
-	y -= e.verts[0][1];
-	z -= e.verts[0][2];
+enum ELEM_TYPE {
+	TRIA= 2,
+	QUAD = 3
+};
 
-    xi   = e.Jac(0, 0) * x + e.Jac(0, 1) * y + e.Jac(0, 2) * z;
-    eta  = e.Jac(1, 0) * x + e.Jac(1, 1) * y + e.Jac(1, 2) * z;
-	return;
-}
+class Elem {
+	public:
+		// Note: call after updateJacobian().
+		/* virtual Real getArea(Real3 *face_normal = nullptr, */
+		/* Real3 *face_df1 = nullptr, */
+		/* Real3 *face_df2 = nullptr); */
+		/* virtual Real getEdgeLength(int iside, Real3 *edge_normal = nullptr); */
+		Elem() = default;
+		virtual ~Elem() = default;
+
+		ELEM_TYPE elem_type; // 2 for Triangle
+							 // 3 for Quad
+		int index;
+		int verts[NVert];
+		int edges[NEdge];
+		int neigh[NEdge];  // >=0: elem index
+						   // -1:  boundry
+						   // -2:  remote neigh
+
+		char ordering[NVert]; // Ordering of vertices:
+		Btype btypes[NEdge];
+		int edges_sgn[NEdge];
+
+		// Geom 
+		Real area;
+		Real edge_length[NEdge];
+		Real edge_normal[NEdge][3];  // edge outer normal
+		Real face_normal[3];		 // face outer normal
+
+		// Update for each quad point
+		Eigen::Matrix<Real, 3, 2> dFdx;
+		Eigen::Matrix<Real, 2, 3> Jac;
+		Real Det;
+		int sgn;
+
+		// Iteration for different elem type
+		virtual int nvert() const = 0;
+		virtual int nedge() const = 0;
+	private:
+};
+
+class Triangle : public Elem {
+	public:
+		Triangle() { elem_type = TRIA; }
+		int nvert() const override {
+			assert(elem_type == TRIA);
+			return 3;
+		}
+		int nedge() const override {
+			assert(elem_type == TRIA);
+			return 3;
+		}
+};
+
+
+class Quad : public Elem {
+	public:
+		Quad() { elem_type = QUAD; }
+		int nvert() const override {
+			assert(elem_type == QUAD);
+			return 4;
+		}
+		int nedge() const override {
+			assert(elem_type == QUAD);
+			return 4;
+		}
+};
+
+
 
 typedef Btype (*BC_FUNCTION)(int mark);
-
 
 static Btype default_bc_map(int mark)
 {
@@ -497,8 +494,219 @@ bool get_token(FILE *fp, char *token)
 
 
 #define MAX_TOKEN_LEN 1024
-/* void read_mesh(const char *mesh_file_name, BC_FUNCTION user_bc_map, const char *part_file_name) */
-void read_mesh(const char *mesh_file_name, BC_FUNCTION user_bc_map)
+
+
+class Grid {
+	public:
+		Grid() : verb(1) {}
+		//
+		// Initial grid:
+		//    1. coord, elems
+		//    2. edges
+		//    3. types_xxxx
+		//    4. btypes and neighs
+		//    5. partition
+		//    6. local_grid
+		//    7. gref
+		//    8. geom
+		//    9. statistics
+		//
+		void read_mesh(const char *name, BC_FUNCTION user_bc_map = nullptr, 
+				const char *part_file_name = nullptr);
+
+		/* virtual void partition(const char *part_file_name = nullptr) {}; */
+		/* virtual void get_local_grid() {}; */
+
+		/* void init_geom();  // isop_map, element area, length, normal, etc */
+		virtual void init_gref();  // vert_to_elem, edge_to_elem, edge sign
+		/* void statistic();  // statitics */
+
+		/* virtual void check_conformal(); */
+		/* void check_conformal2(); */
+		/* void output_gmsh(const char *file_name, bool second_order = false); */
+
+		// Geom
+		/* // Mapping with proj sphere + Isop */
+		/* void lambda2xyz(const Elem &e, Real xi, Real eta, Real &x, Real &y, Real &z) const; */
+		/* // Mapping with Isop only */
+		/* void lambda2xyzDirect(const Elem &e, Real xi, Real eta, Real &x, Real &y, Real &z) const; */
+
+		/* void xyz2lambda(const Elem &e, Real x, Real y, Real &xi, Real &eta) const; */
+		/* // Mapping with proj sphere + affine */
+		/* void xyz2lambda(const Elem &e, Real x, Real y, Real z, Real &xi, Real &eta) const; */
+		/* // Mapping with affine only */
+		/* void xyz2lambdaDirect(const Elem &e, Real x, Real y, Real z, Real &xi, Real &eta) const; */
+
+		/* void updateJacobian(Elem &e, const double *lambda); */
+		/* void updateJacobian(Elem &e); */
+		/* //void getFaceLambda(int v0, int v1, int v2, const Real *p, Real *lambda) const; */
+		/* bool getFaceLambda(Elem &e, int iside, const Real *p, Real *lambda, bool do_swap = true) const; */
+
+		/* // Utils */
+		/* static int compare_edge(const void *p0, const void *p1); */
+
+		/* virtual int nvert_global() {return nvert;}; */	
+		/* virtual int nedge_global() {return nedge;}; */
+		/* virtual int nelem_global() {return nelem;}; */
+
+		/* unsigned int until_elem(unsigned int ielem, Btype btype = BDRY_MASK::OWNER ); */
+
+		// nums
+		int nvert;
+		int nedge;
+		int nelem;
+		int ntria;
+		int nquad;
+
+		Coord *verts = nullptr;
+		Edge *edges = nullptr;
+		Elem **elems = nullptr;
+		//Edge *bdry_edges = nullptr;
+
+		Btype *types_vert = nullptr;
+		Btype *types_edge = nullptr;
+		Btype *types_elem = nullptr;
+
+		BC_FUNCTION bc_map;
+		struct gRef {
+			unsigned int eind;			// elem index
+			unsigned int gind;			// geom index
+		};
+		std::vector<std::vector<gRef>> vert_to_elem;
+		std::vector<std::vector<gRef>> edge_to_elem;
+
+		// Isop
+		/* Dof *isop_map = nullptr; */
+		Real proj_sphere_radius = 1.;
+
+		// layered
+		int nlayer;
+
+		int rank;
+		int nprocs;
+		/* MPI_Comm comm; */
+
+		int verb;
+	private:
+
+};
+
+#define SortIndex(v0, v1)  {			\
+	if (v0 > v1) {				\
+	    int _tmp = v0; v0 = v1; v1 = _tmp;	\
+	}					\
+    }
+
+namespace REF_ELEM {
+	int EdgeVertTria[3][3] = {
+		{0, 1, 2}, 
+		{1, 2, 0}, 
+		{2, 0, 1}
+	};
+	int EdgeVertQuad[4][3] = {
+		{0, 1, 2}, 
+		{1, 2, 3}, 
+		{2, 3, 0},
+        {3, 0, 1}
+	};
+}
+
+#define GetEdgeVertTria(i,j) REF_ELEM::EdgeVertTria[i][j]
+#define GetEdgeVertQuad(i,j) REF_ELEM::EdgeVertQuad[i][j]
+
+void
+Grid::init_gref()
+{
+    phgInfo(0, "Serical or local gref\n");
+
+    //
+    // Vert to elem list, edge to elem list
+    // The element in the list in ordered so that the element indices increase.
+    // In case of crack mesh, the order is not garenteed for copied edges.
+    //
+    vert_to_elem.resize(nvert);
+    edge_to_elem.resize(nedge);
+
+    for (unsigned int ielem = 0; ielem < nelem; ielem++) {
+		const Elem &e = *elems[ielem];
+
+		for (unsigned int i = 0; i < e.nvert(); i++) {
+			int vid = e.verts[i];
+			gRef gr = { ielem, i };
+
+			vert_to_elem[vid].push_back(gr);
+		}
+
+		for (unsigned int i = 0; i < e.nedge(); i++) {
+			int eid = e.edges[i];
+			gRef gr = { ielem, i };
+			std::vector<gRef> &e2E = edge_to_elem[eid];
+
+			// Sort edge to elem list
+			if (e2E.size() == 1
+				&& e2E[0].eind > ielem ) {
+				e2E.insert(e2E.begin(), gr);
+			}
+			else {
+				e2E.push_back(gr);
+			}
+		}
+    }
+
+    // Sort vert to elem list
+    for (unsigned int ivert = 0; ivert < nvert; ivert++) {
+		sort(begin(vert_to_elem[ivert]),
+			 end(vert_to_elem[ivert]),
+			 [](gRef a, gRef b) {return a.eind > b.eind; });
+    }
+
+    // assign element edge signs
+    for (unsigned int iedge = 0; iedge < nedge; iedge++) {
+		int ne = edge_to_elem[iedge].size();
+		assert(ne == 1 || ne == 2);
+
+		// First elem has POISITIVE edge sgn.
+		// In FESpace::interp, the value is interpolated from first element.
+		gRef *gr = &edge_to_elem[iedge][0];
+		elems[gr->eind]->edges_sgn[gr->gind] = 1;
+
+		if (ne == 2) {
+			// Second elem has NEGETIVE edge sgn
+			gr = &edge_to_elem[iedge][1];
+			elems[gr->eind]->edges_sgn[gr->gind] = -1;
+		}
+    }
+
+
+#if 0
+    // Check
+    for (unsigned int i = 0; i < nvert; i++) {
+		phgInfo(2, "Vert[%5d]: ", i);
+		for (unsigned int j = 0; j < vert_to_elem[i].size(); j++) {
+			phgInfo(2, "(%4d, %d), ",  vert_to_elem[i][j].eind,
+					vert_to_elem[i][j].gind
+					);
+		}
+		phgInfo(2, "\n");
+    }
+#endif
+#if 0	
+    for (unsigned int i = 0; i < nedge; i++) {
+		phgInfo(2, "Edge[%5d]: ", i);
+		for (unsigned int j = 0; j < edge_to_elem[i].size(); j++) {
+			phgInfo(2, "(%4d, %d), ",  edge_to_elem[i][j].eind,
+					edge_to_elem[i][j].gind
+					);
+		}
+		phgInfo(2, "\n");
+    }
+#endif
+    return;
+}
+
+
+void 
+Grid::read_mesh(const char *mesh_file_name, BC_FUNCTION user_bc_map, const char *part_file_name)
 // ------------------------------------------------------------
 //
 //
@@ -509,7 +717,6 @@ void read_mesh(const char *mesh_file_name, BC_FUNCTION user_bc_map)
 {
     int nbdry_edge;
     BdryEdge *bdry_edges;
-    BC_FUNCTION bc_map;
 
     if (user_bc_map == NULL)
 		bc_map = default_bc_map;
@@ -517,13 +724,8 @@ void read_mesh(const char *mesh_file_name, BC_FUNCTION user_bc_map)
 		bc_map = user_bc_map;
 
     /* if (verb >=1 && phgRank == 0) */
-    cout << "Reading Mesh " << mesh_file_name << endl;
+	std::cout << "Read Mesh " << mesh_file_name << endl;
 
-    Coord *verts = NULL;
-    int nvert;
-    // int *bdry_edges = NULL;
-    // int *faces = NULL;
-    
 #define READ_NUMBER													\
     if (!get_token(fp, token)) strcpy(token, "End");				\
     if (isalpha((int)(token[0]))) {									\
@@ -538,7 +740,7 @@ void read_mesh(const char *mesh_file_name, BC_FUNCTION user_bc_map)
     int n;
     if ((fp = fopen(mesh_file_name, "r")) == NULL) {
 		printf("can't open mesh file \"%s\"!\n", mesh_file_name);
-		/* phgAbort(0); */
+		abort();
 		return;
     }
 
@@ -557,24 +759,24 @@ void read_mesh(const char *mesh_file_name, BC_FUNCTION user_bc_map)
     while (true) {
 		if (!get_token(fp, token))
 			break;
-		//next_token:
+		// next_token:
 		if (!strcasecmp(token, "$Nodes")) {
 			if (!get_token(fp, token))
 				ERROR;
 			n = atoi(token);
 			/* if (verb >= 1 && phgRank == 0) */
-            fprintf(stderr, "number of vertices: %d\n", n);
+			/* fprintf(stderr, "number of vertices: %d\n", n); */
 			verts = new Coord[n]();
 
 			unsigned int i;
 			for (i = 0; i < n; i++) {
-				READ_NUMBER;	// Unused
+				READ_NUMBER;	// Unused, index of vertex
 				READ_NUMBER;
 				verts[i][0] = atof(token);
 				if (!get_token(fp, token))
 					ERROR;
 				verts[i][1] = atof(token);
-				//phgInfo(0, "vert: %d %lf %lf\n", i, verts[i][0],verts[i][1]);
+				// phgInfo(0, "vert: %d %lf %lf\n", i, verts[i][0],verts[i][1]);
 				if (!get_token(fp, token))
 					ERROR;
 				verts[i][2] = atof(token); 
@@ -593,11 +795,12 @@ void read_mesh(const char *mesh_file_name, BC_FUNCTION user_bc_map)
 				ERROR;
 			n = atoi(token);
 			/* if (verb >= 1 && phgRank == 0) */
-            fprintf(stderr, "number of elements: %d\n", n);
+			/* fprintf(stderr, "number of elements: %d\n", n); */
 
 			bdry_edges = new BdryEdge[n]();
-			elems = new Elem[n]();
-			int nedge_read = 0, nface_read = 0;
+			/* elems = new Elem[n](); // creates an array of Elem objects, not pointers to Elem */
+			elems = new Elem*[n](); // creates an array of Elem pointers
+			int nedge_read = 0, nface_read = 0, ntria_read = 0, nquad_read = 0;
 			int elem_type = 0;
 
 			unsigned int i;
@@ -608,8 +811,8 @@ void read_mesh(const char *mesh_file_name, BC_FUNCTION user_bc_map)
 
 				READ_NUMBER;	// # element type
 				elem_type = atoi(token);
-				// edge or quadrilateral
-				assert(elem_type == 1 || elem_type == 3);
+				// point or edge or triangle or quadrilateral
+				assert(elem_type == 15 || elem_type == 1 || elem_type == 2 || elem_type == 3);
 
 				READ_NUMBER;	// # of tags
 				int ntag = atoi(token);
@@ -627,7 +830,6 @@ void read_mesh(const char *mesh_file_name, BC_FUNCTION user_bc_map)
 				for (; itag < ntag; itag++) {
 					READ_NUMBER;  //  rest tag not used
 				}
-
 				if (elem_type == 1) {
 					// 
 					// edges
@@ -644,13 +846,38 @@ void read_mesh(const char *mesh_file_name, BC_FUNCTION user_bc_map)
 					bdry_edges[nedge_read][1] = v1;
 					bdry_edges[nedge_read][2] = phy_id;  // edge mark
 					nedge_read++;
-				}
-				else if (elem_type == 3) {
+				} else if (elem_type == 15) {
+					READ_NUMBER;
+                } else if (elem_type == 2) {
 					//
-					// faces
+					// triangles
 					// 
 					READ_NUMBER;
-					Elem *e = &elems[nface_read];
+					elems[nface_read] = new Triangle();
+					Elem *e = elems[nface_read];
+					e->verts[0] = atoi(token) - 1;
+					if (!get_token(fp, token))
+						ERROR;
+					e->verts[1] = atoi(token) - 1;
+					if (!get_token(fp, token))
+						ERROR;
+					e->verts[2] = atoi(token) - 1;
+					e->index = nface_read;
+					// e->mark = phy_id;
+					// if (phy_id == 0) {
+					// 	phgInfo(2, "Discard elem\n");
+					// }
+					// else {
+					nface_read++;
+					ntria_read++;
+					//}
+				} else if (elem_type == 3) {
+					//
+					// quadrilaterals
+					// 
+					READ_NUMBER;
+					elems[nface_read] = new Quad();
+					Elem *e = elems[nface_read];
 					e->verts[0] = atoi(token) - 1;
 					if (!get_token(fp, token))
 						ERROR;
@@ -669,6 +896,7 @@ void read_mesh(const char *mesh_file_name, BC_FUNCTION user_bc_map)
 					// }
 					// else {
 					nface_read++;
+					nquad_read++;
 					//}
 				}
 				else {
@@ -676,6 +904,8 @@ void read_mesh(const char *mesh_file_name, BC_FUNCTION user_bc_map)
 				}
 			}
 			nelem = nface_read;
+			ntria = ntria_read;
+			nquad = nquad_read;
 			nbdry_edge = nedge_read;
 			assert(i == n);
 			// if (i < n)
@@ -686,8 +916,19 @@ void read_mesh(const char *mesh_file_name, BC_FUNCTION user_bc_map)
 			assert(!strcasecmp(token, "$EndElements"));
 		}
     }
-    qsort(bdry_edges, nbdry_edge, sizeof(BdryEdge),
-		  compare_bdry_edge);
+#if 0
+    printf("debug info from read_mesh:\n nvert = %d\n nelem = %d\n nbdry_edge = %d\n", nvert, nelem, nbdry_edge);
+    cout << "verts:\n";
+    for (int i = 0; i < nvert; i++) {
+        cout << verts[i][0] << "\t" << verts[i][1] << "\t" << verts[i][2] << endl;
+    }
+    cout << "elems:\n";
+    for (int i = 0; i < nelem; i++) {
+        cout << elems[i].verts[0] << "\t" << elems[i].verts[1] << "\t" << elems[i].verts[2] << "\t" << elems[i].verts[3] << "\t";
+    }
+#endif
+
+    qsort(bdry_edges, nbdry_edge, sizeof(BdryEdge), compare_bdry_edge);
 
 
 
@@ -697,50 +938,65 @@ void read_mesh(const char *mesh_file_name, BC_FUNCTION user_bc_map)
     // 
     // ------------------------------------------------------------
 
-    edges	= new Edge[nelem * 4]();
+    edges = new Edge[nelem * 4]();
+	int edge_count = 0;
     for (unsigned int i = 0; i < nelem; i++) {
 		int v0, v1;
-		for (unsigned int j = 0; j < 4; j++) {
-			v0 = elems[i].verts[GetEdgeVert(j, 0)];
-			v1 = elems[i].verts[GetEdgeVert(j, 1)];
+		for (unsigned int j = 0; j < elems[i]->nedge(); j++) {
+			if (elems[i]->elem_type == TRIA) {
+				v0 = elems[i]->verts[GetEdgeVertTria(j, 0)];
+				v1 = elems[i]->verts[GetEdgeVertTria(j, 1)];
+			} else {
+				v0 = elems[i]->verts[GetEdgeVertQuad(j, 0)];
+				v1 = elems[i]->verts[GetEdgeVertQuad(j, 1)];
+			}
 
 			SortIndex(v0, v1);
 	    
-			edges[i*4+j][0] = v0;
-			edges[i*4+j][1] = v1;
+			/* edges[i*4+j][0] = v0; */
+			/* edges[i*4+j][1] = v1; */
+			edges[edge_count][0] = v0;
+			edges[edge_count][1] = v1;
+			edge_count++;
 		}
 
 		// Ordering
 		{
 			int V0, V1, V2, V3, v0, v1, v2, v3;
-			V0 = elems[i].verts[0];
-			V1 = elems[i].verts[1];
-			V2 = elems[i].verts[2];
-			V3 = elems[i].verts[3];
+			V0 = elems[i]->verts[0];
+			V1 = elems[i]->verts[1];
+			V2 = elems[i]->verts[2];
+			if (elems[i]->elem_type == QUAD)
+				V3 = elems[i]->verts[3];
 
 			v0 = v1 = v2 = v3 = 0;
 			(V0 > V1) ? v0++ : v1++;
 			(V0 > V2) ? v0++ : v2++;
-			(V0 > V3) ? v0++ : v3++;
 			(V1 > V2) ? v1++ : v2++;
-			(V1 > V3) ? v1++ : v3++;
-			(V2 > V3) ? v2++ : v3++;
+			if (elems[i]->elem_type == QUAD)
+			{
+				(V0 > V3) ? v0++ : v3++;
+				(V1 > V3) ? v1++ : v3++;
+				(V2 > V3) ? v2++ : v3++;
+			}
 
-			elems[i].ordering[0] = v0;
-			elems[i].ordering[1] = v1;
-			elems[i].ordering[2] = v2;
-			elems[i].ordering[3] = v3;
+			elems[i]->ordering[0] = v0;
+			elems[i]->ordering[1] = v1;
+			elems[i]->ordering[2] = v2;
+			if (elems[i]->elem_type == QUAD)
+				elems[i]->ordering[3] = v3;
 		}
     }
     // for (i = 0; i < 3*nelem; i++)
     // 	phgInfo(2, "edge %d: %d %d\n", i, edges[i][0], edges[i][1]);
 
-    qsort(edges, nelem*4, sizeof(Edge), compare_edge);
+    /* qsort(edges, nelem*4, sizeof(Edge), compare_edge); */
+    qsort(edges, edge_count, sizeof(Edge), compare_edge);
 
     int count = 0; 
     {
 		int i0 = 0;
-		for (unsigned int i = i0+1; i < 4*nelem; i++) {
+		for (unsigned int i = i0+1; i < edge_count; i++) {
 			int cmp = compare_edge(edges + i0,
 								   edges + i);
 			if (cmp < 0) {
@@ -753,22 +1009,29 @@ void read_mesh(const char *mesh_file_name, BC_FUNCTION user_bc_map)
 		count = i0 + 1;
     }
     nedge = count;
+    // cout << "nedge = " << nedge << endl;
 
+    /* if (verb >= 1 && phgRank == 0) */
+	/* fprintf(stderr, "number of edges: %d\n", nedge); */
 
     // for (unsigned int i = 0; i < nedge; i++) 
     // 	phgInfo(2, "edge: %d %d %d\n", i,
     // 	       edges[i][0],edges[i][1]);
 
 
-#define SortIndex(v0, v1)  {			\
-	if (v0 > v1) {				\
-	    int _tmp = v0; v0 = v1; v1 = _tmp;	\
-	}					\
-    }
+
+
+    /* if (verb >= 1 && phgRank == 0) { */
+	fprintf(stderr, "nvert = : %d\n", nvert);
+	fprintf(stderr, "nedge = : %d\n", nedge);
+	fprintf(stderr, "nelem = : %d\n", nelem);
+	fprintf(stderr, "ntria = : %d\n", ntria);
+	fprintf(stderr, "nquad = : %d\n", nquad);
+    /* } */
 
     // ------------------------------------------------------------
     //
-    // Boundary makers
+    // Boudnary makers
     //
     // ------------------------------------------------------------
     types_vert = new Btype[nvert](); 
@@ -780,19 +1043,22 @@ void read_mesh(const char *mesh_file_name, BC_FUNCTION user_bc_map)
 		edge2elem[i][0] = edge2elem[i][1] = -1;
 
     for (unsigned int ielem = 0; ielem < nelem; ielem++) {
-		Elem *e = &elems[ielem];
-
-		for (unsigned int j = 0; j < NEdge; j++) {
-			int v0 = e->verts[GetEdgeVert(j, 0)];
-			int v1 = e->verts[GetEdgeVert(j, 1)];
-
+		Elem *e = elems[ielem];
+		int v0, v1;
+		for (unsigned int j = 0; j < e->nedge(); j++) {
+			if (e->elem_type == TRIA) {
+				v0 = e->verts[GetEdgeVertTria(j, 0)];
+				v1 = e->verts[GetEdgeVertTria(j, 1)];
+			} else {
+				v0 = e->verts[GetEdgeVertQuad(j, 0)];
+				v1 = e->verts[GetEdgeVertQuad(j, 1)];
+			}
 			SortIndex(v0, v1);
-
-			Edge edge = {v0, v1}, *p; // Edge *p;
-
+			Edge edge = {v0, v1}, *p;
 			p = (Edge *) bsearch(&edge, edges,
 								 nedge, sizeof(Edge),
 								 compare_edge);
+
 			assert (p != NULL);
 			int iedge = p - edges;
 			e->edges[j] = iedge;
@@ -802,16 +1068,17 @@ void read_mesh(const char *mesh_file_name, BC_FUNCTION user_bc_map)
 			else if (edge2elem[iedge][1] == -1)
 				edge2elem[iedge][1] = ielem;
 			else
-				/* phgAbort(0); */
-                abort();
-                
+				abort();
 
 			e->neigh[j] = -1;
 		}
     }
+#if 0
+	for (int i = 0; i < nedge; i++) {
+		cout << edge2elem[i][0] << "\t" << edge2elem[i][1] << endl; 
+	}
+#endif
 
-
-    
 
     //
     // make neighs
@@ -841,33 +1108,29 @@ void read_mesh(const char *mesh_file_name, BC_FUNCTION user_bc_map)
 
 		Btype btype = (mark >= 0) ? bc_map(mark) : 0;
 		types_edge[iedge] = btype;
-		// phgInfo(0, "edge %d %d %d\n", iedge, mark, btype);
-		// if (btype & BDRY_MASK::DIRICHLET)
-		//     phgInfo(0, "(D %d)", iedge);
-		//     //phgInfo(2, "(D %d-%d )", e0->index, j0);
-
 
 		//
 		// Update elem edges info
 		// 
 		int ielem0 = edge2elem[iedge][0];
 		int ielem1 = edge2elem[iedge][1];
+		int v0, v1;
 
 		if (ielem0 >= 0 && ielem1 >= 0) {
 			// Interior edge
-			Elem *e0 = &elems[ielem0];
-			Elem *e1 = &elems[ielem1];
+			Elem *e0 = elems[ielem0];
+			Elem *e1 = elems[ielem1];
 			int j0, j1;
 	    
-			for (j0 = 0; j0 < NEdge; j0++)
+			for (j0 = 0; j0 < e0->nedge(); j0++)
 				if (e0->edges[j0] == iedge)
 					break;
-			assert(j0 < NEdge);
+			assert(j0 < e0->nedge());
 
-			for (j1 = 0; j1 < NEdge; j1++)
+			for (j1 = 0; j1 < e1->nedge(); j1++)
 				if (e1->edges[j1] == iedge)
 					break;
-			assert(j1 < NEdge);
+			assert(j1 < e1->nedge());
 
 			types_edge[iedge] |= BDRY_MASK::INTERIOR;	    
 			e0->btypes[j0] = BDRY_MASK::INTERIOR | btype;
@@ -877,34 +1140,44 @@ void read_mesh(const char *mesh_file_name, BC_FUNCTION user_bc_map)
 			e1->neigh[j1] = ielem0;
 	    
 			// to vert
-			int v0 = e0->verts[GetEdgeVert(j0, 0)];  // fixeme: use v0_
-			int v1 = e0->verts[GetEdgeVert(j0, 1)];
+			if (e0->elem_type == TRIA) {
+				v0 = e0->verts[GetEdgeVertTria(j0, 0)];  // fixeme: use v0_
+				v1 = e0->verts[GetEdgeVertTria(j0, 1)];
+			} else {
+				v0 = e0->verts[GetEdgeVertQuad(j0, 0)];  // fixeme: use v0_
+				v1 = e0->verts[GetEdgeVertQuad(j0, 1)];
+			}
 			types_vert[v0] |= btype;
 			types_vert[v1] |= btype;
 		}
 		else if (ielem0 >= 0) {
 			// Boundary edge
-			Elem *e0 = &elems[ielem0];
+			Elem *e0 = elems[ielem0];
 			int j0;
 	    
-			for (j0 = 0; j0 < NEdge; j0++)
+			for (j0 = 0; j0 < e0->nedge(); j0++)
 				if (e0->edges[j0] == iedge)
 					break;
-			assert(j0 < NEdge);
+			assert(j0 < e0->nedge());
 
 			e0->btypes[j0] = btype;
 			e0->neigh[j0] = -1;
 
 			// to vert
-			int v0 = e0->verts[GetEdgeVert(j0, 0)];  // fixeme: use v0_
-			int v1 = e0->verts[GetEdgeVert(j0, 1)];
+			if (e0->elem_type == TRIA) {
+				v0 = e0->verts[GetEdgeVertTria(j0, 0)];  // fixeme: use v0_
+				v1 = e0->verts[GetEdgeVertTria(j0, 1)];
+			} else {
+				v0 = e0->verts[GetEdgeVertQuad(j0, 0)];  // fixeme: use v0_
+				v1 = e0->verts[GetEdgeVertQuad(j0, 1)];
+			}
 			types_vert[v0] |= btype;
 			types_vert[v1] |= btype;
 		}
 		else {
-			/* phgAbort(0);  // edge with no element */
-            abort();
+			abort();  // edge with no element
 		}
+
     }  
 
     // // Dump neighs
@@ -915,18 +1188,22 @@ void read_mesh(const char *mesh_file_name, BC_FUNCTION user_bc_map)
     // 	       );
     // }
 
-    // ------------------------ not tested ----------------------------
 	/* partition(part_file_name); */
     /* get_local_grid(); */
 
-    /* init_gref(); */
+    
+    init_gref();
     /* init_geom(); */
 
+
+    /* // phgInfo(0, "debug exit\n"); */
+    /* // MPI_Barrier(MPI_COMM_WORLD); */
+    /* // exit(0); */
     /* statistic(); */
 
     return;
 }
-#endif
+
 
 
 
@@ -983,8 +1260,140 @@ double func_u(double x, double y) {
     return pow(x, 7) + pow(y, 6);
 }
 
+class Student {
+	public:
+		Student() { cout << "构造函数被调用\n";  }
+		~Student() { cout << "析构函数被调用\n";  }
+};
+
+
+#ifdef USE_LONG
+# define DFMT "lld"
+#else
+# define DFMT "d"
+#endif
+
+
+namespace NameSpaceA {
+	int a = 0;
+}
+
+namespace NameSpaceB {
+	int a = 1;
+	namespace NameSpaceC {
+		struct Teacher {
+			char name[10];
+			int age;
+		};
+	}
+}
+
+
+
 
 int main(int argc, char *argv[]) {
+	// --------------------------------------- namespace ------------------------------------------
+	/* using namespace NameSpaceA; */
+	/* using NameSpaceB::NameSpaceC::Teacher; */
+	/* printf("a = %d\n", a); // 0 */
+	/* printf("a = %d\n", NameSpaceB::a); // 1 */
+    /* Teacher t1 = { "ttt", 20 }; */
+	/* printf("t1.name = %s\n", t1.name); */
+	/* printf("t1.age = %d\n", t1.age); */
+	
+	// --------------------------------------- read_mesh ------------------------------------------
+	Grid g;
+	g.read_mesh("mixed_struct_grid.msh");
+	/* for (int i = 0; i < g.nvert; i++) { */
+	/* 	printf("%d\t%8.5f\t%8.5f\t%8.5f\n", i, g.verts[i][0], g.verts[i][1], g.verts[i][2]); */
+	/* } */
+	/* for (int i = 0; i < g.nedge; i++) { */
+	/* 	cout << g.edges[i][0] << "\t" << g.edges[i][1] << endl; */
+	/* } */
+	/* for (int i = 0; i < g.nelem; i++) { */
+	/* 	for (int j = 0; j < g.elems[i]->nvert(); j++) */
+	/* 		cout << g.elems[i]->verts[j] << "\t"; */
+	/* 	cout << endl; */
+	/* } */
+	/* for (int i = 0; i < g.nelem; i++) { */
+	/* 	for (int j = 0; j < g.elems[i]->nedge(); j++) */
+	/* 		cout << g.elems[i]->edges[j] << "\t"; */
+	/* 	cout << endl; */
+	/* } */
+	/* for (int i = 0; i < g.nelem; i++) { */
+	/* 	for (int j = 0; j < g.elems[i]->nedge(); j++) */
+	/* 		cout << g.elems[i]->neigh[j] << "\t"; */
+	/* 	cout << endl; */
+	/* } */
+	/* for (int i = 0; i < g.nelem; i++) { */
+	/* 	for (int j = 0; j < g.elems[i]->nedge(); j++) */
+	/* 		cout << g.elems[i]->btypes[j] << "\t"; */
+	/* 	cout << endl; */
+	/* } */
+	/* for (int i = 0; i < g.nelem; i++) { */
+	/* 	for (int j = 0; j < g.elems[i]->nvert(); j++) */
+	/* 		printf("%d\t", g.elems[i]->ordering[j]); */
+	/* 	cout << endl; */
+	/* } */
+	/* for (int i = 0; i < g.nvert; i++) { */
+	/* 	for (int j = 0; j < g.vert_to_elem[i].size(); j++) { */
+	/* 		Grid::gRef ref = g.vert_to_elem[i][j]; */
+	/* 		printf("vert NO.%d is elem NO.%d \'s NO.%d vert\n", i, ref.eind, ref.gind); */
+	/* 	} */
+	/* 	cout << endl; */
+	/* } */
+	/* for (int i = 0; i < g.nedge; i++) { */
+	/* 	for (int j = 0; j < g.edge_to_elem[i].size(); j++) { */
+	/* 		Grid::gRef ref = g.edge_to_elem[i][j]; */
+	/* 		printf("edge NO.%d is elem NO.%d \'s NO.%d edge\n", i, ref.eind, ref.gind); */
+	/* 	} */
+	/* } */
+	/* for (int i = 0; i < g.nelem; i++) { */
+	/* 	for (int j = 0; j < g.elems[i]->nedge(); j++) */
+	/* 		printf("elem NO.%d's NO.%d edge's edge sign is %d\n", i, j, g.elems[i]->edges_sgn[j]); */
+	/* } */
+
+	// ---------------------------------------- DFMT ----------------------------------------------
+	/* int x = 42; */
+	/* printf("%" DFMT "\n", x); */
+
+	// ----------------------------------- new & delete  ------------------------------------------
+	// free(p) 或 delete p 并不会自动把指针设为 nullptr，而是让它变成“悬空指针（dangling pointer）”。
+	// 手动设置 p = nullptr; 是为了防止之后“误用”这个悬空指针。
+	//
+	/* int* p = new int;   // 分配一个 int */
+	/* *p = 42;            // 赋值 */
+	/* cout << *p << endl; // 输出 42 */
+	/* delete p;           // 释放内存 */
+	/* p = nullptr;        // 防止悬空指针 */
+
+	/* int* arr = new int[5]; // 分配一个大小为 5 的 int 数组 */
+	/* for (int i = 0; i < 5; ++i) { */
+	/* 	arr[i] = i * 10; */
+	/* 	cout << arr[i] << " "; */
+	/* } */
+	/* cout << endl; */
+	/* delete[] arr;  // 注意这里要用 delete[] */
+
+	/* Student *s = new Student; // 构造函数调用 */
+	/* delete s;                 // 析构函数调用 */
+	/* Student* S = new Student[3]; // 调用 3 次构造函数 */
+	/* delete[] S;                  // 调用 3 次析构函数 */
+
+	// ----------------------------------- malloc & free ------------------------------------------
+	/* int* p = (int*) malloc(5 * sizeof(int));  // 分配 5 个 int */
+	/* if (!p) { */
+	/* 	std::cerr << "Memory allocation failed\n"; */
+	/* 	return 1; */
+	/* } */
+	/* for (int i = 0; i < 5; ++i) */
+	/* 	p[i] = i * 10; */
+	/* for (int i = 0; i < 5; ++i) */
+	/* 	std::cout << p[i] << " "; */
+	/* cout << endl; */
+	/* free(p);      // 释放内存 */
+	/* p = nullptr;  // 防止悬空指针 */
+
 	// ------------------------------------- blas ------------------------------------------------
 	/* int n = 5; */
     /* float x[5] = {1, 2, 3, 4, 5}; */
@@ -1096,12 +1505,13 @@ int main(int argc, char *argv[]) {
     /* std::vector<int> vec4(vec3); // 复制另一个向量 */
     /* std::vector<int> vec5(5, 42); // 指定大小和初始值（5个42） */
 
-    /* // 访问元素 */
+    // 访问元素
     /* std::vector<int> vec = {10, 20, 30}; */
     /* int a = vec[0];  // 10 下标访问（不检查越界） */
     /* int b = vec.at(1); // 20 at() 访问（越界抛出异常） */
     /* int first = vec.front(); // 10 首元素 */
     /* int last = vec.back();   // 30 末元素 */
+	/* cout << a << endl << b << endl << first << endl << last << endl; */
     /* for (auto it = vec.begin(); it != vec.end(); ++it) { // 迭代器访问 */
     /*     std::cout << *it << std::endl; */
     /* } */
