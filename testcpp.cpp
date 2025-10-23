@@ -1288,10 +1288,18 @@ namespace NameSpaceB {
 	}
 }
 
-
+#include <bitset>
 
 
 int main(int argc, char *argv[]) {
+	// -------------------------------------- 4 bytes of int --------------------------------------
+	int a = 256;
+	char *p = (char*)&a;
+	for (int i = 0; i < 4; i++) {
+		// 使用 std::bitset 将字节转换为 8 位二进制字符串 (header file <bitset>)
+		std::cout << std::bitset<8>(*(p+i)) << std::endl;
+	}
+
 	// --------------------------------------- namespace ------------------------------------------
 	/* using namespace NameSpaceA; */
 	/* using NameSpaceB::NameSpaceC::Teacher; */
@@ -1302,8 +1310,8 @@ int main(int argc, char *argv[]) {
 	/* printf("t1.age = %d\n", t1.age); */
 	
 	// --------------------------------------- read_mesh ------------------------------------------
-	Grid g;
-	g.read_mesh("mixed_struct_grid.msh");
+	/* Grid g; */
+	/* g.read_mesh("mixed_struct_grid.msh"); */
 	/* for (int i = 0; i < g.nvert; i++) { */
 	/* 	printf("%d\t%8.5f\t%8.5f\t%8.5f\n", i, g.verts[i][0], g.verts[i][1], g.verts[i][2]); */
 	/* } */
@@ -1352,9 +1360,9 @@ int main(int argc, char *argv[]) {
 	/* 	for (int j = 0; j < g.elems[i]->nedge(); j++) */
 	/* 		printf("elem NO.%d's NO.%d edge's edge sign is %d\n", i, j, g.elems[i]->edges_sgn[j]); */
 	/* } */
-	for (int i = 0; i < g.nelem; i++) {
-		printf("elem NO.%d's index is: %d\n", i, g.elems[i]->index);
-	}
+	/* for (int i = 0; i < g.nelem; i++) { */
+	/* 	printf("elem NO.%d's index is: %d\n", i, g.elems[i]->index); */
+	/* } */
 
 	// ---------------------------------------- DFMT ----------------------------------------------
 	/* int x = 42; */
