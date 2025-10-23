@@ -398,7 +398,7 @@ class Elem {
 		/* Real3 *face_df1 = nullptr, */
 		/* Real3 *face_df2 = nullptr); */
 		/* virtual Real getEdgeLength(int iside, Real3 *edge_normal = nullptr); */
-		Elem() = default;
+		Elem() = default; // 只有构造函数和析构函数才能用 default, 一般函数会报错
 		virtual ~Elem() = default;
 
 		ELEM_TYPE elem_type; // 2 for Triangle
@@ -1352,6 +1352,9 @@ int main(int argc, char *argv[]) {
 	/* 	for (int j = 0; j < g.elems[i]->nedge(); j++) */
 	/* 		printf("elem NO.%d's NO.%d edge's edge sign is %d\n", i, j, g.elems[i]->edges_sgn[j]); */
 	/* } */
+	for (int i = 0; i < g.nelem; i++) {
+		printf("elem NO.%d's index is: %d\n", i, g.elems[i]->index);
+	}
 
 	// ---------------------------------------- DFMT ----------------------------------------------
 	/* int x = 42; */
@@ -1402,13 +1405,19 @@ int main(int argc, char *argv[]) {
 	/* float result = cblas_sdot(n, x, 1, y, 1); */
 	/* printf("Dot product: %f\n", result); */	
 
-	// -------------------------------------- time_t ---------------------------------------------
-	/* time_t now = time(nullptr); */
+	// ---------------------------------- time_t vs size_t ------------------------------------------
+	// in glibc
+	// typedef long          time_t; // 表示秒数，可能为负（1970 以前）
+	// typedef unsigned long size_t; // 表示字节数，非负
+	/* time_t now = time(); */
 	/* cout << "size of time_t: " << sizeof(time_t) << endl; */
-	/* cout << "Seconds since epoch: " << now << endl; */
+	/* cout << "Seconds since epoch: " << now << endl; // number of seconds since year 1970 */
 	/* // Convert to human-readable format */
 	/* char* time_str = ctime(&now); */
     /* std::cout << "Local time: " << time_str << endl; */
+	/* const char *s = "hello"; */
+	/* size_t len = strlen(s); */
+	/* printf("Length: %zu\n", len); */
 
 	// ---------------------------------- unsigned char & char -----------------------------------
 	/* unsigned char a = 255; // 0 ~ 255 */
