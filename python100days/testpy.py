@@ -156,10 +156,226 @@ Date  : 2025-10-23
 
 
 """
-Python Learn - Day 5 within 100 Days - Judgment and branch
+Python Learn - Day 5 within 100 Days - Judgment and Banch
 Author: guisongwu
 Date  : 2025-10-23
 """
+# BMI
+# height = float(input('身高(cm)：'))
+# weight = float(input('体重(kg)：'))
+# bmi = weight / (height / 100) ** 2
+# print(f'{bmi = :.1f}')
+# print(f'height = {height:.2f} weight = {weight:.2f} bmi = {bmi:.2f}')
+# if 18.5 <= bmi < 24:
+#     print('你的身材很棒！')
+# if bmi < 18.5:
+#     print('你的体重过轻!')
+# elif bmi < 24:
+#     print('你的身材很棒!')
+# elif bmi < 27:
+#     print('你的体重过重!')
+# else:
+#     print('你的体重太重!')
+
+# status_code = int(input('响应状态码: '))
+# if status_code == 400:
+#     description = 'Bad Request'
+# elif status_code == 401:
+#     description = 'Unauthorized'
+# elif status_code == 403:
+#     description = 'Forbidden'
+# elif status_code == 404:
+#     description = 'Not Found'
+# elif status_code == 405:
+#     description = 'Method Not Allowed'
+# elif status_code == 418:
+#     description = 'I am a teapot'
+# elif status_code == 429:
+#     description = 'Too many requests'
+# else:
+#     description = 'Unknown status Code'
+# print('状态码描述:', description)
+
+# status_code = int(input('响应状态码: '))
+# match status_code:
+#     case 400: description = 'Bad Request'
+#     case 401: description = 'Unauthorized'
+#     case 403: description = 'Forbidden'
+#     case 404: description = 'Not Found'
+#     case 405: description = 'Method Not Allowed'
+#     case 418: description = 'I am a teapot'
+#     case 429: description = 'Too many requests'
+#     case _: description = 'Unknown Status Code' # 带有_的case语句在代码中起到通配符的作用，如果前面的分支都没有匹配上，代码就会来到case _。case _的是可选的，并非每种分支结构都要给出通配符选项。如果分支中出现了case _，它只能放在分支结构的最后面，如果它的后面还有其他的分支，那么这些分支将是不可达的。
+# print('状态码描述:', description)
+
+# status_code = int(input('响应状态码: '))
+# match status_code:
+#     case 400 | 405: description = 'Invalid Request'
+#     case 401 | 403 | 404: description = 'Not Allowed'
+#     case 418: description = 'I am a teapot'
+#     case 429: description = 'Too many requests'
+#     case _: description = 'Unknown Status Code'
+# print('状态码描述:', description)
+
+# 3x-5 x>1
+# x+2 -1<=x<=1
+# 5x+3 x<-1
+# x = float(input('x: '))
+# if x < -1:
+#     y = 5*x+3
+# elif -1 <= x <= 1:
+#     y = x + 2
+# else:
+#     y = 3*x-5
+# print(f"{y = }")
+# print(f"y = {y:.2f}")
+
+# score = float(input("请输入成绩: "))
+# if score >= 90:
+#     grade = 'A'
+# elif score >= 80:
+#     grade = 'B'
+# elif score >= 70:
+#     grade = 'C'
+# elif score >= 60:
+#     grade = 'D'
+# else:
+#     grade = 'E'
+# print(f"{grade = }")
+
+# a = float(input("a: "))
+# b = float(input("b: "))
+# c = float(input("c: "))
+# if a + b > c and a + c > b and b + c > a:
+#     perimeter = a + b + c
+#     print(f"{perimeter = }")
+#     s = perimeter / 2
+#     area = (s * (s - a) * (s - b) * (s - c)) ** 0.5
+#     print(f"{area = }")
+# else:
+#     print("This is not a triangle!")
+    
+
+
+
+"""
+Python Learn - Day 6 within 100 Days - Iteration
+Author: guisongwu
+Date  : 2025-10-23
+"""
+# import time
+# print("hello")
+# time.sleep(1)
+# print("world")
+
+# 如果明确知道循环执行的次数，我们推荐使用 for-in 循环
+# import time
+# for i in range(5):
+# for _ in range(5):
+#     print("hello world")
+#     time.sleep(1)
+
+# print(type(range(100))) # class 'range'
+# range(101)：可以用来产生0到100范围的整数，需要注意的是取不到101。
+# range(1, 101)：可以用来产生1到100范围的整数，相当于是左闭右开的设定，即[1, 101)。
+# range(1, 101, 2)：可以用来产生1到100的奇数，其中2是步长（跨度），即每次递增的值，101取不到。
+# range(100, 0, -2)：可以用来产生100到1的偶数，其中-2是步长（跨度），即每次递减的值，0取不到。
+
+# total = 0
+# for i in range(1, 101):
+#     total += i
+# print(f"{total = }")
+
+# total = 0
+# for i in range(1, 101):
+#     if i % 2 == 0:
+#         total += i
+# print(f"{total = }")
+
+# total = 0
+# for i in range(2, 101, 2):
+#     total += i
+# print("total = %d" % total)
+# print(f"{total = }")
+# print(f"total = {total}")
+# print("sum = ", sum(range(2, 101, 2)))
+
+# 要构造循环结构但是又不能确定循环重复的次数，我们推荐使用 while 循环
+# total = 0
+# i = 1
+# while i <= 100:
+#     total += i
+#     i += 1
+# print(total)
+
+# break and continue
+# total = 0
+# i = 2
+# while True:
+#     total += i
+#     i += 2
+#     if i > 100:
+#         break
+# print(total) 
+
+# total = 0
+# for i in range(1, 101):
+#     if i % 2 != 0:
+#         continue
+#     total += i
+# print(total)
+
+# for i in range(1, 10):
+#     for j in range(1, i + 1):
+#         print(f'{i}×{j}={i * j}', end='\t') # end 参数控制每次 print() 输出后结尾要打印的内容, 默认是"\n"
+#     print()
+
+# judge if a num is prime or not
+# num = int(input("give a positive num: "))
+# end = int(num ** 0.5)
+# is_prime = True
+# for i in range(1, end+1):
+#     if num % i == 0:
+#         is_prime = False
+#         break
+# if is_prime:
+#     print(f"{num} is a prime")
+# else:
+#     print(f"{num} is not a prime")
+
+# 最大公因数
+# a = int(input("a = "))
+# b = int(input("b = "))
+# for i in range(a, 0, -1):
+#     if a % i == 0 and b % i == 0:
+#         print(f"最大公因数{i}")
+#         break
+
+# 辗转相除
+# x = int(input('x = '))
+# y = int(input('y = '))
+# while y % x != 0:
+#     x, y = y % x, x
+# print(f'最大公约数: {x}')')
+
+# 猜数字
+# import random
+# answer = random.randrange(0, 100)
+# counter = 0
+# while True:
+#     guess = int(input("your guess: "))
+#     counter += 1
+#     if guess < answer:
+#         print("Greater!")
+#     elif guess == answer:
+#         print("Bingo!")
+#         break
+#     else:
+#         print("Smaller!")
+# print(f"Success after {counter} times!")
+
+
+
 
 
 
