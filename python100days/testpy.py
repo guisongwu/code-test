@@ -404,14 +404,165 @@ Date  : 2025-10-24
 # b = 旧的a + 旧的b
 
 # narcissistic number (水仙花数)
-for i in range(100, 1000):
-    a = i % 10
-    b = ((i - a) // 10) % 10
-    c = i // 100
-    if i == (a**3 + b**3 + c**3):
-        print(i)
+# for i in range(100, 1000):
+#     a = i % 10
+#     b = ((i - a) // 10) % 10
+#     c = i // 100
+#     if i == (a**3 + b**3 + c**3):
+#         print(i)
+
+# invert a num
+# num = int(input("num = "))
+# inverted_num = 0
+# while num > 0:
+#     inverted_num = inverted_num * 10 + num % 10
+#     num = num // 10
+#     print(inverted_num) 
+#     print(num) 
+
+# 公鸡 5 元一只，母鸡 3 元一只，小鸡 1 元三只，用 100 块钱买一百只鸡，问公鸡a、母鸡b、小鸡c各有多少只？
+# for a in range(0, 21):
+#     for b in range(0, 34):
+#         for c in range(0, 100, 3):
+#             if a + b + c == 100 and 5*a + 3*b + 1./3.*c == 100:
+#                 print(a, b, c)
+#                 break
+
+# CRAPS赌博游戏. 说明：CRAPS又称花旗骰，是美国拉斯维加斯非常受欢迎的一种的桌上赌博游戏。该游戏使用两粒骰子，玩家通过摇两粒骰子获得点数进行游戏。简化后的规则是：玩家第一次摇骰子如果摇出了 7 点或 11 点，玩家胜；玩家第一次如果摇出 2 点、3 点或 12 点，庄家胜；玩家如果摇出其他点数则游戏继续，玩家重新摇骰子，如果玩家摇出了 7 点，庄家胜；如果玩家摇出了第一次摇的点数，玩家胜；其他点数玩家继续摇骰子，直到分出胜负。为了增加代码的趣味性，我们设定游戏开始时玩家有 1000 元的赌注，每局游戏开始之前，玩家先下注，如果玩家获胜就可以获得对应下注金额的奖励，如果庄家获胜，玩家就会输掉自己下注的金额。游戏结束的条件是玩家破产（输光所有的赌注）。
+# import random
+# money = 1000
+# while money > 0:
+#     a = int(input("请下注："))
+#     first_toss = random.randrange(1, 7) + random.randrange(1, 7)
+#     print(f"first toss {first_toss}")
+#     if first_toss == 7 or first_toss == 11:
+#         money += a
+#         print(f"You won {a}")
+#     elif first_toss == 2 or first_toss == 3 or first_toss == 12:
+#         money -= a
+#         print(f"You lose {a}")
+#     else:
+#         while True:
+#             second_toss = random.randrange(1, 7) + random.randrange(1, 7)
+#             print(f"second toss {second_toss}")
+#             if second_toss == 7:
+#                 money -= a
+#                 print(f"You lose {a}")
+#                 break
+#             elif second_toss == first_toss:
+#                 money += a
+#                 print(f"You won {a}")
+#                 break
+#     print(f"Now your money is {money}")
+    
 
 
 
+"""
+Python Learn - Day 8 within 100 Days - List 1
+Author: guisongwu
+Date  : 2025-10-24
+"""
+# 容器型变量
+# items1 = [35, 12, 99, 68, 55, 35, 87]
+# items2 = ['Python', 'Java', 'Go', 'Kotlin']
+# items3 = [100, 12.3, 'Python', True]
+# print(items1)  # [35, 12, 99, 68, 55, 35, 87]
+# print(type(items1))  # <class 'list'>
+# print(items2)  # ['Python', 'Java', 'Go', 'Kotlin']
+# print(items3)  # [100, 12.3, 'Python', True]
+
+# 通过 Python 内置的list函数将其他序列变成列表。准确的说，list并不是一个普通的函数，它是创建列表对象的构造器
+# print(type(range(1, 10))) # <class 'range'>
+# items4 = list(range(1, 10))
+# print(type('hello')) # <class 'str'>
+# items5 = list('hello')
+# print(items4)  # [1, 2, 3, 4, 5, 6, 7, 8, 9]
+# print(items5)  # ['h', 'e', 'l', 'l', 'o']
+
+# 可以使用+运算符实现两个列表的拼接，拼接运算会将两个列表中的元素连接起来放到一个列表中
+# 可以使用*运算符实现列表的重复运算，*运算符会将列表元素重复指定的次数
+# 可以使用in或not in运算符判断一个元素在不在列表中
+# items5 = [35, 12, 99, 45, 66]
+# items6 = [45, 58, 29]
+# items7 = ['Python', 'Java', 'JavaScript']
+# print(items5 + items6)  # [35, 12, 99, 45, 66, 45, 58, 29]
+# print(items6 + items7)  # [45, 58, 29, 'Python', 'Java', 'JavaScript']
+# items5 += items6
+# print(items5)  # [35, 12, 99, 45, 66, 45, 58, 29]
+
+# print(items6 * 3)  # [45, 58, 29, 45, 58, 29, 45, 58, 29]
+# print(items7 * 2)  # ['Python', 'Java', 'JavaScript', 'Python', 'Java', 'JavaScript']
+
+# print(29 in items6)  # True
+# print(99 in items6)  # False
+# print('C++' not in items7)     # True
+# print('Python' not in items7)  # False
+
+# 当我们想操作列表中的某个元素时，可以使用[]运算符，通过在[]中指定元素的位置来访问该元素，这种运算称为索引运算。需要说明的是，[]的元素位置可以是0到N - 1的整数，也可以是-1到-N的整数，分别称为正向索引和反向索引，其中N代表列表元素的个数。对于正向索引，[0]可以访问列表中的第一个元素，[N - 1]可以访问最后一个元素；对于反向索引，[-1]可以访问列表中的最后一个元素，[-N]可以访问第一个元素，代码如下所示。
+# 避免出现索引越界的情况，对于下面的items8，如果我们访问items8[5]或items8[-6]，就会引发IndexError错误，导致程序崩溃，对应的错误信息是：list index out of range
+# items8 = ['apple', 'waxberry', 'pitaya', 'peach', 'watermelon']
+# print(items8[0])   # apple
+# print(items8[2])   # pitaya
+# print(items8[4])   # watermelon
+# items8[2] = 'durian'
+# print(items8)      # ['apple', 'waxberry', 'durian', 'peach', 'watermelon']
+# print(items8[-5])  # 'apple'
+# print(items8[-4])  # 'waxberry'
+# print(items8[-1])  # watermelon
+# items8[-4] = 'strawberry'
+# print(items8)      # ['apple', 'strawberry', 'durian', 'peach', 'watermelon']
+# # 希望一次性访问列表中的多个元素，我们可以使用切片运算。切片运算是形如[start:end:stride]的运算符，其中start代表访问列表元素的起始位置，end代表访问列表元素的终止位置（终止位置的元素无法访问）
+# print(items8[1:3:1])     # ['strawberry', 'durian']
+# print(items8[0:3:1])     # ['apple', 'strawberry', 'durian']
+# print(items8[0:5:2])     # ['apple', 'durian', 'watermelon']
+# print(items8[-4:-2:1])   # ['strawberry', 'durian']
+# print(items8[-2:-6:-1])  # ['peach', 'durian', 'strawberry', 'apple']
+# # 如果start值等于0，那么在使用切片运算符时可以将其省略；如果end值等于N，N代表列表元素的个数，那么在使用切片运算符时可以将其省略；如果stride值等于1，那么在使用切片运算符时也可以将其省略。所以，下面的代码跟上面的代码作用完全相同。
+# print(items8[1:3])     # ['strawberry', 'durian']
+# print(items8[:3:1])    # ['apple', 'strawberry', 'durian']
+# print(items8[:3:])    # ['apple', 'strawberry', 'durian']
+# print(items8[::2])     # ['apple', 'durian', 'watermelon']
+# print(items8[-4:-2])   # ['strawberry', 'durian']
+# print(items8[-2::-1])  # ['peach', 'durian', 'strawberry', 'apple']
+# # 切片修改列表
+# items8[1:3] = ['x', 'o']
+# print(items8)  # ['apple', 'x', 'o', 'peach', 'watermelon']
+
+# 两个列表还可以做关系运算，我们可以比较两个列表是否相等，也可以给两个列表比大小
+# nums1 = [1, 2, 3, 4]
+# nums2 = list(range(1, 5))
+# nums3 = [3, 2, 1]
+# print(nums1 == nums2)  # True
+# print(nums1 != nums2)  # False
+# print(nums1 <= nums3)  # True
+# print(nums2 >= nums3)  # False
+
+# 如果想逐个取出列表中的元素，可以使用for-in循环
+# method 1
+# languages = ["python", "c", "c++", "matlab"]
+# print(len(languages))
+# for i in range(len(languages)):
+#     print(languages[i])
+# # method 2
+# for language in languages:
+#     print(language)
+
+# toss a dice
+# import random
+# counters = [0] * 6
+# # 模拟掷色子记录每种点数出现的次数
+# for _ in range(100000):
+#     face = random.randrange(1, 7)
+#     counters[face - 1] += 1
+#     # 输出每种点数出现的次数
+# for face in range(1, 7):
+#     print(f'{face}点出现了{counters[face - 1]}次')
 
 
+
+"""
+Python Learn - Day 9 within 100 Days - List 2
+Author: guisongwu
+Date  : 2025-10-24
+"""

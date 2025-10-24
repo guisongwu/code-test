@@ -1290,23 +1290,83 @@ namespace NameSpaceB {
 
 #include <bitset>
 
+class Base {
+	public:
+		void func1() { cout << "Base::func" << endl;  }
+		virtual void func2() { cout << "Base::func" << endl;  }
+		virtual void func3() = 0; // 至少含有一个纯虚函数的类是抽象类，不能实例化(Base B)
+								  // 如果函数是 virtual 但不是纯虚函数 → 必须实现。
+								  // 如果函数是 virtual = 0（纯虚函数）→ 可以不实现，但类就变成抽象类，派生类必须实现它。
+								  // 特殊情况下，你也可以给纯虚函数提供一个“默认实现”，供派生类显式调用。
+};
+class Derived : public Base {
+	public:
+		void func1() { cout << "Derived::func" << endl;  }
+		void func2() override { cout << "Derived::func" << endl;  }
+		void func3() override { cout << "Derived::func" << endl;  }
+};
+
 
 int main(int argc, char *argv[]) {
+	// ------------------------------------ lambda function ---------------------------------------
+	// | 捕获写法  | 含义           		      |
+	// | --------- | ---------------------------  |
+	// | `[ ]`     | 不捕获任何外部变量           |
+	// | `[&]`     | 按引用捕获所有外部变量       |
+	// | `[=]`     | 按值捕获所有外部变量         |
+	// | `[x]`     | 按值捕获变量 x               |
+	// | `[&x]`    | 按引用捕获变量 x             |
+	// | `[=, &y]` | 默认按值捕获，`y` 按引用捕获 |
+	// | `[&, x]`  | 默认按引用捕获，`x` 按值捕获 |
+	//
+	double nodes[3][3];
+    auto setNode = [&](int i, Real x, Real y) {
+		nodes[i][0] = x; nodes[i][1] = y; nodes[i][2] = 1-x-y; };
+	setNode(1, 0.2, 0.3);
+	cout << nodes[1][0] << "\t" << nodes[1][1] << "\t" << nodes[1][2] << "\n";
+
+	int factor = 10;
+	auto multiply = [factor](int x) {
+		return x * factor; };
+	auto increment = [&factor]() {
+		factor++; };
+	cout << "multiply(5) = " << multiply(5) << endl; // 5 * 10 = 50
+	increment();  // factor = 11
+	std::cout << "factor = " << factor << std::endl; // 11
+
+	std::vector<int> v = {5, 2, 8, 1, 3};
+    std::sort(v.begin(), v.end(), [](int a, int b) { return a > b; }); // 使用 lambda 降序排列
+    for (int x : v)
+		std::cout << x << " ";
+	std::cout << std::endl;
+
+
+	// -------------------------------------- class funcs -----------------------------------------
+	/* Derived D; */
+	/* D.func1(); */
+	/* D.func2(); */
+	/* D.func3(); */
+	/* Base *p = new Derived(); */
+	/* p->func1();  // 输出 Base::func （静态绑定）p 是基类指针 */
+	/* p->func2();  // 输出 Derived::func （动态绑定） */
+	/* p->func3();  // 输出 Derived::func （动态绑定） */
+
 	// --------------------------------- break in multi-loops -------------------------------------
-	int num = 0;
-	bool is_prime = true;
-	for (num = 2; num < 100; num++) {
-		is_prime = true;
-		for (int i = 2; i < (int)sqrt(num) + 1; i++) {
-			if (num % i == 0) {
-				is_prime = false;
-				break; // 只能跳出他所在的那一级循环
-			}
-		}
-		if (is_prime) {
-			cout << num << endl;
-		}
-	}
+	/* int num = 0; */
+	/* bool is_prime = true; */
+	/* for (num = 2; num < 100; num++) { */
+	/* 	is_prime = true; */
+	/* 	for (int i = 2; i < (int)sqrt(num) + 1; i++) { */
+	/* 		if (num % i == 0) { */
+	/* 			is_prime = false; */
+	/* 			break; // 只能跳出他所在的那一级循环 */
+	/* 		} */
+	/* 	} */
+	/* 	if (is_prime) { */
+	/* 		cout << num << endl; */
+	/* 	} */
+	/* } */
+
 	// -------------------------------------- 4 bytes of int --------------------------------------
 	/* int a = 256; */
 	/* char *p = (char*)&a; */
@@ -1377,6 +1437,10 @@ int main(int argc, char *argv[]) {
 	/* } */
 	/* for (int i = 0; i < g.nelem; i++) { */
 	/* 	printf("elem NO.%d's index is: %d\n", i, g.elems[i]->index); */
+	/* } */
+	/* for (int i = 0; i < g.nelem; i++) { */
+	/* 	printf("%d\t", g.types_elem[i]); */
+	/* 	cout << endl; */
 	/* } */
 
 	// ---------------------------------------- DFMT ----------------------------------------------
