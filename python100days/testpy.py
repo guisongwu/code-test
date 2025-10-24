@@ -377,10 +377,39 @@ Date  : 2025-10-23
 
 
 
+"""
+Python Learn - Day 7 within 100 Days - Practice with Branching and Loop Structures
+Author: guisongwu
+Date  : 2025-10-24
+"""
+# 100 以内的素数
+# for i in range(2, 100):
+#     is_prime = True
+#     for j in range(2, int(i**0.5)+1):
+#         if i % j == 0:
+#             is_prime = False
+#             break # break只能终止它所在的那个循环，这一点在使用嵌套循环结构时需要引起注意
+#     if is_prime:
+#         print(i)
 
+# Fibonacci Sequence
+# a, b = 0, 1
+# for i in range(20):
+#     a, b = b, a+b
+#     print(a)
+# “同时解包赋值”（tuple unpacking assignment）
+# 右边先整体求值，生成一个元组：(b, a + b), 使用的是赋值前的 a 和 b 的旧值
+# 再一次性将结果解包并赋给左边的变量：
+# a = 旧的b
+# b = 旧的a + 旧的b
 
-
-
+# narcissistic number (水仙花数)
+for i in range(100, 1000):
+    a = i % 10
+    b = ((i - a) // 10) % 10
+    c = i // 100
+    if i == (a**3 + b**3 + c**3):
+        print(i)
 
 
 

@@ -1292,13 +1292,28 @@ namespace NameSpaceB {
 
 
 int main(int argc, char *argv[]) {
-	// -------------------------------------- 4 bytes of int --------------------------------------
-	int a = 256;
-	char *p = (char*)&a;
-	for (int i = 0; i < 4; i++) {
-		// 使用 std::bitset 将字节转换为 8 位二进制字符串 (header file <bitset>)
-		std::cout << std::bitset<8>(*(p+i)) << std::endl;
+	// --------------------------------- break in multi-loops -------------------------------------
+	int num = 0;
+	bool is_prime = true;
+	for (num = 2; num < 100; num++) {
+		is_prime = true;
+		for (int i = 2; i < (int)sqrt(num) + 1; i++) {
+			if (num % i == 0) {
+				is_prime = false;
+				break; // 只能跳出他所在的那一级循环
+			}
+		}
+		if (is_prime) {
+			cout << num << endl;
+		}
 	}
+	// -------------------------------------- 4 bytes of int --------------------------------------
+	/* int a = 256; */
+	/* char *p = (char*)&a; */
+	/* for (int i = 0; i < 4; i++) { */
+	/* 	// 使用 std::bitset 将字节转换为 8 位二进制字符串 (header file <bitset>) */
+	/* 	std::cout << std::bitset<8>(*(p+i)) << std::endl; */
+	/* } */
 
 	// --------------------------------------- namespace ------------------------------------------
 	/* using namespace NameSpaceA; */
