@@ -566,3 +566,333 @@ Python Learn - Day 9 within 100 Days - List 2
 Author: guisongwu
 Date  : 2025-10-24
 """
+# Methods of list
+# items.append(item)
+# items.insert(index, item)
+
+# items.remove(item)
+# items.pop()
+# items.pop(index)
+# items.clear()
+
+# items.index(item, index)
+# items.count(item)
+
+# items.sort()
+# items.reverse()
+
+
+# 列表的方法
+# 列表是一种可变容器，可变容器指的是我们可以向容器中添加元素、可以从容器移除元素，也可以修改现有容器中的元素。我们可以使用列表的append方法向列表中追加元素，使用insert方法向列表中插入元素。追加指的是将元素添加到列表的末尾，而插入则是在指定的位置添加新元素
+# languages = ['Python', 'Java', 'C++']
+# languages.append('JavaScript')
+# print(languages)  # ['Python', 'Java', 'C++', 'JavaScript']
+# languages.insert(1, 'SQL')
+# print(languages)  # ['Python', 'SQL', 'Java', 'C++', 'JavaScript']
+# languages.insert(2, 'Matlab')
+# print(languages)  # ['Python', 'SQL', 'Matlab', 'Java', 'C++', 'JavaScript']
+
+# 我们可以用列表的remove方法从列表中删除指定元素，需要注意的是，如果要删除的元素并不在列表中，会引发ValueError错误导致程序崩溃，所以建议大家在删除元素时，先用之前讲过的成员运算做一个判断。我们还可以使用pop方法从列表中删除元素，pop方法默认删除列表中的最后一个元素，当然也可以给一个位置，删除指定位置的元素。在使用pop方法删除元素时，如果索引的值超出了范围，会引发IndexError异常，导致程序崩溃。除此之外，列表还有一个clear方法，可以清空列表中的元素
+# languages = ['Python', 'SQL', 'Java', 'C++', 'JavaScript']
+# if 'Java' in languages:
+#     languages.remove('Java')
+# if 'Swift' in languages:
+#     languages.remove('Swift')
+# print(languages)  # ['Python', 'SQL', C++', 'JavaScript']
+# languages.pop()
+# print(languages)  # ['Python', 'SQL', C++']
+# temp = languages.pop(1)
+# print(temp)       # SQL
+# print(type(temp))       # <class 'str'>
+# languages.append(temp)
+# print(languages)  # ['Python', C++', 'SQL']
+# languages.clear()
+# print(languages)  # []
+
+# a = 1
+# del a
+# print(a)
+
+# languages = ["Python", 'Matlab', 'Python']
+# print(languages)
+# if 'Python' in languages:
+#     languages.remove('Python') # remove the first 'Python'
+# print(languages)
+
+# 元素位置和频次. 列表的index方法可以查找某个元素在列表中的索引位置，如果找不到指定的元素，index方法会引发ValueError错误；列表的count方法可以统计一个元素在列表中出现的次数
+# items = ['Python', 'Java', 'Java', 'C++', 'Kotlin', 'Python']
+# print(items.index('Python'))     # 0
+# print(items.index('Python', 1))  # 5  从索引位置1开始查找'Python'
+# print(items.count('Python'))     # 2
+# print(items.count('Kotlin'))     # 1
+# print(items.count('Swfit'))      # 0
+# # print(items.index('Java', 3))    # ValueError: 'Java' is not in list  从索引位置3开始查找'Java'
+# print(items.index('C++', 0))
+
+# items = ['Python', 'Java', 'C++', 'Kotlin', 'Swift']
+# items.sort()
+# print(items)  # ['C++', 'Java', 'Kotlin', 'Python', 'Swift']
+# items.reverse()
+# print(items)  # ['Swift', 'Python', 'Kotlin', 'Java', 'C++']
+
+# 列表生成式. 在 Python 中，列表还可以通过一种特殊的字面量语法来创建, 强烈建议用生成式语法来创建列表
+# 场景一：创建一个取值范围在1到99且能被3或者5整除的数字构成的列表。
+# method 1
+# items = []
+# for i in range(1, 100):
+#     if i % 3 == 0 or i % 5 == 0:
+#         items.append(i)
+# print(items)
+# method 2
+# items = [i for i in range(1, 100) if i % 3 == 0 or i % 5 == 0]
+# print(items)
+
+# 场景二：有一个整数列表nums1，创建一个新的列表nums2，nums2中的元素是nums1中对应元素的平方。
+# method 1
+# nums1 = [1, 2, 3, 4, 5, 12, 14]
+# nums2 = []
+# for num in nums1:
+#     nums2.append(num ** 2)
+# print(nums2)
+# method 2
+# nums1 = [1, 2, 3, 4, 5, 12, 14]
+# nums2 = [num ** 2 for num in nums1]
+# print(nums2)
+
+# 场景三： 有一个整数列表nums1，创建一个新的列表nums2，将nums1中大于50的元素放到nums2中。
+# method 1
+# nums1 = [35, 12, 97, 64, 55]
+# nums2 = []
+# for num in nums1:
+#     if num > 50:
+#         nums2.append(num)
+# print(nums2)
+# method 2
+# nums1 = [35, 12, 97, 64, 55]
+# nums2 = [num for num in nums1 if num > 50]
+# print(nums2)
+
+
+# 嵌套列表
+# scores = [[95, 83, 92], [80, 75, 82], [92, 97, 90], [80, 78, 69], [65, 66, 89]]
+# print(scores[0])
+# print(scores[0][1])
+
+# import random
+# scores = [[random.randrange(60, 101) for _ in range(3)] for _ in range(5)]
+# print(scores)
+
+# import random
+# red_balls = list(range(1, 34))
+# selected_balls = []
+# for _ in range(6):
+#     index = random.randrange(len(red_balls))
+#     # 将选中的球从红色球列表中移除并添加到选中列表
+#     selected_balls.append(red_balls.pop(index))
+# selected_balls.sort()
+# for ball in selected_balls:
+#     print(f'\033[031m{ball:0>2d}\033[0m', end=' ')
+# blue_ball = random.randrange(1, 17)
+# print(f'\033[034m{blue_ball:0>2d}\033[0m')
+# 上面代码中print(f'\033[0m...\033[0m')是为了控制输出内容的颜色，红色球输出成红色，蓝色球输出成蓝色。其中省略号代表我们要输出的内容，\033[0m是一个控制码，表示关闭所有属性，也就是说之前的控制码将会失效，你也可以将其简单的理解为一个定界符，m前面的0表示控制台的显示方式为默认值，0可以省略，1表示高亮，5表示闪烁，7表示反显等。在0和m的中间，我们可以写上代表颜色的数字，比如30代表黑色，31代表红色，32代表绿色，33代表黄色，34代表蓝色等。]]])
+
+# import random
+# red_balls = [i for i in range(1, 34)]
+# blue_balls = list(range(1, 17))
+# # 从红色球列表中随机抽出6个红色球（无放回抽样）
+# selected_balls = random.sample(red_balls, 6)
+# selected_balls.sort()
+# for ball in selected_balls:
+#     print(f'\033[031m{ball:0>2d}\033[0m', end=' ')
+# # 从蓝色球列表中随机抽出1个蓝色球
+# blue_ball = random.choice(blue_balls)
+# print(f'\033[034m{blue_ball:0>2d}\033[0m')
+
+# import random
+# from rich.console import Console
+# from rich.table import Table 
+# # table 是用 Rich 库（一个漂亮的终端输出库）创建的表格对象
+# # 创建控制台
+# console = Console()
+# n = int(input('生成几注号码: '))
+# red_balls = list(range(1, 34))
+# blue_balls = [i for i in range(1, 17)]
+# # 创建表格并添加表头
+# table = Table(title='balls', show_header=True)
+# for col_name in ['序号', '红球', '蓝球']:
+#     table.add_column(col_name, justify='center')
+# for i in range(n):
+#     selected_balls = random.sample(red_balls, 6)
+#     selected_balls.sort()
+#     blue_ball = random.choice(blue_balls)
+#     # 向表格中添加行（序号，红色球，蓝色球）
+#     table.add_row(str(i + 1), 
+#                   f'[red]{" ".join([f"{ball:0>2d}" for ball in selected_balls])}[/red]',
+#                   f'[blue]{blue_ball:0>2d}[/blue]')
+# # 通过控制台输出表格
+# console.print(table)
+
+# rich, table, console
+# from rich.table import Table
+# from rich.console import Console
+# table = Table(title="Scores", show_header=True)
+# console = Console()
+# table.add_column("Name", justify="center")
+# table.add_column("Score", justify = "center")
+# table.add_row("xiaohong", "90")
+# table.add_row("xiaoming", "80")
+# console.print(table)
+
+
+# a = [1, 3, 5]
+# print(" ".join([str(i) for i in a]))
+
+
+
+"""
+Python Learn - Day 10 within 100 Days - Tuple
+Author: guisongwu
+Date  : 2025-10-25
+"""
+# 元组和列表的不同之处在于，元组是不可变类型，这就意味着元组类型的变量一旦定义，其中的元素不能再添加或删除，而且元素的值也不能修改。如果试图修改元组中的元素，将引发TypeError错误，导致程序崩溃.
+# t1 = (35, 12, 98)
+# t2 = ('jason', 24, True, 'Beijing')
+
+# print(type(t1))  # <class 'tuple'>
+# print(type(t2))  # <class 'tuple'>
+# print(len(t1))  # 3
+# print(len(t2))  # 4
+# print(t1[0])    # 35
+# print(t1[2])    # 98
+# print(t2[-1])   # Beijing
+
+# # 切片运算 [start:end:stride]
+# print(t2[:2])   # ('jason', 24)
+# print(t2[::3])  # ('jason', 'Beijing')
+# for elem in t1:
+#     print(elem)
+
+# # 成员运算
+# print(12 in t1)         # True
+# print(99 in t1)         # False
+# print('Hao' not in t2)  # True
+
+# # 拼接运算
+# t3 = t1 + t2
+# print(t3)  # (35, 12, 98, '骆昊', 43, True, '四川成都')
+# # 比较运算
+# print(t1 == t3)            # False
+# print(t1 >= t3)            # False
+# print(t1 <= (35, 11, 99))  # False
+
+
+# 如果元组中只有一个元素，需要加上一个逗号，否则()就不是代表元组的字面量语法，而是改变运算优先级的圆括号
+# a = ()
+# print(type(a))  # <class 'tuple'>
+# b = ('hello')
+# print(type(b))  # <class 'str'>
+# c = (100)
+# print(type(c))  # <class 'int'>
+# d = ('hello', )
+# print(type(d))  # <class 'tuple'>
+# e = (100, )
+# print(type(e))  # <class 'tuple'>
+
+# 打包和解包操作. 当我们把多个用逗号分隔的值赋给一个变量时，多个值会打包成一个元组类型；当我们把一个元组赋值给多个变量时，元组会解包成多个值然后分别赋给对应的变量
+# a = 1, 10, 100
+# print(type(a))  # <class 'tuple'>
+# print(a)        # (1, 10, 100)
+# # 解包操作
+# i, j, k = a
+# print(i, j, k)  # 1 10 100
+
+# 在解包时，如果解包出来的元素个数和变量个数不对应，会引发ValueError异常，错误信息为：too many values to unpack（解包的值太多）或not enough values to unpack（解包的值不足）
+# a = 1, 10, 100, 1000
+# i, j, k = a             # ValueError: too many values to unpack (expected 3)
+# i, j, k, l, m, n = a    # ValueError: not enough values to unpack (expected 6, got 4)
+# 有一种解决变量个数少于元素的个数方法，就是使用星号表达式。通过星号表达式，我们可以让一个变量接收多个值，代码如下所示。需要注意两点：
+# 首先，用星号表达式修饰的变量会变成一个列表，列表中有0个或多个元素；其次，在解包语法中，星号表达式只能出现一次。
+# a = 1, 10, 100, 1000
+# i, j, *k = a
+# print(i, j, k)        # 1 10 [100, 1000]
+# print(type(i))
+# print(type(j))
+# print(type(k))
+# i, *j, k = a
+# print(i, j, k)        # 1 [10, 100] 1000
+# *i, j, k = a
+# print(i, j, k)        # [1, 10] 100 1000
+# *i, j = a
+# print(i, j)           # [1, 10, 100] 1000
+# i, *j = a
+# print(i, j)           # 1 [10, 100, 1000]
+# i, j, k, *l = a
+# print(i, j, k, l)     # 1 10 100 [1000]
+# i, j, k, l, *m = a
+# print(i, j, k, l, m)  # 1 10 100 1000 []
+
+# 需要说明一点，解包语法对所有的序列都成立，这就意味着我们之前讲的列表、range函数构造的范围序列甚至字符串都可以使用解包语法。
+# 用星号修饰的变量会变成一个列表 list
+# a, b, *c = range(1, 10)
+# print(a, b, c)
+# print(type(a)) # <class 'int'>
+# print(type(b)) # <class 'int'>
+# print(type(c)) # <class 'list'>
+# a, b, c = [1, 10, 100]
+# print(a, b, c)
+# a, *b, c = 'hello'
+# print(a, b, c)
+# print(type(a))
+# print(type(b))
+# print(type(c))
+
+# 元组是不可变类型，不可变类型更适合多线程环境，因为它降低了并发访问变量的同步化开销。通常不可变类型在创建时间上优于对应的可变类型。我们可以使用timeit模块的timeit函数来看看创建保存相同元素的元组和列表各自花费的时间，timeit函数的number参数表示代码执行的次数。下面的代码中，我们分别创建了保存1到9的整数的列表和元组，每个操作执行10000000次，统计运行时间
+# import timeit
+# print('%.3f 秒' % timeit.timeit('[1, 2, 3, 4, 5, 6, 7, 8, 9]', number=10000000))
+# print('%.3f 秒' % timeit.timeit('(1, 2, 3, 4, 5, 6, 7, 8, 9)', number=10000000))
+# print('%.3f seconds' % timeit.timeit('[1,2,3,4,5,6]', number = 10000000))
+# print('%.3f seconds' % timeit.timeit('(1,2,3,4,5,6)', number = 10000000))
+
+# list and tuple can be transformed
+# infos = ('骆昊', 43, True, '四川成都')
+# print(list(infos))  # ['骆昊', 43, True, '四川成都']
+# frts = ['apple', 'banana', 'orange']
+# print(tuple(frts))  # ('apple', 'banana', 'orange')
+
+# 列表和元组都是容器型的数据类型，即一个变量可以保存多个数据，而且它们都是按一定顺序组织元素的有序容器。列表是可变数据类型，元组是不可变数据类型，所以列表可以添加元素、删除元素、清空元素、排序反转，但这些操作对元组来说是不成立的。列表和元组都可以支持拼接运算、成员运算、索引运算、切片运算等操作，后面我们要讲到的字符串类型也支持这些运算，因为字符串就是字符按一定顺序构成的序列，在这一点上三者并没有什么区别。我们推荐大家使用列表的生成式语法来创建列表，它不仅好用而且效率很高，是 Python 语言中非常有特色的语法。
+
+
+
+"""
+Python Learn - Day 11 within 100 Days - String
+Author: guisongwu
+Date  : 2025-10-26
+"""
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
