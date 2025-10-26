@@ -868,15 +868,207 @@ Python Learn - Day 11 within 100 Days - String
 Author: guisongwu
 Date  : 2025-10-26
 """
+# s1 = 'hello, world!'
+# s2 = "你好，世界！❤️"
+# s3 = '''hello,
+# wonderful
+# world!'''
+# print(s1)
+# print(s2)
+# print(s3)
+# s1 = '\'hello, world!\''
+# s2 = '\\hello, world!\\'
+# print(s1)
+# print(s2)
+
+# Python 中有一种以r或R开头的字符串，这种字符串被称为原始字符串，意思是字符串中的每个字符都是它本来的含义，没有所谓的转义字符。例如，在字符串'hello\n'中，\n表示换行；而在r'hello\n'中，\n不再表示换行，就是字符\和字符n
+# s1 = 'it is \time \to \read \now' # \r是回车符（carriage return）相当于让输出回到了行首
+# s2 = r'\it \is \time \to \read \now'
+# print(s1)
+# print(s2)
+
+# +, *, [], [:], in, not in...
+# s1 = 'hello' + ', ' + 'world'
+# print(s1)    # hello, world
+# s2 = '!' * 3
+# print(s2)    # !!!
+# s1 += s2
+# print(s1)    # hello, world!!!
+# s1 *= 2
+# print(s1)    # hello, world!!!hello, world!!!
+
+# s1 = 'a whole new world'
+# s2 = 'hello world'
+# print(s1 == s2)             # False
+# print(s1 < s2)              # True ord('a') < ord('h')
+# print(s1 == 'hello world')  # False
+# print(s2 == 'hello world')  # True
+# print(s2 != 'Hello world')  # True
+# s3 = '骆昊'
+# print(ord('骆'))            # 39558
+# print(ord('昊'))            # 26122
+# s4 = '王大锤'
+# print(ord('王'))            # 29579
+# print(ord('大'))            # 22823
+# print(ord('锤'))            # 38180
+# print(s3 >= s4)             # True
+# print(s3 != s4)             # True
+
+# print(ord('a'))
+# print(chr(97))
+
+# 成员运算符 in / not in
+# s1 = 'hello, world'
+# s2 = 'goodbye, world'
+# print('wo' in s1)      # True
+# print('wo' not in s2)  # False
+# print(s2 in s1)        # False
+
+# list1 = list(range(10))
+# tuple1 = tuple(range(10))
+# str1 = 'hello, world'
+# print(len(list1))                 # 10
+# print(len(tuple1))                 # 10
+# print(len(str1))                 # 12
+
+# string 不是可变类型
+# s = 'abc123456'
+# n = len(s)
+# print(s[0], s[-n])    # a a
+# print(s[n-1], s[-1])  # 6 6
+# print(s[2], s[-7])    # c c
+# print(s[5], s[-4])    # 3 3
+# print(s[2:5])         # c12
+# print(s[-7:-4])       # c12
+# print(s[2:])          # c123456
+# print(s[:2])          # ab
+# print(s[::2])         # ac246
+# print(s[::-1])        # 654321cba
+# print(type(s[0]))
+# print(type(s[3]))
+
+# s = 'hello'
+# for i in range(len(s)-1):
+#     print(s[i], end="")
+# print(s[-1])
+# for elem in s:
+#     print(elem)
+
+# .capitalize(), .title(), .upper(), .lower()
+# s1 = 'hello, world!'
+# # 字符串首字母大写
+# print(s1.capitalize())  # Hello, world!
+# # 字符串每个单词首字母大写
+# print(s1.title())       # Hello, World!
+# # 字符串变大写
+# print(s1.upper())       # HELLO, WORLD!
+# s2 = 'GOODBYE'
+# # 字符串变小写
+# print(s2.lower())       # goodbye
+# print(s1)               # hello, world
+# print(s2)               # GOODBYE
+# s3 = '123456'
+# print(s3.upper())       # HELLO, WORLD!
+# 字符串是不可变类型，使用字符串的方法对字符串进行操作会产生新的字符串，但是原来变量的值并没有发生变化。所以上面的代码中，当我们最后检查s1和s2两个变量的值时，s1和s2 的值并没有发生变化。
 
 
+# 查找操作. 如果想在一个字符串中从前向后查找有没有另外一个字符串，可以使用字符串的find或index方法。在使用find和index方法时还可以通过方法的参数来指定查找的范围，也就是查找不必从索引为0的位置开始。
+# find() / rfind()：找不到时返回 -1, 
+# index() / rindex()：找不到时抛出 ValueError
+# s = 'hello, world!'
+# print(s.find('or'))      # 8
+# print(s.find('or', 9))   # -1 没找到
+# print(s.find('of'))      # -1
+# print(s.index('or'))     # 8
+# print(s.index('or', 9))  # ValueError: substring not found
+# find和index方法还有逆向查找（从后向前查找）的版本，分别是rfind和rindex
+# s = 'hello world!'
+# print(s.find('o'))       # 4
+# print(s.rfind('o'))      # 7
+# print(s.rindex('o'))     # 7
+# print(s.rindex('o', 8))  # ValueError: substring not found
 
+# s1 = 'hello, world!'
+# print(s1.startswith('He'))   # False
+# print(s1.startswith('hel'))  # True
+# print(s1.endswith('!'))      # True
+# s2 = 'abc123456'
+# print(s2.isdigit())  # False
+# print(s2.isalpha())  # False
+# print(s2.isalnum())  # True
 
+# 格式化, 在 Python 中，字符串类型可以通过center、ljust、rjust方法做居中、左对齐和右对齐的处理。如果要在字符串的左侧补零，也可以使用zfill方法。
+# s = 'hello, world'
+# print(s.center(20, '*'))  # ****hello, world****
+# print(s.rjust(20))        #         hello, world
+# print(s.ljust(20, '~'))   # hello, world~~~~~~~~
+# print('33'.zfill(5))      # 00033
+# print('-33'.zfill(5))     # -0033
+# print('abc'.zfill(5))     # -0033
 
+# a = 321
+# b = 123
+# print('%d * %d = %d' % (a, b, a * b))
+# # 当然，我们也可以用字符串的format方法来完成字符串的格式，代码如下所示。
+# print('{0} * {1} = {2}'.format(a, b, a * b))
+# # 从 Python 3.6 开始，可以在字符串前加上f来格式化字符串，{变量名}是一个占位符，会被变量对应的值将其替换掉，代码如下所示。
+# print(f'{a} * {b} = {a * b}')
 
+# 变量值          占位符      格式化结果           说明
+# 3.1415926       {:.2f}        '3.14'          保留小数点后两位
+# 3.1415926       {:+.2f}       '+3.14'         带符号保留小数点后两位
+# -1              {:+.2f}       '-1.00'         带符号保留小数点后两位
+# 3.1415926       {:.0f}        '3'             不带小数
+# 123             {:0>10d}      '0000000123'    左边补0，补够10位
+# 123             {:x<10d}      '123xxxxxxx'    右边补x ，补够10位
+# 123             {:>10d}       '       123'    左边补空格，补够10位
+# 123             {:<10d}       '123       '    右边补空格，补够10位
+# 123456789       {:,}          '123,456,789'   逗号分隔格式
+# 0.123           {:.2%}        '12.30%'        百分比格式
+# 123456789       {:.2e}        '1.23e+08'      科学计数法格式
 
+# 字符串的strip方法可以帮我们获得将原字符串修剪掉左右两端指定字符之后的字符串，默认是修剪空格字符。这个方法非常有实用价值，可以用来将用户输入时不小心键入的头尾空格等去掉，strip方法还有lstrip和rstrip两个版本，相信从名字大家已经猜出来这两个方法是做什么用的。
+# s1 = '   jackfrued@126.com  '
+# print(s1.strip())      # jackfrued@126.com
+# print(s1)
+# s2 = '~你好，世界~'
+# print(s2.lstrip('~'))  # 你好，世界~
+# print(s2.rstrip('~'))  # ~你好，世界
+# print(s2)  # ~你好，世界
 
+# 替换操作. 如果希望用新的内容替换字符串中指定的内容，可以使用replace方法，代码如下所示。replace方法的第一个参数是被替换的内容，第二个参数是替换后的内容，还可以通过第三个参数指定替换的次数。
+# s = 'hello, good world'
+# print(s.replace('o', '@'))     # hell@, g@@d w@rld
+# print(s)     # hell@, g@@d w@rld
+# print(s.replace('o', '@', 1))  # hell@, good world
 
+# 拆分与合并. 可以使用字符串的split方法将一个字符串拆分为多个字符串（放在一个列表中），也可以使用字符串的join方法将列表中的多个字符串连接成一个字符串，代码如下所示。
+# s = 'I love you'
+# words = s.split()
+# print(words)            # ['I', 'love', 'you']
+# print('~'.join(words))  # I~love~you
+
+# 需要说明的是，split方法默认使用空格进行拆分，我们也可以指定其他的字符来拆分字符串，而且还可以指定最大拆分次数来控制拆分的效果，代码如下所示。
+# s = 'I#love#you#so#much'
+# words = s.split('#')
+# print(words)  # ['I', 'love', 'you', 'so', 'much']
+# words = s.split('#', 2)
+# print(words)  # ['I', 'love', 'you#so#much']
+
+# 编码和解码. Python 中除了字符串str类型外，还有一种表示二进制数据的字节串类型（bytes）。
+# 所谓字节串，就是由零个或多个字节组成的有限序列。
+# 通过字符串的encode方法，我们可以按照某种编码方式将字符串编码为字节串，我们也可以使用字节串的decode方法，将字节串解码为字符串，代码如下所示。
+# a = '骆昊'
+# b = a.encode('utf-8')
+# c = a.encode('gbk')
+# print(b)                  # b'\xe9\xaa\x86\xe6\x98\x8a'
+# print(type(b))            # <class 'bytes'>
+# print(c)                  # b'\xc2\xe6\xea\xbb'
+# print(type(c))            # b'\xe9\xaa\x86\xe6\x98\x8a'
+# print(b.decode('utf-8'))  # 骆昊
+# print(c.decode('gbk'))    # 骆昊
+
+# 注意，如果编码和解码的方式不一致，会导致乱码问题（无法再现原始的内容）或引发UnicodeDecodeError错误，导致程序崩溃。
 
 
 

@@ -1,8 +1,5 @@
 Makefile
-README
 compile_commands.json
-conv_test.m
-generate_mesh.m
 helmholtz-rt0-sphere.cpp
 helmholtz-rt0.cpp
 helmholtz-rt1-sphere.cpp
@@ -17,5 +14,4 @@ poisson-rt1.cpp
 poisson.c
 rectangle.geo
 sphere_poisson.cpp
-tags
 testpetsc.c

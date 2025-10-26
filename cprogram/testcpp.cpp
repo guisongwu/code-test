@@ -1319,27 +1319,25 @@ int main(int argc, char *argv[]) {
 	// | `[=, &y]` | 默认按值捕获，`y` 按引用捕获 |
 	// | `[&, x]`  | 默认按引用捕获，`x` 按值捕获 |
 	//
-	double nodes[3][3];
-    auto setNode = [&](int i, Real x, Real y) {
-		nodes[i][0] = x; nodes[i][1] = y; nodes[i][2] = 1-x-y; };
-	setNode(1, 0.2, 0.3);
-	cout << nodes[1][0] << "\t" << nodes[1][1] << "\t" << nodes[1][2] << "\n";
+	/* double nodes[3][3]; */
+    /* auto setNode = [&](int i, Real x, Real y) { */
+	/* 	nodes[i][0] = x; nodes[i][1] = y; nodes[i][2] = 1-x-y; }; */
+	/* setNode(1, 0.2, 0.3); */
+	/* cout << nodes[1][0] << "\t" << nodes[1][1] << "\t" << nodes[1][2] << "\n"; */
 
-	int factor = 10;
-	auto multiply = [factor](int x) {
-		return x * factor; };
-	auto increment = [&factor]() {
-		factor++; };
-	cout << "multiply(5) = " << multiply(5) << endl; // 5 * 10 = 50
-	increment();  // factor = 11
-	std::cout << "factor = " << factor << std::endl; // 11
-
-	std::vector<int> v = {5, 2, 8, 1, 3};
-    std::sort(v.begin(), v.end(), [](int a, int b) { return a > b; }); // 使用 lambda 降序排列
-    for (int x : v)
-		std::cout << x << " ";
-	std::cout << std::endl;
-
+	/* int factor = 10; */
+	/* auto multiply = [factor](int x) { */
+	/* 	return x * factor; }; */
+	/* auto increment = [&factor]() { */
+	/* 	factor++; }; */
+	/* cout << "multiply(5) = " << multiply(5) << endl; // 5 * 10 = 50 */
+	/* increment();  // factor = 11 */
+	/* std::cout << "factor = " << factor << std::endl; // 11 */
+	/* std::vector<int> v = {5, 2, 8, 1, 3}; */
+    /* std::sort(v.begin(), v.end(), [](int a, int b) { return a > b; }); // 使用 lambda 降序排列 */
+    /* for (int x : v) */
+	/* 	std::cout << x << " "; */
+	/* std::cout << std::endl; */
 
 	// -------------------------------------- class funcs -----------------------------------------
 	/* Derived D; */
