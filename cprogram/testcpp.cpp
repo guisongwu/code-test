@@ -460,7 +460,6 @@ class Quad : public Elem {
 };
 
 
-
 typedef Btype (*BC_FUNCTION)(int mark);
 
 static Btype default_bc_map(int mark)
@@ -1306,6 +1305,9 @@ class Derived : public Base {
 		void func3() override { cout << "Derived::func" << endl;  }
 };
 
+void test_elem(const Elem &e) {
+	cout << "e.elem_type = " << e.elem_type << endl;
+}
 
 int main(int argc, char *argv[]) {
 	// ------------------------------------ lambda function ---------------------------------------
@@ -1383,8 +1385,12 @@ int main(int argc, char *argv[]) {
 	/* printf("t1.age = %d\n", t1.age); */
 	
 	// --------------------------------------- read_mesh ------------------------------------------
-	/* Grid g; */
-	/* g.read_mesh("mixed_struct_grid.msh"); */
+	Grid g;
+	g.read_mesh("../mesh/mixed_struct_grid.msh");
+	for (int i = 0; i < g.nelem; i++) {
+		const Elem &e = *g.elems[i];
+		test_elem(e);
+	}
 	/* for (int i = 0; i < g.nvert; i++) { */
 	/* 	printf("%d\t%8.5f\t%8.5f\t%8.5f\n", i, g.verts[i][0], g.verts[i][1], g.verts[i][2]); */
 	/* } */

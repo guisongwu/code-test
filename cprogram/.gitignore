@@ -1,0 +1,13 @@
+*.o
+poisson
+tags
+testc
+testcpp
+testpetsc
+poisson-rt
+poisson-rt0
+poisson-rt0-sphere
+poisson-rt1-sphere
+helmholtz-rt0-sphere
+helmholtz-rt1-sphere
+compile_commands.json
