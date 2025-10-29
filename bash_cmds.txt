@@ -11,3 +11,6 @@ wc -l filename                                // 查看文件行数
 find . -name "*.cpp" | xargs wc -l            // 查看当前目录下所有 cpp 文件的行数
 
 
+git fetch  									  // 获取远程仓库，并不会修改本地仓库
+git status                                    // 查看刚刚拉取的远程和本地的状态
+git pull = git fetch + git merge
