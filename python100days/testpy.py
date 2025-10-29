@@ -1336,13 +1336,15 @@ Date  : 2025-10-27
 # 我们通过几个简单的例子来看看如何使用字典类型解决一些实际的问题。
 # 例子1：输入一段话，统计每个英文字母出现的次数，按出现次数从高到低输出。
 sentence = input('请输入一段话: ')
+print(type(sentence))
 counter = {}
 for ch in sentence:
+    print(ch)
     if 'A' <= ch <= 'Z' or 'a' <= ch <= 'z':
         counter[ch] = counter.get(ch, 0) + 1
-                    sorted_keys = sorted(counter, key=counter.get, reverse=True)
-                    for key in sorted_keys:
-                        print(f'{key} 出现了 {counter[key]} 次.')
+sorted_keys = sorted(counter, key=counter.get, reverse=True)
+for key in sorted_keys:
+    print(f'{key} 出现了 {counter[key]} 次.')
 
 #                                             输入：
 

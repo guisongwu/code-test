@@ -52,7 +52,8 @@ namespace BDRY_MASK {
         OWNER = 2,
         REMOTE = 4,
         DIRICHLET = 8,
-        NEUMANN = 16
+        NEUMANN = 16,
+		BDRY_HDIV = 32
     };
 }
 
@@ -623,8 +624,8 @@ namespace REF_ELEM {
 	};
 }
 
-#define GetEdgeVertTria(i,j) REF_ELEM::EdgeVertTria[i][j]
-#define GetEdgeVertQuad(i,j) REF_ELEM::EdgeVertQuad[i][j]
+/* #define GetEdgeVertTria(i,j) REF_ELEM::EdgeVertTria[i][j] */
+/* #define GetEdgeVertQuad(i,j) REF_ELEM::EdgeVertQuad[i][j] */
 
 #define GetEdgeVert(e,i,j) ((e).elem_type == TRIA) ? REF_ELEM::EdgeVertTria[i][j] : REF_ELEM::EdgeVertQuad[i][j]
 
@@ -1061,15 +1062,7 @@ Grid::read_mesh(const char *mesh_file_name, BC_FUNCTION user_bc_map, const char 
 
     for (unsigned int ielem = 0; ielem < nelem; ielem++) {
 		Elem *e = &elems[ielem];
-		/* int v0, v1; */
 		for (unsigned int j = 0; j < e->nedge(); j++) {
-			/* if (e->elem_type == TRIA) { */
-			/* 	v0 = e->verts[GetEdgeVertTria(j, 0)]; */
-			/* 	v1 = e->verts[GetEdgeVertTria(j, 1)]; */
-			/* } else { */
-			/* 	v0 = e->verts[GetEdgeVertQuad(j, 0)]; */
-			/* 	v1 = e->verts[GetEdgeVertQuad(j, 1)]; */
-			/* } */
 
 			int v0 = e->verts[GetEdgeVert(*e, j, 0)];
 			int v1 = e->verts[GetEdgeVert(*e, j, 1)];
@@ -1094,11 +1087,6 @@ Grid::read_mesh(const char *mesh_file_name, BC_FUNCTION user_bc_map, const char 
 			e->neigh[j] = -1;
 		}
     }
-#if 0
-	for (int i = 0; i < nedge; i++) {
-		cout << edge2elem[i][0] << "\t" << edge2elem[i][1] << endl; 
-	}
-#endif
 
 
     //
@@ -1135,7 +1123,6 @@ Grid::read_mesh(const char *mesh_file_name, BC_FUNCTION user_bc_map, const char 
 		// 
 		int ielem0 = edge2elem[iedge][0];
 		int ielem1 = edge2elem[iedge][1];
-		int v0, v1;
 
 		if (ielem0 >= 0 && ielem1 >= 0) {
 			// Interior edge
@@ -1161,13 +1148,15 @@ Grid::read_mesh(const char *mesh_file_name, BC_FUNCTION user_bc_map, const char 
 			e1->neigh[j1] = ielem0;
 	    
 			// to vert
-			if (e0->elem_type == TRIA) {
-				v0 = e0->verts[GetEdgeVertTria(j0, 0)];  // fixeme: use v0_
-				v1 = e0->verts[GetEdgeVertTria(j0, 1)];
-			} else {
-				v0 = e0->verts[GetEdgeVertQuad(j0, 0)];  // fixeme: use v0_
-				v1 = e0->verts[GetEdgeVertQuad(j0, 1)];
-			}
+			/* if (e0->elem_type == TRIA) { */
+			/* 	v0 = e0->verts[GetEdgeVertTria(j0, 0)];  // fixeme: use v0_ */
+			/* 	v1 = e0->verts[GetEdgeVertTria(j0, 1)]; */
+			/* } else { */
+			/* 	v0 = e0->verts[GetEdgeVertQuad(j0, 0)];  // fixeme: use v0_ */
+			/* 	v1 = e0->verts[GetEdgeVertQuad(j0, 1)]; */
+			/* } */
+			int v0 = e0->verts[GetEdgeVert(*e0, j0, 0)];  // fixeme: use v0_
+			int	v1 = e0->verts[GetEdgeVert(*e0, j0, 1)];
 			types_vert[v0] |= btype;
 			types_vert[v1] |= btype;
 		}
@@ -1185,13 +1174,8 @@ Grid::read_mesh(const char *mesh_file_name, BC_FUNCTION user_bc_map, const char 
 			e0->neigh[j0] = -1;
 
 			// to vert
-			if (e0->elem_type == TRIA) {
-				v0 = e0->verts[GetEdgeVertTria(j0, 0)];  // fixeme: use v0_
-				v1 = e0->verts[GetEdgeVertTria(j0, 1)];
-			} else {
-				v0 = e0->verts[GetEdgeVertQuad(j0, 0)];  // fixeme: use v0_
-				v1 = e0->verts[GetEdgeVertQuad(j0, 1)];
-			}
+			int v0 = e0->verts[GetEdgeVert(*e0, j0, 0)];  // fixeme: use v0_
+			int	v1 = e0->verts[GetEdgeVert(*e0, j0, 1)];
 			types_vert[v0] |= btype;
 			types_vert[v1] |= btype;
 		}
@@ -1332,6 +1316,17 @@ void test_elem(const Elem &e) {
 }
 
 int main(int argc, char *argv[]) {
+	// ------------------------------------------- ++ ---------------------------------------------
+	int a = 0;
+	int b = a++;
+	cout << "b = " << b << endl;
+	cout << "a = " << a << endl;
+
+	// ---------------------------------------- BDRY_MASK -----------------------------------------
+	/* Btype a = BDRY_MASK::BDRY_HDIV; */
+	/* Btype b = BDRY_MASK::INTERIOR; */
+	/* cout << "a & b = " << (a & b) << endl; */
+	
 	// ------------------------------------ lambda function ---------------------------------------
 	// | 捕获写法  | 含义           		      |
 	// | --------- | ---------------------------  |
@@ -1408,7 +1403,10 @@ int main(int argc, char *argv[]) {
 	
 	// --------------------------------------- read_mesh ------------------------------------------
 	Grid g;
-	g.read_mesh("../mesh/mixed_struct_grid.msh");
+	g.read_mesh("../mesh/square_mixR0.msh");
+	for (int i = 0; i < g.nvert; i++) {
+		cout << g.types_vert[i] << endl;
+	}
 	/* for (int i = 0; i < g.nelem; i++) { */
 	/* 	const Elem &e = g.elems[i]; */
 	/* 	test_elem(e); */
@@ -1416,19 +1414,19 @@ int main(int argc, char *argv[]) {
 	/* for (int i = 0; i < g.nvert; i++) { */
 	/* 	printf("%d\t%8.5f\t%8.5f\t%8.5f\n", i, g.verts[i][0], g.verts[i][1], g.verts[i][2]); */
 	/* } */
-	for (int i = 0; i < g.nedge; i++) {
-		cout << g.edges[i][0] << "\t" << g.edges[i][1] << endl;
-	}
+	/* for (int i = 0; i < g.nedge; i++) { */
+	/* 	cout << g.edges[i][0] << "\t" << g.edges[i][1] << endl; */
+	/* } */
 	/* for (int i = 0; i < g.nelem; i++) { */
 	/* 	for (int j = 0; j < g.elems[i].nvert(); j++) */
 	/* 		cout << g.elems[i].verts[j] << "\t"; */
 	/* 	cout << endl; */
 	/* } */
-	for (int i = 0; i < g.nelem; i++) {
-		for (int j = 0; j < g.elems[i].nedge(); j++)
-			cout << g.elems[i].edges[j] << "\t";
-		cout << endl;
-	}
+	/* for (int i = 0; i < g.nelem; i++) { */
+	/* 	for (int j = 0; j < g.elems[i].nedge(); j++) */
+	/* 		cout << g.elems[i].edges[j] << "\t"; */
+	/* 	cout << endl; */
+	/* } */
 	/* for (int i = 0; i < g.nelem; i++) { */
 	/* 	for (int j = 0; j < g.elems[i].nedge(); j++) */
 	/* 		cout << g.elems[i].neigh[j] << "\t"; */
