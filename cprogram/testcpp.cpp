@@ -427,37 +427,49 @@ class Elem {
 		int sgn;
 
 		// Iteration for different elem type
-		virtual int nvert() const = 0;
-		virtual int nedge() const = 0;
+		/* virtual int nvert() const = 0; */
+		/* virtual int nedge() const = 0; */
+		int nvert() const {
+			if (elem_type == TRIA)
+				return 3;
+			else
+				return 4;
+		}
+		int nedge() const {
+			if (elem_type == TRIA)
+				return 3;
+			else
+				return 4;
+		}
 	private:
 };
 
-class Triangle : public Elem {
-	public:
-		Triangle() { elem_type = TRIA; }
-		int nvert() const override {
-			assert(elem_type == TRIA);
-			return 3;
-		}
-		int nedge() const override {
-			assert(elem_type == TRIA);
-			return 3;
-		}
-};
+/* class Triangle : public Elem { */
+/* 	public: */
+/* 		Triangle() { elem_type = TRIA; } */
+/* 		int nvert() const override { */
+/* 			assert(elem_type == TRIA); */
+/* 			return 3; */
+/* 		} */
+/* 		int nedge() const override { */
+/* 			assert(elem_type == TRIA); */
+/* 			return 3; */
+/* 		} */
+/* }; */
 
 
-class Quad : public Elem {
-	public:
-		Quad() { elem_type = QUAD; }
-		int nvert() const override {
-			assert(elem_type == QUAD);
-			return 4;
-		}
-		int nedge() const override {
-			assert(elem_type == QUAD);
-			return 4;
-		}
-};
+/* class Quad : public Elem { */
+/* 	public: */
+/* 		Quad() { elem_type = QUAD; } */
+/* 		int nvert() const override { */
+/* 			assert(elem_type == QUAD); */
+/* 			return 4; */
+/* 		} */
+/* 		int nedge() const override { */
+/* 			assert(elem_type == QUAD); */
+/* 			return 4; */
+/* 		} */
+/* }; */
 
 
 typedef Btype (*BC_FUNCTION)(int mark);
@@ -559,7 +571,8 @@ class Grid {
 
 		Coord *verts = nullptr;
 		Edge *edges = nullptr;
-		Elem **elems = nullptr;
+		Elem *elems = nullptr;
+		/* Elem **elems = nullptr; */
 		//Edge *bdry_edges = nullptr;
 
 		Btype *types_vert = nullptr;
@@ -613,6 +626,9 @@ namespace REF_ELEM {
 #define GetEdgeVertTria(i,j) REF_ELEM::EdgeVertTria[i][j]
 #define GetEdgeVertQuad(i,j) REF_ELEM::EdgeVertQuad[i][j]
 
+#define GetEdgeVert(e,i,j) ((e).elem_type == TRIA) ? REF_ELEM::EdgeVertTria[i][j] : REF_ELEM::EdgeVertQuad[i][j]
+
+
 void
 Grid::init_gref()
 {
@@ -627,7 +643,7 @@ Grid::init_gref()
     edge_to_elem.resize(nedge);
 
     for (unsigned int ielem = 0; ielem < nelem; ielem++) {
-		const Elem &e = *elems[ielem];
+		const Elem &e = elems[ielem];
 
 		for (unsigned int i = 0; i < e.nvert(); i++) {
 			int vid = e.verts[i];
@@ -667,12 +683,12 @@ Grid::init_gref()
 		// First elem has POISITIVE edge sgn.
 		// In FESpace::interp, the value is interpolated from first element.
 		gRef *gr = &edge_to_elem[iedge][0];
-		elems[gr->eind]->edges_sgn[gr->gind] = 1;
+		elems[gr->eind].edges_sgn[gr->gind] = 1;
 
 		if (ne == 2) {
 			// Second elem has NEGETIVE edge sgn
 			gr = &edge_to_elem[iedge][1];
-			elems[gr->eind]->edges_sgn[gr->gind] = -1;
+			elems[gr->eind].edges_sgn[gr->gind] = -1;
 		}
     }
 
@@ -798,7 +814,7 @@ Grid::read_mesh(const char *mesh_file_name, BC_FUNCTION user_bc_map, const char 
 
 			bdry_edges = new BdryEdge[n]();
 			/* elems = new Elem[n](); // creates an array of Elem objects, not pointers to Elem */
-			elems = new Elem*[n](); // creates an array of Elem pointers
+			elems = new Elem[n](); // creates an array of Elem pointers
 			int nedge_read = 0, nface_read = 0, ntria_read = 0, nquad_read = 0;
 			int elem_type = 0;
 
@@ -852,8 +868,8 @@ Grid::read_mesh(const char *mesh_file_name, BC_FUNCTION user_bc_map, const char 
 					// triangles
 					// 
 					READ_NUMBER;
-					elems[nface_read] = new Triangle();
-					Elem *e = elems[nface_read];
+					elems[nface_read].elem_type = TRIA;
+					Elem *e = &elems[nface_read];
 					e->verts[0] = atoi(token) - 1;
 					if (!get_token(fp, token))
 						ERROR;
@@ -875,8 +891,8 @@ Grid::read_mesh(const char *mesh_file_name, BC_FUNCTION user_bc_map, const char 
 					// quadrilaterals
 					// 
 					READ_NUMBER;
-					elems[nface_read] = new Quad();
-					Elem *e = elems[nface_read];
+					elems[nface_read].elem_type = QUAD;
+					Elem *e = &elems[nface_read];
 					e->verts[0] = atoi(token) - 1;
 					if (!get_token(fp, token))
 						ERROR;
@@ -941,14 +957,16 @@ Grid::read_mesh(const char *mesh_file_name, BC_FUNCTION user_bc_map, const char 
 	int edge_count = 0;
     for (unsigned int i = 0; i < nelem; i++) {
 		int v0, v1;
-		for (unsigned int j = 0; j < elems[i]->nedge(); j++) {
-			if (elems[i]->elem_type == TRIA) {
-				v0 = elems[i]->verts[GetEdgeVertTria(j, 0)];
-				v1 = elems[i]->verts[GetEdgeVertTria(j, 1)];
-			} else {
-				v0 = elems[i]->verts[GetEdgeVertQuad(j, 0)];
-				v1 = elems[i]->verts[GetEdgeVertQuad(j, 1)];
-			}
+		for (unsigned int j = 0; j < elems[i].nedge(); j++) {
+			/* if (elems[i].elem_type == TRIA) { */
+			/* 	v0 = elems[i].verts[GetEdgeVertTria(j, 0)]; */
+			/* 	v1 = elems[i].verts[GetEdgeVertTria(j, 1)]; */
+			/* } else { */
+			/* 	v0 = elems[i].verts[GetEdgeVertQuad(j, 0)]; */
+			/* 	v1 = elems[i].verts[GetEdgeVertQuad(j, 1)]; */
+			/* } */
+			int v0 = elems[i].verts[GetEdgeVert(elems[i], j, 0)];
+			int v1 = elems[i].verts[GetEdgeVert(elems[i], j, 1)];
 
 			SortIndex(v0, v1);
 	    
@@ -962,28 +980,28 @@ Grid::read_mesh(const char *mesh_file_name, BC_FUNCTION user_bc_map, const char 
 		// Ordering
 		{
 			int V0, V1, V2, V3, v0, v1, v2, v3;
-			V0 = elems[i]->verts[0];
-			V1 = elems[i]->verts[1];
-			V2 = elems[i]->verts[2];
-			if (elems[i]->elem_type == QUAD)
-				V3 = elems[i]->verts[3];
+			V0 = elems[i].verts[0];
+			V1 = elems[i].verts[1];
+			V2 = elems[i].verts[2];
+			if (elems[i].elem_type == QUAD)
+				V3 = elems[i].verts[3];
 
 			v0 = v1 = v2 = v3 = 0;
 			(V0 > V1) ? v0++ : v1++;
 			(V0 > V2) ? v0++ : v2++;
 			(V1 > V2) ? v1++ : v2++;
-			if (elems[i]->elem_type == QUAD)
+			if (elems[i].elem_type == QUAD)
 			{
 				(V0 > V3) ? v0++ : v3++;
 				(V1 > V3) ? v1++ : v3++;
 				(V2 > V3) ? v2++ : v3++;
 			}
 
-			elems[i]->ordering[0] = v0;
-			elems[i]->ordering[1] = v1;
-			elems[i]->ordering[2] = v2;
-			if (elems[i]->elem_type == QUAD)
-				elems[i]->ordering[3] = v3;
+			elems[i].ordering[0] = v0;
+			elems[i].ordering[1] = v1;
+			elems[i].ordering[2] = v2;
+			if (elems[i].elem_type == QUAD)
+				elems[i].ordering[3] = v3;
 		}
     }
     // for (i = 0; i < 3*nelem; i++)
@@ -1030,7 +1048,7 @@ Grid::read_mesh(const char *mesh_file_name, BC_FUNCTION user_bc_map, const char 
 
     // ------------------------------------------------------------
     //
-    // Boudnary makers
+    // Boundary makers
     //
     // ------------------------------------------------------------
     types_vert = new Btype[nvert](); 
@@ -1042,16 +1060,20 @@ Grid::read_mesh(const char *mesh_file_name, BC_FUNCTION user_bc_map, const char 
 		edge2elem[i][0] = edge2elem[i][1] = -1;
 
     for (unsigned int ielem = 0; ielem < nelem; ielem++) {
-		Elem *e = elems[ielem];
-		int v0, v1;
+		Elem *e = &elems[ielem];
+		/* int v0, v1; */
 		for (unsigned int j = 0; j < e->nedge(); j++) {
-			if (e->elem_type == TRIA) {
-				v0 = e->verts[GetEdgeVertTria(j, 0)];
-				v1 = e->verts[GetEdgeVertTria(j, 1)];
-			} else {
-				v0 = e->verts[GetEdgeVertQuad(j, 0)];
-				v1 = e->verts[GetEdgeVertQuad(j, 1)];
-			}
+			/* if (e->elem_type == TRIA) { */
+			/* 	v0 = e->verts[GetEdgeVertTria(j, 0)]; */
+			/* 	v1 = e->verts[GetEdgeVertTria(j, 1)]; */
+			/* } else { */
+			/* 	v0 = e->verts[GetEdgeVertQuad(j, 0)]; */
+			/* 	v1 = e->verts[GetEdgeVertQuad(j, 1)]; */
+			/* } */
+
+			int v0 = e->verts[GetEdgeVert(*e, j, 0)];
+			int v1 = e->verts[GetEdgeVert(*e, j, 1)];
+
 			SortIndex(v0, v1);
 			Edge edge = {v0, v1}, *p;
 			p = (Edge *) bsearch(&edge, edges,
@@ -1117,8 +1139,8 @@ Grid::read_mesh(const char *mesh_file_name, BC_FUNCTION user_bc_map, const char 
 
 		if (ielem0 >= 0 && ielem1 >= 0) {
 			// Interior edge
-			Elem *e0 = elems[ielem0];
-			Elem *e1 = elems[ielem1];
+			Elem *e0 = &elems[ielem0];
+			Elem *e1 = &elems[ielem1];
 			int j0, j1;
 	    
 			for (j0 = 0; j0 < e0->nedge(); j0++)
@@ -1151,7 +1173,7 @@ Grid::read_mesh(const char *mesh_file_name, BC_FUNCTION user_bc_map, const char 
 		}
 		else if (ielem0 >= 0) {
 			// Boundary edge
-			Elem *e0 = elems[ielem0];
+			Elem *e0 = &elems[ielem0];
 			int j0;
 	    
 			for (j0 = 0; j0 < e0->nedge(); j0++)
@@ -1387,39 +1409,39 @@ int main(int argc, char *argv[]) {
 	// --------------------------------------- read_mesh ------------------------------------------
 	Grid g;
 	g.read_mesh("../mesh/mixed_struct_grid.msh");
-	for (int i = 0; i < g.nelem; i++) {
-		const Elem &e = *g.elems[i];
-		test_elem(e);
-	}
+	/* for (int i = 0; i < g.nelem; i++) { */
+	/* 	const Elem &e = g.elems[i]; */
+	/* 	test_elem(e); */
+	/* } */
 	/* for (int i = 0; i < g.nvert; i++) { */
 	/* 	printf("%d\t%8.5f\t%8.5f\t%8.5f\n", i, g.verts[i][0], g.verts[i][1], g.verts[i][2]); */
 	/* } */
-	/* for (int i = 0; i < g.nedge; i++) { */
-	/* 	cout << g.edges[i][0] << "\t" << g.edges[i][1] << endl; */
-	/* } */
+	for (int i = 0; i < g.nedge; i++) {
+		cout << g.edges[i][0] << "\t" << g.edges[i][1] << endl;
+	}
 	/* for (int i = 0; i < g.nelem; i++) { */
-	/* 	for (int j = 0; j < g.elems[i]->nvert(); j++) */
-	/* 		cout << g.elems[i]->verts[j] << "\t"; */
+	/* 	for (int j = 0; j < g.elems[i].nvert(); j++) */
+	/* 		cout << g.elems[i].verts[j] << "\t"; */
+	/* 	cout << endl; */
+	/* } */
+	for (int i = 0; i < g.nelem; i++) {
+		for (int j = 0; j < g.elems[i].nedge(); j++)
+			cout << g.elems[i].edges[j] << "\t";
+		cout << endl;
+	}
+	/* for (int i = 0; i < g.nelem; i++) { */
+	/* 	for (int j = 0; j < g.elems[i].nedge(); j++) */
+	/* 		cout << g.elems[i].neigh[j] << "\t"; */
 	/* 	cout << endl; */
 	/* } */
 	/* for (int i = 0; i < g.nelem; i++) { */
-	/* 	for (int j = 0; j < g.elems[i]->nedge(); j++) */
-	/* 		cout << g.elems[i]->edges[j] << "\t"; */
+	/* 	for (int j = 0; j < g.elems[i].nedge(); j++) */
+	/* 		cout << g.elems[i].btypes[j] << "\t"; */
 	/* 	cout << endl; */
 	/* } */
 	/* for (int i = 0; i < g.nelem; i++) { */
-	/* 	for (int j = 0; j < g.elems[i]->nedge(); j++) */
-	/* 		cout << g.elems[i]->neigh[j] << "\t"; */
-	/* 	cout << endl; */
-	/* } */
-	/* for (int i = 0; i < g.nelem; i++) { */
-	/* 	for (int j = 0; j < g.elems[i]->nedge(); j++) */
-	/* 		cout << g.elems[i]->btypes[j] << "\t"; */
-	/* 	cout << endl; */
-	/* } */
-	/* for (int i = 0; i < g.nelem; i++) { */
-	/* 	for (int j = 0; j < g.elems[i]->nvert(); j++) */
-	/* 		printf("%d\t", g.elems[i]->ordering[j]); */
+	/* 	for (int j = 0; j < g.elems[i].nvert(); j++) */
+	/* 		printf("%d\t", g.elems[i].ordering[j]); */
 	/* 	cout << endl; */
 	/* } */
 	/* for (int i = 0; i < g.nvert; i++) { */
@@ -1436,11 +1458,11 @@ int main(int argc, char *argv[]) {
 	/* 	} */
 	/* } */
 	/* for (int i = 0; i < g.nelem; i++) { */
-	/* 	for (int j = 0; j < g.elems[i]->nedge(); j++) */
-	/* 		printf("elem NO.%d's NO.%d edge's edge sign is %d\n", i, j, g.elems[i]->edges_sgn[j]); */
+	/* 	for (int j = 0; j < g.elems[i].nedge(); j++) */
+	/* 		printf("elem NO.%d's NO.%d edge's edge sign is %d\n", i, j, g.elems[i].edges_sgn[j]); */
 	/* } */
 	/* for (int i = 0; i < g.nelem; i++) { */
-	/* 	printf("elem NO.%d's index is: %d\n", i, g.elems[i]->index); */
+	/* 	printf("elem NO.%d's index is: %d\n", i, g.elems[i].index); */
 	/* } */
 	/* for (int i = 0; i < g.nelem; i++) { */
 	/* 	printf("%d\t", g.types_elem[i]); */

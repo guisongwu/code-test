@@ -1299,59 +1299,50 @@ Date  : 2025-10-27
 # print(person.get('sex'))        # None
 # print(person.get('sex', True))  # True
 # 如果需要获取字典中所有的键，可以使用keys方法；如果需要获取字典中所有的值，可以使用values方法。字典还有一个名为items的方法，它会将键和值组装成二元组，通过该方法来遍历字典中的元素也是非常方便的。
-person = {'name': '王大锤', 'age': 25, 'height': 178}
-print(person.keys())    # dict_keys(['name', 'age', 'height'])
-print(type(person.keys())) # <class 'dict_keys'>
-print(person.values())  # dict_values(['王大锤', 25, 178])
-print(person.items())   # dict_items([('name', '王大锤'), ('age', 25), ('height', 178)])
-for key, value in person.items():
-    print(f'{key}:\t{value}')
+# person = {'name': '王大锤', 'age': 25, 'height': 178}
+# print(person.keys())    # dict_keys(['name', 'age', 'height'])
+# print(type(person.keys())) # <class 'dict_keys'>
+# print(person.values())  # dict_values(['王大锤', 25, 178])
+# print(person.items())   # dict_items([('name', '王大锤'), ('age', 25), ('height', 178)])
+# for key, value in person.items():
+#     print(f'{key}:\t{value}')
 
-#                 字典的update方法实现两个字典的合并操作。例如，有两个字典x和y，当执行x.update(y)操作时，x跟y相同的键对应的值会被y中的值更新，而y中有但x中没有的键值对会直接添加到x中，代码如下所示。
+# 字典的update方法实现两个字典的合并操作。例如，有两个字典x和y，当执行x.update(y)操作时，x跟y相同的键对应的值会被y中的值更新，而y中有但x中没有的键值对会直接添加到x中，代码如下所示。
+# person1 = {'name': '王大锤', 'age': 55, 'height': 178}
+# person2 = {'age': 25, 'addr': '成都市武侯区科华北路62号1栋101'}
+# person1.update(person2)
+# print(person1)  # {'name': '王大锤', 'age': 25, 'height': 178, 'addr': '成都市武侯区科华北路62号1栋101'}
+# 如果使用 Python 3.9 及以上的版本，也可以使用|运算符来完成同样的操作，代码如下所示。
+# person1 = {'name': '王大锤', 'age': 55, 'height': 178}
+# person2 = {'age': 25, 'addr': '成都市武侯区科华北路62号1栋101'}
+# person1 |= person2
+# print(person1)  # {'name': '王大锤', 'age': 25, 'height': 178, 'addr': '成都市武侯区科华北路62号1栋101'}
 
-#                 person1 = {'name': '王大锤', 'age': 55, 'height': 178}
-#                 person2 = {'age': 25, 'addr': '成都市武侯区科华北路62号1栋101'}
-#                 person1.update(person2)
-#                 print(person1)  # {'name': '王大锤', 'age': 25, 'height': 178, 'addr': '成都市武侯区科华北路62号1栋101'}
+# 可以通过pop或popitem方法从字典中删除元素，前者会返回（获得）键对应的值，但是如果字典中不存在指定的键，会引发KeyError错误；后者在删除元素时，会返回（获得）键和值组成的二元组。字典的clear方法会清空字典中所有的键值对，代码如下所示。
+# person = {'name': '王大锤', 'age': 25, 'height': 178, 'addr': '成都市武侯区科华北路62号1栋101'}
+# print(person.pop('age'))  # 25
+# print(person)             # {'name': '王大锤', 'height': 178, 'addr': '成都市武侯区科华北路62号1栋101'}
+# print(person.popitem())   # ('addr', '成都市武侯区科华北路62号1栋101')
+# print(person)             # {'name': '王大锤', 'height': 178}
+# person.clear()
+# print(person)             # {}
+# 跟列表一样，从字典中删除元素也可以使用del关键字，在删除元素的时候如果指定的键索引不到对应的值，一样会引发KeyError错误，具体的做法如下所示。
+# person = {'name': '王大锤', 'age': 25, 'height': 178, 'addr': '成都市武侯区科华北路62号1栋101'}
+# del person['age']
+# del person['addr']
+# print(person)  # {'name': '王大锤', 'height': 178}
 
-#                 如果使用 Python 3.9 及以上的版本，也可以使用|运算符来完成同样的操作，代码如下所示。
-
-#                 person1 = {'name': '王大锤', 'age': 55, 'height': 178}
-#                 person2 = {'age': 25, 'addr': '成都市武侯区科华北路62号1栋101'}
-#                 person1 |= person2
-#                 print(person1)  # {'name': '王大锤', 'age': 25, 'height': 178, 'addr': '成都市武侯区科华北路62号1栋101'}
-
-#                 可以通过pop或popitem方法从字典中删除元素，前者会返回（获得）键对应的值，但是如果字典中不存在指定的键，会引发KeyError错误；后者在删除元素时，会返回（获得）键和值组成的二元组。字典的clear方法会清空字典中所有的键值对，代码如下所示。
-
-#                 person = {'name': '王大锤', 'age': 25, 'height': 178, 'addr': '成都市武侯区科华北路62号1栋101'}
-#                 print(person.pop('age'))  # 25
-#                 print(person)             # {'name': '王大锤', 'height': 178, 'addr': '成都市武侯区科华北路62号1栋101'}
-#                 print(person.popitem())   # ('addr', '成都市武侯区科华北路62号1栋101')
-#                 print(person)             # {'name': '王大锤', 'height': 178}
-#                 person.clear()
-#                 print(person)             # {}
-
-#                 跟列表一样，从字典中删除元素也可以使用del关键字，在删除元素的时候如果指定的键索引不到对应的值，一样会引发KeyError错误，具体的做法如下所示。
-
-#                 person = {'name': '王大锤', 'age': 25, 'height': 178, 'addr': '成都市武侯区科华北路62号1栋101'}
-#                 del person['age']
-#                 del person['addr']
-#                 print(person)  # {'name': '王大锤', 'height': 178}
-
-#                 字典的应用
-
-#                 我们通过几个简单的例子来看看如何使用字典类型解决一些实际的问题。
-
-#                 例子1：输入一段话，统计每个英文字母出现的次数，按出现次数从高到低输出。
-
-#                 sentence = input('请输入一段话: ')
-#                 counter = {}
-#                 for ch in sentence:
-#                         if 'A' <= ch <= 'Z' or 'a' <= ch <= 'z':
-#                                     counter[ch] = counter.get(ch, 0) + 1
-#                                     sorted_keys = sorted(counter, key=counter.get, reverse=True)
-#                                     for key in sorted_keys:
-#                                             print(f'{key} 出现了 {counter[key]} 次.')
+# 字典的应用
+# 我们通过几个简单的例子来看看如何使用字典类型解决一些实际的问题。
+# 例子1：输入一段话，统计每个英文字母出现的次数，按出现次数从高到低输出。
+sentence = input('请输入一段话: ')
+counter = {}
+for ch in sentence:
+    if 'A' <= ch <= 'Z' or 'a' <= ch <= 'z':
+        counter[ch] = counter.get(ch, 0) + 1
+                    sorted_keys = sorted(counter, key=counter.get, reverse=True)
+                    for key in sorted_keys:
+                        print(f'{key} 出现了 {counter[key]} 次.')
 
 #                                             输入：
 

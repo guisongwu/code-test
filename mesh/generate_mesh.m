@@ -1,8 +1,9 @@
 %% generate a mixed structure mesh on [0,1]^2
+%% output is 'mixed_struct_grid.msh'
 clear;
 clc;
 
-N = 2;
+N = 16;
 h = 1/N;
 
 mapnode = @(i,j) (i-1)*(N+1)+j;
