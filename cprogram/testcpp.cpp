@@ -1297,18 +1297,22 @@ namespace NameSpaceB {
 
 class Base {
 	public:
+		Base() { cout << "Constructer of class Base\n"; }
 		void func1() { cout << "Base::func" << endl;  }
 		virtual void func2() { cout << "Base::func" << endl;  }
 		virtual void func3() = 0; // 至少含有一个纯虚函数的类是抽象类，不能实例化(Base B)
 								  // 如果函数是 virtual 但不是纯虚函数 → 必须实现。
 								  // 如果函数是 virtual = 0（纯虚函数）→ 可以不实现，但类就变成抽象类，派生类必须实现它。
 								  // 特殊情况下，你也可以给纯虚函数提供一个“默认实现”，供派生类显式调用。
+		void onlyBase() { cout << "Base::onlyBase\n";  }
 };
 class Derived : public Base {
 	public:
+		Derived() { cout << "Constructer of class Derived\n"; }
 		void func1() { cout << "Derived::func" << endl;  }
 		void func2() override { cout << "Derived::func" << endl;  }
 		void func3() override { cout << "Derived::func" << endl;  }
+		void onlyDerived() { cout << "Derived::onlyDerived\n";  }
 };
 
 void test_elem(const Elem &e) {
@@ -1316,11 +1320,39 @@ void test_elem(const Elem &e) {
 }
 
 int main(int argc, char *argv[]) {
+	// ----------------------------------- sizeof a class -----------------------------------------
+	cout << sizeof(Base) << endl;
+	cout << sizeof(Derived) << endl;
+	Derived derived;
+	cout << sizeof(derived) << endl;
+	cout << sizeof(Elem) << endl;
+	Elem e;
+	cout << sizeof(e) << endl;
+
+	// ----------------------------- base and derived's pointer -----------------------------------
+	/* Base *b1 = new Derived(); // 构造过程： */
+	/* 						 // */
+	/* 						 // 分配一块足够大的内存，能容纳一个 Derived 对象（包括 Base 部分）。 */
+	/* 						 // */
+	/* 						 // 自动调用 Base() 构造函数（基类部分初始化）。 */
+	/* 						 // → 输出：Constructer of class Base */
+	/* 						 // */
+	/* 						 // 再调用 Derived() 构造函数（派生类自己的部分）。 */
+	/* 						 // → 输出：Constructer of class Derived */
+	/* b1->onlyBase(); */
+	/* Derived *b2 = new Derived(); // 构造过程: same as above */
+	/* b2->onlyBase(); */
+	/* | 表达式                      | 指针类型   | 指向对象类型 | 能访问的成员范围 */          
+	/* | Base *b = new Derived();    | 基类指针   | 派生类对象   | 只能访问 Base 中声明的成员, 除非虚函数多态 */
+	/* | Derived *b = new Derived(); | 派生类指针 | 派生类对象   | 能访问 Base 和 Derived 的全部成员 */ 
+
+	/* Derived *d = new Base(); // Wrong */
+
 	// ------------------------------------------- ++ ---------------------------------------------
-	int a = 0;
-	int b = a++;
-	cout << "b = " << b << endl;
-	cout << "a = " << a << endl;
+	/* int a = 0; */
+	/* int b = a++; */
+	/* cout << "b = " << b << endl; */
+	/* cout << "a = " << a << endl; */
 
 	// ---------------------------------------- BDRY_MASK -----------------------------------------
 	/* Btype a = BDRY_MASK::BDRY_HDIV; */
@@ -1402,11 +1434,11 @@ int main(int argc, char *argv[]) {
 	/* printf("t1.age = %d\n", t1.age); */
 	
 	// --------------------------------------- read_mesh ------------------------------------------
-	Grid g;
-	g.read_mesh("../mesh/square_mixR0.msh");
-	for (int i = 0; i < g.nvert; i++) {
-		cout << g.types_vert[i] << endl;
-	}
+	/* Grid g; */
+	/* g.read_mesh("../mesh/square_mixR0.msh"); */
+	/* for (int i = 0; i < g.nvert; i++) { */
+	/* 	cout << g.types_vert[i] << endl; */
+	/* } */
 	/* for (int i = 0; i < g.nelem; i++) { */
 	/* 	const Elem &e = g.elems[i]; */
 	/* 	test_elem(e); */
