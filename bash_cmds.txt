@@ -7,6 +7,7 @@ file -i filename                              // 查看文件编码方式
 tmux list-windows                             // 查看 byobu 窗口
 tmux kill-window -t 2                         // 关闭 2 号 byobu 窗口
 
+wc -l                                         // 统计文件或标准输入的行数
 wc -l filename                                // 查看文件行数
 find . -name "*.cpp" | xargs wc -l            // 查看当前目录下所有 cpp 文件的行数
 
@@ -14,3 +15,8 @@ find . -name "*.cpp" | xargs wc -l            // 查看当前目录下所有 cpp
 git fetch  									  // 获取远程仓库，并不会修改本地仓库
 git status                                    // 查看刚刚拉取的远程和本地的状态
 git pull = git fetch + git merge
+
+cat /proc/cpuinfo | grep "physical id" | sort | uniq | wc -l      // 查看物理cpu数
+cat /proc/cpuinfo | grep "cpu cores" | uniq                       // 查看每个物理cpu中的核心(core)数
+cat /proc/cpuinfo | grep "processor" | wc -l                        // 查看总的逻辑cpu(processor)数
+cat /proc/cpuinfo | grep name | cut -f2 -d: | uniq -c             // 查看cpu型号

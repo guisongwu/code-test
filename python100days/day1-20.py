@@ -1197,9 +1197,9 @@ Author: guisongwu
 Date  : 2025-10-27
 """
 # 迄今为止，我们已经为大家介绍了 Python 中的三种容器型数据类型（列表、元组、集合），但是这些数据类型仍然不足以帮助我们解决所有的问题。例如，我们需要一个变量来保存一个人的多项信息，包括：姓名、年龄、身高、体重、家庭住址、本人手机号、紧急联系人手机号，此时你会发现，我们之前学过的列表、元组和集合类型都不够好使。
-# person1 = ['王大锤', 55, 168, 60, '成都市武侯区科华北路62号1栋101', '13122334455', '13800998877']
-# person2 = ('王大锤', 55, 168, 60, '成都市武侯区科华北路62号1栋101', '13122334455', '13800998877')
-# person3 = {'王大锤', 55, 168, 60, '成都市武侯区科华北路62号1栋101', '13122334455', '13800998877'}
+# person1 = ['王大锤', 55, 168, 60, '成都市武侯区科华北路62号1栋101', '13122334455', '13800998877'] list 
+# person2 = ('王大锤', 55, 168, 60, '成都市武侯区科华北路62号1栋101', '13122334455', '13800998877') tuple
+# person3 = {'王大锤', 55, 168, 60, '成都市武侯区科华北路62号1栋101', '13122334455', '13800998877'} set
 # 集合肯定是最不合适的，因为集合中不能有重复元素，如果一个人的年龄和体重刚好相同，那么集合中就会少一项信息；同理，如果这个人的手机号和紧急联系人手机号是相同的，那么集合中又会少一项信息。另一方面，虽然列表和元组可以把一个人的所有信息都保存下来，但是当你想要获取这个人的手机号或家庭住址时，你得先知道他的手机号是列表或元组中的第几个元素。总之，在遇到上述的场景时，列表、元组、集合都不是最合适的选择，此时我们需要字典（dictionary）类型，这种数据类型最适合把相关联的信息组装到一起，可以帮助我们解决 Python 程序中为真实事物建模的问题。
 # Python 程序中的字典跟现实生活中的字典很像，它以键值对（键和值的组合）的方式把数据组织到一起，我们可以通过键找到与之对应的值并进行操作。就像《新华字典》中，每个字（键）都有与它对应的解释（值）一样，每个字和它的解释合在一起就是字典中的一个条目，而字典中通常包含了很多个这样的条目。
 # 创建和使用字典. Python 中创建字典可以使用{}字面量语法，这一点跟上一节课讲的集合是一样的。但是字典的{}中的元素是以键值对的形式存在的，每个元素由:分隔的两个值构成，:前面是键，:后面是值，代码如下所示。
@@ -1335,72 +1335,470 @@ Date  : 2025-10-27
 # 字典的应用
 # 我们通过几个简单的例子来看看如何使用字典类型解决一些实际的问题。
 # 例子1：输入一段话，统计每个英文字母出现的次数，按出现次数从高到低输出。
-sentence = input('请输入一段话: ')
-print(type(sentence))
-counter = {}
-for ch in sentence:
-    print(ch)
-    if 'A' <= ch <= 'Z' or 'a' <= ch <= 'z':
-        counter[ch] = counter.get(ch, 0) + 1
-sorted_keys = sorted(counter, key=counter.get, reverse=True)
-for key in sorted_keys:
-    print(f'{key} 出现了 {counter[key]} 次.')
+# sentence = input('请输入一段话: ')
+# print(type(sentence))
+# counter = {} # empty dict
+# for ch in sentence:
+#     print(ch)
+#     if 'A' <= ch <= 'Z' or 'a' <= ch <= 'z':
+#         counter[ch] = counter.get(ch, 0) + 1
+# sorted_keys = sorted(counter, key=counter.get, reverse=True)
+# for key in sorted_keys:
+#     print(f'{key} 出现了 {counter[key]} 次.')
 
-#                                             输入：
+# sorted() 是 Python 内置的排序函数，用来对 任意可迭代对象（iterable） 进行排序，返回一个新的已排序列表（不会修改原对象）。
+# sorted(iterable, key=None, reverse=False)
+# | 参数         | 说明                                  |
+# | ---------- | ----------------------------------- |
+# | `iterable` | 可迭代对象，比如 list、tuple、str、dict、set 等  |
+# | `key`      | 排序时用的函数，用于提取比较关键字                   |
+# | `reverse`  | 是否倒序（默认 `False`，即升序；设为 `True` 表示降序） |
+# nums = [5, 2, 9, 1]
+# print(sorted(nums))
+# print(sorted(nums, reverse=True))
+# words = ["apple", "pear", "banana", "kiwi"]
+# print(sorted(words, key=len))
+# scores = {'Alice': 85, 'Bob': 92, 'Charlie': 78}
+# print(sorted(scores, key=lambda name: scores[name], reverse=True))
+# items = [(1, 3), (2, 1), (4, 2)]
+# print(sorted(items, key=lambda x: x[1]))
 
-#                                             Man is distinguished, not only by his reason, but by this singular passion from other animals, which is a lust of the mind, that by a perseverance of delight in the continued and indefatigable generation of knowledge, exceeds the short vehemence of any carnal pleasure.
+# 输入：
+# Man is distinguished, not only by his reason, but by this singular passion from other animals, which is a lust of the mind, that by a perseverance of delight in the continued and indefatigable generation of knowledge, exceeds the short vehemence of any carnal pleasure.
+# 输出：
+# e 出现了 27 次.
+# n 出现了 21 次.
+# a 出现了 18 次.
+# i 出现了 18 次.
+# s 出现了 16 次.
+# t 出现了 16 次.
+# o 出现了 14 次.
+# h 出现了 13 次.
+# r 出现了 10 次.
+# d 出现了 9 次.
+# l 出现了 9 次.
+# g 出现了 6 次.
+# u 出现了 6 次.
+# f 出现了 6 次.
+# c 出现了 6 次.
+# y 出现了 5 次.
+# b 出现了 5 次.
+# m 出现了 4 次.
+# p 出现了 3 次.
+# w 出现了 2 次.
+# v 出现了 2 次.
+# M 出现了 1 次.
+# k 出现了 1 次.
+# x 出现了 1 次.
 
-#                                             输出：
+# 例子2：在一个字典中保存了股票的代码和价格，找出股价大于100元的股票并创建一个新的字典。
+# 说明：可以用字典的生成式语法来创建这个新字典。
+# stocks = {
+#         'AAPL': 191.88,
+#         'GOOG': 1186.96,
+#         'IBM': 149.24,
+#         'ORCL': 48.44,
+#         'ACN': 166.89,
+#         'FB': 208.09,
+#         'SYMC': 21.29
+#         }
+# stocks2 = {key: value for key, value in stocks.items() if value > 100}
+# print(stocks2) # {'AAPL': 191.88, 'GOOG': 1186.96, 'IBM': 149.24, 'ACN': 166.89, 'FB': 208.09}
 
-#                                             e 出现了 27 次.
-#                                             n 出现了 21 次.
-#                                             a 出现了 18 次.
-#                                             i 出现了 18 次.
-#                                             s 出现了 16 次.
-#                                             t 出现了 16 次.
-#                                             o 出现了 14 次.
-#                                             h 出现了 13 次.
-#                                             r 出现了 10 次.
-#                                             d 出现了 9 次.
-#                                             l 出现了 9 次.
-#                                             g 出现了 6 次.
-#                                             u 出现了 6 次.
-#                                             f 出现了 6 次.
-#                                             c 出现了 6 次.
-#                                             y 出现了 5 次.
-#                                             b 出现了 5 次.
-#                                             m 出现了 4 次.
-#                                             p 出现了 3 次.
-#                                             w 出现了 2 次.
-#                                             v 出现了 2 次.
-#                                             M 出现了 1 次.
-#                                             k 出现了 1 次.
-#                                             x 出现了 1 次.
-
-#                                             例子2：在一个字典中保存了股票的代码和价格，找出股价大于100元的股票并创建一个新的字典。
-
-#                                                 说明：可以用字典的生成式语法来创建这个新字典。
-
-#                                                 stocks = {
-#                                                             'AAPL': 191.88,
-#                                                                 'GOOG': 1186.96,
-#                                                                     'IBM': 149.24,
-#                                                                         'ORCL': 48.44,
-#                                                                             'ACN': 166.89,
-#                                                                                 'FB': 208.09,
-#                                                                                     'SYMC': 21.29
-                                                                                    
-#                                                         }
-#                                                 stocks2 = {key: value for key, value in stocks.items() if value > 100}
-#                                                 print(stocks2)
-
-#                                                 输出：
-
-#                                                 {'AAPL': 191.88, 'GOOG': 1186.96, 'IBM': 149.24, 'ACN': 166.89, 'FB': 208.09}
-
-#                                                 总结
-#                                                 Python 程序中的字典跟现实生活中字典非常像，允许我们以键值对的形式保存数据，再通过键访问对应的值。字典是一种非常有利于数据检索的数据类型，但是需要再次提醒大家，字典中的键必须是不可变类型，列表、集合、字典等类型的数据都不能作为字典的键。'))')
+# 总结. Python 程序中的字典跟现实生活中字典非常像，允许我们以键值对的形式保存数据，再通过键访问对应的值。字典是一种非常有利于数据检索的数据类型，但是需要再次提醒大家，字典中的键必须是不可变类型，列表、集合、字典等类型的数据都不能作为字典的键.
 
 
 
 
+"""
+Python Learn - Day 14 within 100 Days - function and modules
+Author: guisongwu
+Date  : 2025-10-29
+"""
+
+# 函数和模块. 在讲解本节课的内容之前，我们先来研究一道数学题，请说出下面的方程有多少组正整数解。
+# x1 + x2 + x3 + x4 = 8
+# 你可能已经想到了，这个问题其实等同于将 8 个苹果分成四组且每组至少一个苹果有多少种方案，也等价于在分隔 8 个苹果的 7 个间隙之间放入三个隔断将苹果分成四组有多少种方案，所以答案是 C_7^3 = 35 ，其中 C_m^n = \frac{m!}{n!(m-n)!}. 根据之前学习的知识，我们可以用循环做累乘的方式分别计算出 m ! 、 n ! 和 ( m − n  ) ! ，然后再通过除法运算得到组合数 C m n ，代码如下所示。
+# m = 7
+# n = 3
+# # 计算m的阶乘
+# fm = 1
+# for num in range(1, m + 1):
+#     fm *= num
+# # 计算n的阶乘
+# fn = 1
+# for num in range(1, n + 1):
+#     fn *= num
+# # 计算m-n的阶乘
+# fk = 1
+# for num in range(1, m - n + 1):
+#     fk *= num
+# # 计算C(M,N)的值
+# print(fm // fn // fk)
+# print(fm / fn / fk)
+
+# 不知大家是否注意到，上面的代码中我们做了三次求阶乘的操作，虽然 m 、 n 、 m − n 的值各不相同，但是三段代码并没有实质性的区别，属于重复代码。世界级的编程大师Martin Fowler曾经说过：“代码有很多种坏味道，重复是最坏的一种！”。要写出高质量的代码，首先就要解决重复代码的问题。对于上面的代码来说，我们可以将求阶乘的功能封装到一个称为“函数”的代码块中，在需要计算阶乘的地方，我们只需“调用函数”即可实现对求阶乘功能的复用。
+# 定义函数. 数学上的函数通常形如 y = f(x) 或者 z = g(x,y) 这样的形式，在 y=f(x) 中， f 是函数的名字， x 是函数的自变量， y 是函数的因变量；而在 z=g(x,y) 中， g 是函数名， x 和 y 是函数的自变量， z 是函数的因变量。Python 中的函数跟这个结构是一致的，每个函数都有自己的名字、自变量和因变量。我们通常把 Python 函数的自变量称为函数的参数，而因变量称为函数的返回值。
+# Python 中可以使用def关键字来定义函数，和变量一样每个函数也应该有一个漂亮的名字，命名规则跟变量的命名规则是一样的（大家赶紧想想我们之前讲过的变量的命名规则）。在函数名后面的圆括号中可以设置函数的参数，也就是我们刚才说的函数的自变量，而函数执行完成后，我们会通过return关键字来返回函数的执行结果，这就是我们刚才说的函数的因变量。如果函数中没有return语句，那么函数会返回代表空值的None。另外，函数也可以没有自变量（参数），但是函数名后面的圆括号是必须有的。一个函数要做的事情（要执行的代码），是通过代码缩进的方式放到函数定义行之后，跟之前分支和循环结构的代码块类似，如下图所示。
+
+# 下面，我们将之前代码中求阶乘的操作放到一个函数中，通过这种方式来重构上面的代码。所谓重构，是在不影响代码执行结果的前提下对代码的结构进行调整，重构之后的代码如下所示。
+# 通过关键字def定义求阶乘的函数
+# 自变量（参数）num是一个非负整数
+# 因变量（返回值）是num的阶乘
+# def fac(num):
+#     result = 1
+#     for n in range(2, num + 1):
+#         result *= n
+#     return result
+# m = 7
+# n = 3
+# print(fac(m) // fac(n) // fac(m - n))
+
+# 大家可以感受下，上面的代码是不是比之前的版本更加简单优雅。更为重要的是，我们定义的求阶乘函数fac还可以在其他需要求阶乘的代码中重复使用。所以，使用函数可以帮助我们将功能上相对独立且会被重复使用的代码封装起来，当我们需要这些的代码，不是把重复的代码再编写一遍，而是通过调用函数实现对既有代码的复用。事实上，Python 标准库的math模块中，已经有一个名为factorial的函数实现了求阶乘的功能，我们可以直接用import math导入math模块，然后使用math.factorial来调用求阶乘的函数；我们也可以通过from math import factorial直接导入factorial函数来使用它，代码如下所示。
+# from math import factorial
+# m = 7
+# n = 3
+# print(factorial(m) // factorial(n) // factorial(m - n))
+# 将来我们使用的函数，要么是自定义的函数，要么是 Python 标准库或者三方库中提供的函数，如果已经有现成的可用的函数，我们就没有必要自己去定义，“重复发明轮子”是一件非常糟糕的事情。对于上面的代码，如果你觉得factorial这个名字太长，书写代码的时候不是特别方便，我们在导入函数的时候还可以通过as关键字为其别名。在调用函数的时候，我们可以用函数的别名，而不再使用它之前的名字，代码如下所示。
+# from math import factorial as f
+# m = 7
+# n = 3
+# print(f(m) // f(n) // f(m - n))
+
+# 函数的参数
+# 位置参数和关键字参数
+# 我们再来写一个函数，根据给出的三条边的长度判断是否可以构成三角形，如果可以构成三角形则返回True，否则返回False，代码如下所示。
+# 上面make_judgement函数有三个参数，这种参数叫做位置参数，在调用函数时通常按照从左到右的顺序依次传入，而且传入参数的数量必须和定义函数时参数的数量相同，如下所示。
+# 如果不想按照从左到右的顺序依次给出a、b、c 三个参数的值，也可以使用关键字参数，通过“参数名=参数值”的形式为函数传入参数，如下所示。
+# def make_judgement(a, b, c):
+#     """判断三条边的长度能否构成三角形"""
+#     return a + b > c and b + c > a and a + c > b
+# print(make_judgement(1, 2, 3))  # False
+# print(make_judgement(4, 5, 6))  # True
+# print(make_judgement(b=2, c=3, a=1))  # False
+# print(make_judgement(c=6, b=4, a=5))  # True
+
+# 在定义函数时，我们可以在参数列表中用/设置强制位置参数（positional-only arguments），用*设置命名关键字参数。所谓强制位置参数，就是调用函数时只能按照参数位置来接收参数值的参数；而命名关键字参数只能通过“参数名=参数值”的方式来传递和接收参数，大家可以看看下面的例子。
+# /前面的参数是强制位置参数
+# def make_judgement(a, b, c, /):
+#     """判断三条边的长度能否构成三角形"""
+#     return a + b > c and b + c > a and a + c > b
+# print(make_judgement(1, 2, 3))
+# print(make_judgement(b=2, c=3, a=1))
+# 上面的代码会产生TypeError错误，错误信息提示“强制位置参数是不允许给出参数名的”
+# TypeError: make_judgement() got some positional-only arguments passed as keyword arguments
+# 说明：强制位置参数是 Python 3.8 引入的新特性，在使用低版本的 Python 解释器时需要注意。
+# *后面的参数是命名关键字参数
+# def make_judgement(*, a, b, c):
+#     """判断三条边的长度能否构成三角形"""
+#     return a + b > c and b + c > a and a + c > b
+# print(make_judgement(b=2, c=3, a=1))
+# print(make_judgement(1, 2, 3))
+# 上面的代码会产生TypeError错误，错误信息提示“函数没有位置参数但却给了3个位置参数”
+# TypeError: make_judgement() takes 0 positional arguments but 3 were given
+
+# 参数的默认值. Python 中允许函数的参数拥有默认值，我们可以把之前讲过的一个例子“CRAPS赌博游戏”（《第07课：分支和循环结构的应用》）中摇色子获得点数的功能封装到函数中，代码如下所示。
+# from random import randrange
+# 定义摇色子的函数
+# 函数的自变量（参数）n表示色子的个数，默认值为2
+# 函数的因变量（返回值）表示摇n颗色子得到的点数
+# def roll_dice(n=2):
+#     total = 0
+#     for _ in range(n):
+#         total += randrange(1, 7)
+#     return total
+# print(roll_dice())
+# print(roll_dice(3))
+
+# 我们再来看一个更为简单的例子。
+# def add(a=0, b=0, c=0):
+#     """三个数相加求和"""
+#     return a + b + c
+# print(add())         # 调用add函数，没有传入参数，那么a、b、c都使用默认值0
+# print(add(1))        # 调用add函数，传入一个参数，该参数赋值给变量a, 变量b和c使用默认值0
+# print(add(1, 2))     # 调用add函数，传入两个参数，分别赋值给变量a和b，变量c使用默认值0
+# print(add(1, 2, 3))  # 调用add函数，传入三个参数，分别赋值给a、b、c三个变量
+# 需要注意的是，带默认值的参数必须放在不带默认值的参数之后，否则将产生SyntaxError错误，错误消息是：non-default argument follows default argument，翻译成中文的意思是“没有默认值的参数放在了带默认值的参数后面”。
+
+# 可变参数. Python 语言中可以通过星号表达式语法让函数支持可变参数。所谓可变参数指的是在调用函数时，可以向函数传入0个或任意多个参数。将来我们以团队协作的方式开发商业项目时，很有可能要设计函数给其他人使用，但有的时候我们并不知道函数的调用者会向该函数传入多少个参数，这个时候可变参数就能派上用场。下面的代码演示了如何使用可变位置参数实现对任意多个数求和的add函数，调用函数时传入的参数会保存到一个元组，通过对该元组的遍历，可以获取传入函数的参数。
+# 用星号表达式来表示args可以接收0个或任意多个参数
+# 调用函数时传入的n个参数会组装成一个n元组赋给args
+# 如果一个参数都没有传入，那么args会是一个空元组
+# def add(*args):
+#     total = 0
+#     # 对保存可变参数的元组进行循环遍历
+#     for val in args:
+#     # 对参数进行了类型检查（数值型的才能求和）
+#         if type(val) in (int, float):
+#             total += val
+#     return total
+# print(add())                        # 0
+# print(add(1))                       # 1
+# print(add(1, 2, 3))                 # 6
+# print(add(1, 2, 'hello', 3.45, 6))  # 12.45
+
+# 如果我们希望通过“参数名=参数值”的形式传入若干个参数，具体有多少个参数也是不确定的，我们还可以给函数添加可变关键字参数，把传入的关键字参数组装到一个字典中，代码如下所示。
+# 参数列表中的**kwargs可以接收0个或任意多个关键字参数
+# 调用函数时传入的关键字参数会组装成一个字典（参数名是字典中的键，参数值是字典中的值）
+# 如果一个关键字参数都没有传入，那么kwargs会是一个空字典
+# def foo(*args, **kwargs):
+#     print(args)
+#     print(kwargs)
+# foo(3, 2.1, True, name='骆昊', age=43, gpa=4.95)
+
+# 用模块管理函数. 不管用什么样的编程语言来写代码，给变量、函数起名字都是一个让人头疼的问题，因为我们会遇到命名冲突这种尴尬的情况。最简单的场景就是在同一个.py文件中定义了两个同名的函数，如下所示。
+# def foo():
+#     print('hello, world!')
+# def foo():
+#     print('goodbye, world!')
+# foo()  # goodbye, world!
+
+# 当然上面的这种情况我们很容易就能避免，但是如果项目是团队协作多人开发的时候，团队中可能有多个程序员都定义了名为foo的函数，这种情况下怎么解决命名冲突呢？答案其实很简单，Python 中每个文件就代表了一个模块（module），我们在不同的模块中可以有同名的函数，在使用函数的时候，我们通过import关键字导入指定的模块再使用完全限定名（模块名.函数名）的调用方式，就可以区分到底要使用的是哪个模块中的foo函数，代码如下所示。
+# import module1
+# import module2
+# module1.foo()  # hello, world!
+# module2.foo()  # goodbye, world!
+# # 在导入模块时，还可以使用as关键字对模块进行别名，这样我们可以使用更为简短的完全限定名。
+# import module1 as m1
+# import module2 as m2
+# m1.foo()  # hello, world!
+# m2.foo()  # goodbye, world!
+# # 上面两段代码，我们导入的是定义函数的模块，我们也可以使用from...import...语法从模块中直接导入需要使用的函数. 但是，如果我们如果从两个不同的模块中导入了同名的函数，后面导入的函数会替换掉之前的导入，就像下面的代码，调用foo会输出goodbye, world!，因为我们先导入了module1的foo，后导入了module2的foo 。如果两个from...import...反过来写，那就是另外一番光景了。
+# from module1 import foo
+# from module2 import foo
+# foo()  # goodbye, world!
+# # 如果想在上面的代码中同时使用来自两个模块的foo函数还是有办法的，大家可能已经猜到了，还是用as关键字对导入的函数进行别名，代码如下所示。
+# from module1 import foo as f1
+# from module2 import foo as f2
+# f1()  # hello, world!
+# f2()  # goodbye, world!
+
+# 标准库中的模块和函数. Python 标准库中提供了大量的模块和函数来简化我们的开发工作，我们之前用过的random模块就为我们提供了生成随机数和进行随机抽样的函数；而time模块则提供了和时间操作相关的函数；我们之前用到过的math模块中还包括了计算正弦、余弦、指数、对数等一系列的数学函数。随着我们深入学习 Python 语言，我们还会用到更多的模块和函数。
+# Python 标准库中还有一类函数是不需要import就能够直接使用的，我们将其称之为内置函数，这些内置函数不仅有用而且还很常用，下面的表格列出了一部分的内置函数。
+# 函数    说明
+# abs     返回一个数的绝对值，例如：abs(-1.3)会返回1.3。
+# bin     把一个整数转换成以'0b'开头的二进制字符串，例如：bin(123)会返回'0b1111011'。
+# chr     将Unicode编码转换成对应的字符，例如：chr(8364)会返回'€'。
+# ord     将字符转换成对应的Unicode编码，例如：ord('€')会返回8364。
+# hex     将一个整数转换成以'0x'开头的十六进制字符串，例如：hex(123)会返回'0x7b'。
+# input   从输入中读取一行，返回读到的字符串。
+# len     获取字符串、列表等的长度。
+# max     返回多个参数或一个可迭代对象中的最大值，例如：max(12, 95, 37)会返回95。
+# min     返回多个参数或一个可迭代对象中的最小值，例如：min(12, 95, 37)会返回12。
+# oct     把一个整数转换成以'0o'开头的八进制字符串，例如：oct(123)会返回'0o173'。
+# open    打开一个文件并返回文件对象。
+# pow     求幂运算，例如：pow(2, 3)会返回8；pow(2, 0.5)会返回1.4142135623730951。
+# print   打印输出。
+# range   构造一个范围序列，例如：range(100)会产生0到99的整数序列。
+# round   按照指定的精度对数值进行四舍五入，例如：round(1.23456, 4)会返回1.2346。
+# sum     对一个序列中的项从左到右进行求和运算，例如：sum(range(1, 101))会返回5050。
+# type    返回对象的类型，例如：type(10)会返回int；而 type('hello')会返回str。
+# 总结. 函数是对功能相对独立且会重复使用的代码的封装。学会使用定义和使用函数，就能够写出更为优质的代码。当然，Python 语言的标准库中已经为我们提供了大量的模块和常用的函数，用好这些模块和函数就能够用更少的代码做更多的事情；如果这些模块和函数不能满足我们的要求，可能就需要自定义函数，然后再通过模块的概念来管理这些自定义函数。
+
+
+
+
+
+"""
+Python Learn - Day 15 within 100 Days - Functions
+Author: guisongwu
+Date  : 2025-10-30
+"""
+# 函数应用实战
+# 例子1：随机验证码
+# 设计一个生成随机验证码的函数，验证码由数字和英文大小写字母构成，长度可以通过参数设置。
+import random
+import string
+ALL_CHARS = string.digits + string.ascii_letters
+a = (random.choice(ALL_CHARS))
+print(a)
+print(type(a)) # <class 'str'>
+b = (random.choices(ALL_CHARS, k=4))
+print(b)
+print(type(b)) # <class 'list'>
+def generate_code(*, code_len=4):
+    """
+    生成指定长度的验证码
+    :param code_len: 验证码的长度(默认4个字符)
+    :return: 由大小写英文字母和数字构成的随机验证码字符串
+    """
+    return ''.join(random.choices(ALL_CHARS, k=code_len))
+# 说明1：string模块的digits代表0到9的数字构成的字符串'0123456789'，string模块的ascii_letters代表大小写英文字母构成的字符串'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ'。
+# 说明2：random模块的sample和choices函数都可以实现随机抽样，sample实现无放回抽样，这意味着抽样取出的元素是不重复的；choices实现有放回抽样，这意味着可能会重复选中某些元素。这两个函数的第一个参数代表抽样的总体，而参数k代表样本容量，需要说明的是choices函数的参数k是一个命名关键字参数，在传参时必须指定参数名。
+# for _ in range(5):
+#     print(generate_code()) 
+# for _ in range(5):
+#     print(generate_code(code_len=6))
+
+
+#                     说明：我们设计的generate_code函数的参数是命名关键字参数，由于它有默认值，可以不给它传值，使用默认值4。如果需要给函数传入参数，必须指定参数名code_len。
+
+#                     例子2：判断素数
+
+#                     设计一个判断给定的大于1的正整数是不是质数的函数。质数是只能被1和自身整除的正整数（大于1），如果一个大于 1 的正整数 N 是质数，那就意味着在 2 到 N − 1 之间都没有它的因子。
+
+#                     def is_prime(num: int) -> bool:
+#                         """
+#                             判断一个正整数是不是质数
+#                                 :param num: 大于1的正整数
+#                                     :return: 如果num是质数返回True，否则返回False
+#                                         """
+#                                             for i in range(2, int(num ** 0.5) + 1):
+#                                                         if num % i == 0:
+#                                                                         return False
+#                                                                         return True
+
+#                                                                         说明1：上面is_prime函数的参数num后面的: int用来标注参数的类型，虽然它对代码的执行结果不产生任何影响，但是很好的增强了代码的可读性。同理，参数列表后面的-> bool用来标注函数返回值的类型，它也不会对代码的执行结果产生影响，但是却让我们清楚的知道，调用函数会得到一个布尔值，要么是True，要么是False。
+
+#                                                                             说明2：上面的循环并不需要从 2 循环到 N − 1 ，因为如果循环进行到 N 时，还没有找到$\small{N}$的因子，那么 N 之后也不会出现 N 的因子，大家可以自己想一想这是为什么。
+
+#                                                                             例子3：最大公约数和最小公倍数
+
+#                                                                             设计计算两个正整数最大公约数和最小公倍数的函数。 x 和 y 的最大公约数是能够同时整除 x 和 y 的最大整数，如果 x 和 y 互质，那么它们的最大公约数为 1； x 和 y 的最小公倍数是能够同时被 x 和 y 整除的最小正整数，如果 x 和 y 互质，那么它们的最小公倍数为 x × y 。需要提醒大家注意的是，计算最大公约数和最小公倍数是两个不同的功能，应该设计成两个函数，而不是把两个功能放到同一个函数中。
+
+#                                                                             def lcm(x: int, y: int) -> int:
+#                                                                                 """求最小公倍数"""""
+#                                                                                     return x * y // gcd(x, y)
+
+
+#                                                                                 def gcd(x: int, y: int) -> int:
+#                                                                                     """求最大公约数"""""
+#                                                                                         while y % x != 0:
+#                                                                                                     x, y = y % x, x
+#                                                                                                         return x
+
+#                                                                                                         说明：函数之间可以相互调用，上面求最小公倍数的lcm函数调用了求最大公约数的gcd函数，通过 x × y g c d ( x , y  ) 来计算最小公倍数。
+
+#                                                                                                         例子4：数据统计
+
+#                                                                                                         假设样本数据保存一个列表中，设计计算样本数据描述性统计信息的函数。描述性统计信息通常包括：算术平均值、中位数、极差（最大值和最小值的差）、方差、标准差、变异系数等，计算公式如下所示。
+
+#                                                                                                         样本均值（sample mean）：
+
+#                                                                                                         x ¯ = ∑ i = 1 n x i n = x 1 + x 2 + ⋯ + x n n
+
+#                                                                                                         样本方差（sample variance）：
+
+#                                                                                                         s 2 = ∑ i = 1 n ( x i − x ¯  ) 2 n − 1
+
+#                                                                                                         样本标准差（sample standard deviation）：
+
+#                                                                                                         s = ∑ i = 1 n ( x i − x ¯  ) 2 n − 1
+
+#                                                                                                         变异系数（coefficient of sample variation）：
+
+#                                                                                                         C V = s x ¯
+
+#                                                                                                         def ptp(data):
+#                                                                                                             """极差（全距）"""""
+#                                                                                                                 return max(data) - min(data)
+
+
+#                                                                                                             def mean(data):
+#                                                                                                                 """算术平均"""""
+#                                                                                                                     return sum(data) / len(data)
+
+
+#                                                                                                                 def median(data):
+#                                                                                                                     """中位数"""""
+#                                                                                                                         temp, size = sorted(data), len(data)
+#                                                                                                                             if size % 2 != 0:
+#                                                                                                                                         return temp[size // 2]
+#                                                                                                                                         else:
+#                                                                                                                                                     return mean(temp[size // 2 - 1:size // 2 + 1])
+
+
+#                                                                                                                                                 def var(data, ddof=1):
+#                                                                                                                                                     """方差"""""
+#                                                                                                                                                         x_bar = mean(data)
+#                                                                                                                                                             temp = [(num - x_bar) ** 2 for num in data]
+#                                                                                                                                                                 return sum(temp) / (len(temp) - ddof)
+
+
+#                                                                                                                                                             def std(data, ddof=1):
+#                                                                                                                                                                 """标准差"""""
+#                                                                                                                                                                     return var(data, ddof) ** 0.5
+
+
+#                                                                                                                                                                 def cv(data, ddof=1):
+#                                                                                                                                                                     """变异系数"""""
+#                                                                                                                                                                         return std(data, ddof) / mean(data)
+
+
+#                                                                                                                                                                     def describe(data):
+#                                                                                                                                                                         """输出描述性统计信息"""""
+#                                                                                                                                                                             print(f'均值: {mean(data)}')
+#                                                                                                                                                                                 print(f'中位数: {median(data)}')
+#                                                                                                                                                                                     print(f'极差: {ptp(data)}')
+#                                                                                                                                                                                         print(f'方差: {var(data)}')
+#                                                                                                                                                                                             print(f'标准差: {std(data)}')
+#                                                                                                                                                                                                 print(f'变异系数: {cv(data)}')
+
+#                                                                                                                                                                                                     说明1：中位数是将数据按照升序或降序排列后位于中间的数，它描述了数据的中等水平。中位数的计算分两种情况：当数据体量$n$为奇数时，中位数是位于 n + 1 2 位置的元素；当数据体量 n 为偶数时，中位数是位于 n 2 和 n 2 + 1 两个位置元素的均值。
+
+#                                                                                                                                                                                                         说明2：计算方差和标准差的函数中有一个名为ddof的参数，它代表了可以调整的自由度，默认值为 1。在计算样本方差和样本标准差时，需要进行自由度校正；如果要计算总体方差和总体标准差，可以将ddof参数赋值为 0，即不需要进行自由度校正。
+
+#                                                                                                                                                                                                             说明3：describe函数将上面封装好的统计函数组装到一起，用于输出数据的描述性统计信息。事实上，Python 标准库中有一个名为statistics的模块，它已经把获取描述性统计信息的函数封装好了，有兴趣的读者可以自行了解。
+
+#                                                                                                                                                                                                             例子5：双色球随机选号
+
+#                                                                                                                                                                                                             我们用函数重构之前讲过的双色球随机选号的例子（《第09课：常用数据结构之列表-2》），将生成随机号码和输出一组号码的功能分别封装到两个函数中，然后通过调用函数实现机选N注号码的功能。
+
+#                                                                                                                                                                                                             """
+#                                                                                                                                                                                                             双色球随机选号程序
+
+#                                                                                                                                                                                                             Author: 骆昊
+#                                                                                                                                                                                                             Version: 1.3
+#                                                                                                                                                                                                             """
+#                                                                                                                                                                                                             import random
+
+#                                                                                                                                                                                                             RED_BALLS = [i for i in range(1, 34)]
+#                                                                                                                                                                                                             BLUE_BALLS = [i for i in range(1, 17)]
+
+
+#                                                                                                                                                                                                             def choose():
+#                                                                                                                                                                                                                 """
+#                                                                                                                                                                                                                     生成一组随机号码
+#                                                                                                                                                                                                                         :return: 保存随机号码的列表
+#                                                                                                                                                                                                                             """
+#                                                                                                                                                                                                                                 selected_balls = random.sample(RED_BALLS, 6)
+#                                                                                                                                                                                                                                     selected_balls.sort()
+#                                                                                                                                                                                                                                         selected_balls.append(random.choice(BLUE_BALLS))
+#                                                                                                                                                                                                                                             return selected_balls
+
+
+#                                                                                                                                                                                                                                         def display(balls):
+#                                                                                                                                                                                                                                             """
+#                                                                                                                                                                                                                                                 格式输出一组号码
+#                                                                                                                                                                                                                                                     :param balls: 保存随机号码的列表
+#                                                                                                                                                                                                                                                         """
+#                                                                                                                                                                                                                                                             for ball in balls[:-1]:
+#                                                                                                                                                                                                                                                                         print(f'\033[031m{ball:0>2d}\033[0m', end=' ')
+#                                                                                                                                                                                                                                                                             print(f'\033[034m{balls[-1]:0>2d}\033[0m')
+
+
+#                                                                                                                                                                                                                                                                             n = int(input('生成几注号码: '))
+#                                                                                                                                                                                                                                                                             for _ in range(n):
+#                                                                                                                                                                                                                                                                                 display(choose())
+
+#                                                                                                                                                                                                                                                                                     说明：大家看看display(choose())这行代码，这里我们先通过choose函数获得一组随机号码，然后把choose函数的返回值作为display函数的参数，通过display函数将选中的随机号码显示出来。重构之后的代码逻辑非常清晰，代码的可读性更强了。如果有人为你封装了这两个函数，你仅仅是函数的调用者，其实你根本不用关心choose函数和display函数的内部实现，你只需要知道调用choose函数可以生成一组随机号码，而调用display函数传入一个列表，就可以输出这组号码。将来我们使用各种各样的 Python 三方库时，我们也根本不关注它们的底层实现，我们需要知道的仅仅是调用哪个函数可以解决问题。
+
+#                                                                                                                                                                                                                                                                                     总结
+#                                                                                                                                                                                                                                                                                     在写代码尤其是开发商业项目的时候，一定要有意识的将相对独立且重复使用的功能封装成函数，这样不管是自己还是团队的其他成员都可以通过调用函数的方式来使用这些功能，减少工作中那些重复且乏味的劳动。]])]])
+#                                                                                                                                                                                                                                                         """
+#                                                                                                                                                                                                                                                 """
+#                                                                                                                                                                                                                             """
+#                                                                                                                                                                                                                     """
+#                                                                                                                                                                                                             """
+#                                                                                                                                                                                                             """')')')')')')
+#                                                                                                                                                                             """"
+#                                                                                                                                                                         """"
+#                                                                                                                                                                     """"
+#                                                                                                                                                         """"
+#                                                                                                                         """"
+#                                                                                                                     """"
+#                                                                                                                 """"
+#                                                                                         """"
+#                                                                                     """"
+#                                         """
+#                             """
