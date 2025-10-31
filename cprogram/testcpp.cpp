@@ -1320,14 +1320,19 @@ void test_elem(const Elem &e) {
 }
 
 int main(int argc, char *argv[]) {
+	// --------------------------------------- for iter -------------------------------------------
+	/* for (int i = 0; i < 0; i++) { */
+	/* 	cout << "hello world\n"; // won't execute */
+	/* } */
+
 	// ----------------------------------- sizeof a class -----------------------------------------
-	cout << sizeof(Base) << endl;
-	cout << sizeof(Derived) << endl;
-	Derived derived;
-	cout << sizeof(derived) << endl;
-	cout << sizeof(Elem) << endl;
-	Elem e;
-	cout << sizeof(e) << endl;
+	/* cout << sizeof(Base) << endl; */
+	/* cout << sizeof(Derived) << endl; */
+	/* Derived derived; */
+	/* cout << sizeof(derived) << endl; */
+	/* cout << sizeof(Elem) << endl; */
+	/* Elem e; */
+	/* cout << sizeof(e) << endl; */
 
 	// ----------------------------- base and derived's pointer -----------------------------------
 	/* Base *b1 = new Derived(); // 构造过程： */
