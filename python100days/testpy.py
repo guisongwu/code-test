@@ -2,6 +2,26 @@
 # Test for Python Programmer
 # ==========================
 
+# ---------------------------- color -----------------------------
+# a = 100
+# print(f"\033[030m a={a}\033[0m") # 30 for black
+# print(f"\033[031m a={a}\033[0m") # 31 for red
+# print(f"\033[032m a={a}\033[0m") # 32 for green
+# print(f"\033[033m a={a}\033[0m") # 33 for yellow
+# print(f"\033[034m a={a}\033[0m") # 34 for blue
+# print(f"\033[035m a={a}\033[0m") # 35 for purple
+# print(f"\033[036m a={a}\033[0m") # 36 for cyan
+# print(f"\033[037m a={a}\033[0m") # 37 for white
+
+# --------------------------- randrange --------------------------
+# import random
+# # a random integer in [0, 10)
+# print(random.randrange(10))
+# print(random.randrange(0, 10))
+# print(random.randrange(0, 10, 1))
+# # a random integer in [0, 10) with step 2, maybe 0 2 4 6 8
+# print(random.randrange(0, 10, 2))
+
 # ---------------------------- join ------------------------------
 # ----- str.join(iterable)
 # words = ['Hello', 'World', 'Python']

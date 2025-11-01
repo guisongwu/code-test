@@ -687,6 +687,7 @@ Date  : 2025-10-24
 # selected_balls = []
 # for _ in range(6):
 #     index = random.randrange(len(red_balls))
+#     # index = random.randrange(0, 33, 1)
 #     # 将选中的球从红色球列表中移除并添加到选中列表
 #     selected_balls.append(red_balls.pop(index))
 # selected_balls.sort()
@@ -708,6 +709,7 @@ Date  : 2025-10-24
 # blue_ball = random.choice(blue_balls)
 # print(f'\033[034m{blue_ball:0>2d}\033[0m')
 
+
 # import random
 # from rich.console import Console
 # from rich.table import Table 
@@ -716,7 +718,7 @@ Date  : 2025-10-24
 # console = Console()
 # n = int(input('生成几注号码: '))
 # red_balls = list(range(1, 34))
-# blue_balls = [i for i in range(1, 17)]
+# blue_balls = list(range(1, 17))
 # # 创建表格并添加表头
 # table = Table(title='balls', show_header=True)
 # for col_name in ['序号', '红球', '蓝球']:
@@ -732,10 +734,12 @@ Date  : 2025-10-24
 # # 通过控制台输出表格
 # console.print(table)
 
-# rich, table, console
+
+# ------- rich, table, console
 # from rich.table import Table
 # from rich.console import Console
-# table = Table(title="Scores", show_header=True)
+# # table = Table(title="Scores", show_header=True)
+# table = Table(show_header=True)
 # console = Console()
 # table.add_column("Name", justify="center")
 # table.add_column("Score", justify = "center")
@@ -743,9 +747,6 @@ Date  : 2025-10-24
 # table.add_row("xiaoming", "80")
 # console.print(table)
 
-
-# a = [1, 3, 5]
-# print(" ".join([str(i) for i in a]))
 
 
 
@@ -1669,102 +1670,221 @@ Date  : 2025-10-30
 # s = \sqrt(s^2)
 # 变异系数（coefficient of sample variation）：
 # CV = s / \bar{x}
+# def ptp(data):
+#     """极差（全距）"""
+#     return max(data) - min(data)
+# def mean(data):
+#     """算术平均"""
+#     return sum(data) / len(data)
+# def median(data):
+#     """中位数"""
+#     temp, size = sorted(data), len(data)
+#     if size % 2 != 0:
+#         return temp[size // 2]
+#     else:
+#         return mean(temp[size // 2 - 1:size // 2 + 1])
+# def var(data, ddof=1):
+#     """方差"""
+#     x_bar = mean(data)
+#     temp = [(num - x_bar) ** 2 for num in data]
+#     return sum(temp) / (len(temp) - ddof)
+# def std(data, ddof=1):
+#     """标准差"""
+#     return var(data, ddof) ** 0.5
+# def cv(data, ddof=1):
+#     """变异系数"""
+#     return std(data, ddof) / mean(data)
+# def describe(data):
+#     """输出描述性统计信息"""
+#     print(f'均值: {mean(data)}')
+#     print(f'中位数: {median(data)}')
+#     print(f'极差: {ptp(data)}')
+#     print(f'方差: {var(data)}')
+#     print(f'标准差: {std(data)}')
+#     print(f'变异系数: {cv(data)}')
+# data = list(range(10))
+# describe(data)
 
-def ptp(data):
-    """极差（全距）"""
-    return max(data) - min(data)
-def mean(data):
-    """算术平均"""
-    return sum(data) / len(data)
-def median(data):
-    """中位数"""
-    temp, size = sorted(data), len(data)
-    if size % 2 != 0:
-        return temp[size // 2]
-    else:
-        return mean(temp[size // 2 - 1:size // 2 + 1])
-def var(data, ddof=1):
-    """方差"""
-    x_bar = mean(data)
-    temp = [(num - x_bar) ** 2 for num in data]
-    return sum(temp) / (len(temp) - ddof)
-def std(data, ddof=1):
-    """标准差"""
-    return var(data, ddof) ** 0.5
+    # 说明1：中位数是将数据按照升序或降序排列后位于中间的数，它描述了数据的中等水平。中位数的计算分两种情况：当数据体量$n$为奇数时，中位数是位于 (n + 1)/2 位置的元素；当数据体量 n 为偶数时，中位数是位于 n/2 和 n/2 + 1 两个位置元素的均值。
+    # 说明2：计算方差和标准差的函数中有一个名为ddof的参数，它代表了可以调整的自由度，默认值为 1。在计算样本方差和样本标准差时，需要进行自由度校正；如果要计算总体方差和总体标准差，可以将ddof参数赋值为 0，即不需要进行自由度校正。
+    # 说明3：describe函数将上面封装好的统计函数组装到一起，用于输出数据的描述性统计信息。事实上，Python 标准库中有一个名为statistics的模块，它已经把获取描述性统计信息的函数封装好了，有兴趣的读者可以自行了解。
 
 
-def cv(data, ddof=1):
-    """变异系数"""
-    return std(data, ddof) / mean(data)
+# 例子5：双色球随机选号
+# 我们用函数重构之前讲过的双色球随机选号的例子（《第09课：常用数据结构之列表-2》），将生成随机号码和输出一组号码的功能分别封装到两个函数中，然后通过调用函数实现机选N注号码的功能。
+
+# import random
+# RED_BALLS = [i for i in range(1, 34)]
+# BLUE_BALLS = [i for i in range(1, 17)]
+# def choose():
+#     """
+#     生成一组随机号码
+#     :return: 保存随机号码的列表
+#     """
+#     selected_balls = random.sample(RED_BALLS, 6)
+#     selected_balls.sort()
+#     selected_balls.append(random.choice(BLUE_BALLS))
+#     return selected_balls
+# def display(balls):
+#     """
+#     格式输出一组号码
+#     :param balls: 保存随机号码的列表
+#     """
+#     for ball in balls[:-1]:
+#         print(f'\033[031m{ball:0>2d}\033[0m', end=' ')
+#     print(f'\033[034m{balls[-1]:0>2d}\033[0m')
+# n = int(input('生成几注号码: '))
+# for _ in range(n):
+#     display(choose())
+
+    # 说明：大家看看display(choose())这行代码，这里我们先通过choose函数获得一组随机号码，然后把choose函数的返回值作为display函数的参数，通过display函数将选中的随机号码显示出来。重构之后的代码逻辑非常清晰，代码的可读性更强了。如果有人为你封装了这两个函数，你仅仅是函数的调用者，其实你根本不用关心choose函数和display函数的内部实现，你只需要知道调用choose函数可以生成一组随机号码，而调用display函数传入一个列表，就可以输出这组号码。将来我们使用各种各样的 Python 三方库时，我们也根本不关注它们的底层实现，我们需要知道的仅仅是调用哪个函数可以解决问题。
+
+# 总结
+# 在写代码尤其是开发商业项目的时候，一定要有意识的将相对独立且重复使用的功能封装成函数，这样不管是自己还是团队的其他成员都可以通过调用函数的方式来使用这些功能，减少工作中那些重复且乏味的劳动。
 
 
-def describe(data):
-    """输出描述性统计信息"""
-    print(f'均值: {mean(data)}')
-    print(f'中位数: {median(data)}')
-    print(f'极差: {ptp(data)}')
-    print(f'方差: {var(data)}')
-    print(f'标准差: {std(data)}')
-    print(f'变异系数: {cv(data)}')
 
-    说明1：中位数是将数据按照升序或降序排列后位于中间的数，它描述了数据的中等水平。中位数的计算分两种情况：当数据体量$n$为奇数时，中位数是位于 n + 1 2 位置的元素；当数据体量 n 为偶数时，中位数是位于 n 2 和 n 2 + 1 两个位置元素的均值。
 
-    说明2：计算方差和标准差的函数中有一个名为ddof的参数，它代表了可以调整的自由度，默认值为 1。在计算样本方差和样本标准差时，需要进行自由度校正；如果要计算总体方差和总体标准差，可以将ddof参数赋值为 0，即不需要进行自由度校正。
 
-    说明3：describe函数将上面封装好的统计函数组装到一起，用于输出数据的描述性统计信息。事实上，Python 标准库中有一个名为statistics的模块，它已经把获取描述性统计信息的函数封装好了，有兴趣的读者可以自行了解。
 
-例子5：双色球随机选号
-
-我们用函数重构之前讲过的双色球随机选号的例子（《第09课：常用数据结构之列表-2》），将生成随机号码和输出一组号码的功能分别封装到两个函数中，然后通过调用函数实现机选N注号码的功能。
 
 """
-双色球随机选号程序
-
-Author: 骆昊
-Version: 1.3
+Python Learn - Day 16 within 100 Days - 函数使用进阶
+Author: guisongwu
+Date  : 2025-10-31
 """
-import random
 
-RED_BALLS = [i for i in range(1, 34)]
-BLUE_BALLS = [i for i in range(1, 17)]
+# 我们继续探索定义和使用函数的相关知识。通过前面的学习，我们知道了函数有自变量（参数）和因变量（返回值），自变量可以是任意的数据类型，因变量也可以是任意的数据类型，那么这里就有一个小问题，我们能不能用函数作为函数的参数，用函数作为函数的返回值？这里我们先说结论：Python 中的函数是“一等函数”，所谓“一等函数”指的就是函数可以赋值给变量，函数可以作为函数的参数，函数也可以作为函数的返回值。把一个函数作为其他函数的参数或返回值的用法，我们通常称之为“高阶函数”。
 
+# 我们回到之前讲过的一个例子，设计一个函数，传入任意多个参数，对其中int类型或float类型的元素实现求和操作。我们对之前的代码稍作调整，让整个代码更加紧凑一些，如下所示。
 
-def choose():
-    """
-    生成一组随机号码
-    :return: 保存随机号码的列表
-    """
-    selected_balls = random.sample(RED_BALLS, 6)
-    selected_balls.sort()
-    selected_balls.append(random.choice(BLUE_BALLS))
-    return selected_balls
+def calc(*args, **kwargs):
+    items = list(args) + list(kwargs.values())
+    result = 0
+    for item in items:
+        if type(item) in (int, float):
+            result += item
+    return result
 
+# 如果我们希望上面的calc函数不仅仅可以做多个参数的求和，还可以实现更多的甚至是自定义的二元运算，我们该怎么做呢？上面的代码只能求和是因为函数中使用了+=运算符，这使得函数跟加法运算形成了耦合关系，如果能解除这种耦合关系，函数的通用性和灵活性就会更好。解除耦合的办法就是将+运算符变成函数调用，并将其设计为函数的参数，代码如下所示。
 
-def display(balls):
-    """
-    格式输出一组号码
-    :param balls: 保存随机号码的列表
-    """
-    for ball in balls[:-1]:
-        print(f'\033[031m{ball:0>2d}\033[0m', end=' ')
-    print(f'\033[034m{balls[-1]:0>2d}\033[0m')
+# def calc(init_value, op_func, *args, **kwargs):
+#     items = list(args) + list(kwargs.values())
+#     result = init_value
+#     for item in items:
+#         if type(item) in (int, float):
+#             result = op_func(result, item)
+#     return result
 
+# 注意，上面的函数增加了两个参数，其中init_value代表运算的初始值，op_func代表二元运算函数，为了调用修改后的函数，我们先定义做加法和乘法运算的函数，代码如下所示。
 
-n = int(input('生成几注号码: '))
-for _ in range(n):
-    display(choose())
-
-    说明：大家看看display(choose())这行代码，这里我们先通过choose函数获得一组随机号码，然后把choose函数的返回值作为display函数的参数，通过display函数将选中的随机号码显示出来。重构之后的代码逻辑非常清晰，代码的可读性更强了。如果有人为你封装了这两个函数，你仅仅是函数的调用者，其实你根本不用关心choose函数和display函数的内部实现，你只需要知道调用choose函数可以生成一组随机号码，而调用display函数传入一个列表，就可以输出这组号码。将来我们使用各种各样的 Python 三方库时，我们也根本不关注它们的底层实现，我们需要知道的仅仅是调用哪个函数可以解决问题。
-
-总结
-在写代码尤其是开发商业项目的时候，一定要有意识的将相对独立且重复使用的功能封装成函数，这样不管是自己还是团队的其他成员都可以通过调用函数的方式来使用这些功能，减少工作中那些重复且乏味的劳动。
+# def add(x, y):
+#     return x + y
 
 
+# def mul(x, y):
+#     return x * y
+
+# 如果要做求和的运算，我们可以按照下面的方式调用calc函数。
+
+# print(calc(0, add, 1, 2, 3, 4, 5))  # 15
+
+# 如果要做求乘积运算，我们可以按照下面的方式调用calc函数。
+
+# print(calc(1, mul, 1, 2, 3, 4, 5))  # 120 
+
+# 上面的calc函数通过将运算符变成函数的参数，实现了跟加法运算耦合，这是一种非常高明和实用的编程技巧，但对于最初学者来说可能会觉得难以理解，建议大家细品一下。需要注意上面的代码中，将函数作为参数传入其他函数和直接调用函数是有显著的区别的，调用函数需要在函数名后面跟上圆括号，而把函数作为参数时只需要函数名即可。
+
+# 如果我们没有提前定义好add和mul函数，也可以使用 Python 标准库中的operator模块提供的add和mul函数，它们分别代表了做加法和做乘法的二元运算，我们拿过来直接使用即可，代码如下所示。
+
+# import operator
+
+# print(calc(0, operator.add, 1, 2, 3, 4, 5))  # 15
+# print(calc(1, operator.mul, 1, 2, 3, 4, 5))  # 120
+
+# Python 内置函数中有不少高阶函数，我们前面提到过的filter和map函数就是高阶函数，前者可以实现对序列中元素的过滤，后者可以实现对序列中元素的映射，例如我们要去掉一个整数列表中的奇数，并对所有的偶数求平方得到一个新的列表，就可以直接使用这两个函数来做到，具体的做法是如下所示。
+
+# def is_even(num):
+#     """判断num是不是偶数"""
+#     return num % 2 == 0
 
 
+# def square(num):
+#     """求平方"""
+#     return num ** 2
 
 
+# old_nums = [35, 12, 8, 99, 60, 52]
+# new_nums = list(map(square, filter(is_even, old_nums)))
+# print(new_nums)  # [144, 64, 3600, 2704]
 
+# 当然，要完成上面代码的功能，也可以使用列表生成式，列表生成式的做法更为简单优雅。
 
+# old_nums = [35, 12, 8, 99, 60, 52]
+# new_nums = [num ** 2 for num in old_nums if num % 2 == 0]
+# print(new_nums)  # [144, 64, 3600, 2704]
+
+# 我们再来讨论一个内置函数sorted，它可以实现对容器型数据类型（如：列表、字典等）元素的排序。我们之前讲过list类型的sort方法，它实现了对列表元素的排序，sorted函数从功能上来讲跟列表的sort方法没有区别，但它会返回排序后的列表对象，而不是直接修改原来的列表，这一点我们称为函数的无副作用设计，也就是说调用函数除了产生返回值以外，不会对程序的状态或外部环境产生任何其他的影响。使用sorted函数排序时，可以通过高阶函数的形式自定义排序的规则，我们通过下面的例子加以说明。
+
+# old_strings = ['in', 'apple', 'zoo', 'waxberry', 'pear']
+# new_strings = sorted(old_strings)
+# print(new_strings)  # ['apple', 'in', 'pear', waxberry', 'zoo']
+
+# 上面的代码对大家来说并不陌生，但是如果希望根据字符串的长度而不是字母表顺序对列表元素排序，我们可以向sorted函数传入一个名为key的参数，将key参数赋值为获取字符串长度的函数len，这个函数我们在之前的课程中讲到过，代码如下所示。
+
+# old_strings = ['in', 'apple', 'zoo', 'waxberry', 'pear']
+# new_strings = sorted(old_strings, key=len)
+# print(new_strings)  # ['in', 'zoo', 'pear', 'apple', 'waxberry']
+
+#     说明：列表类型的sort方法也有同样的key参数，有兴趣的读者可以自行尝试。
+
+# Lambda函数
+
+# 在使用高阶函数的时候，如果作为参数或者返回值的函数本身非常简单，一行代码就能够完成，也不需要考虑对函数的复用，那么我们可以使用 lambda 函数。Python 中的 lambda 函数是没有的名字函数，所以很多人也把它叫做匿名函数，lambda 函数只能有一行代码，代码中的表达式产生的运算结果就是这个匿名函数的返回值。之前的代码中，我们写的is_even和square函数都只有一行代码，我们可以考虑用 lambda 函数来替换掉它们，代码如下所示。
+
+# old_nums = [35, 12, 8, 99, 60, 52]
+# new_nums = list(map(lambda x: x ** 2, filter(lambda x: x % 2 == 0, old_nums)))
+# print(new_nums)  # [144, 64, 3600, 2704]
+
+# 通过上面的代码可以看出，定义 lambda 函数的关键字是lambda，后面跟函数的参数，如果有多个参数用逗号进行分隔；冒号后面的部分就是函数的执行体，通常是一个表达式，表达式的运算结果就是 lambda 函数的返回值，不需要写return 关键字。
+
+# 前面我们说过，Python 中的函数是“一等函数”，函数是可以直接赋值给变量的。在学习了 lambda 函数之后，前面我们写过的一些函数就可以用一行代码来实现它们了，大家可以看看能否理解下面的求阶乘和判断素数的函数。
+
+# import functools
+# import operator
+
+# # 用一行代码实现计算阶乘的函数
+# fac = lambda n: functools.reduce(operator.mul, range(2, n + 1), 1)
+
+# # 用一行代码实现判断素数的函数
+# is_prime = lambda x: all(map(lambda f: x % f, range(2, int(x ** 0.5) + 1)))
+
+# # 调用Lambda函数
+# print(fac(6))        # 720
+# print(is_prime(37))  # True
+
+#     提示1：上面使用的reduce函数是 Python 标准库functools模块中的函数，它可以实现对一组数据的归约操作，类似于我们之前定义的calc函数，第一个参数是代表运算的函数，第二个参数是运算的数据，第三个参数是运算的初始值。很显然，reduce函数也是高阶函数，它和filter函数、map函数一起构成了处理数据中非常关键的三个动作：过滤、映射和归约。
+
+#     提示2：上面判断素数的 lambda 函数通过range函数构造了从 2 到 x 的范围，检查这个范围有没有x的因子。all函数也是 Python 内置函数，如果传入的序列中所有的布尔值都是True，all函数返回True，否则all函数返回False。
+
+# 偏函数
+
+# 偏函数是指固定函数的某些参数，生成一个新的函数，这样就无需在每次调用函数时都传递相同的参数。在 Python 语言中，我们可以使用functools模块的partial函数来创建偏函数。例如，int函数在默认情况下可以将字符串视为十进制整数进行类型转换，如果我们修修改它的base参数，就可以定义出三个新函数，分别用于将二进制、八进制、十六进制字符串转换为整数，代码如下所示。
+
+# import functools
+
+# int2 = functools.partial(int, base=2)
+# int8 = functools.partial(int, base=8)
+# int16 = functools.partial(int, base=16)
+
+# print(int('1001'))    # 1001
+
+# print(int2('1001'))   # 9
+# print(int8('1001'))   # 513
+# print(int16('1001'))  # 4097
+
+# 不知大家是否注意到，partial函数的第一个参数和返回值都是函数，它将传入的函数处理成一个新的函数返回。通过构造偏函数，我们可以结合实际的使用场景将原函数变成使用起来更为便捷的新函数，不知道大家有没有觉得这波操作很有意思。
+# 总结
+# Python 中的函数是一等函数，可以赋值给变量，也可以作为函数的参数和返回值，这也就意味着我们可以在 Python 中使用高阶函数。高阶函数的概念对新手并不友好，但它却带来了函数设计上的灵活性。如果我们要定义的函数非常简单，只有一行代码，而且不需要函数名来复用它，我们可以使用 lambda 函数。
 
 
